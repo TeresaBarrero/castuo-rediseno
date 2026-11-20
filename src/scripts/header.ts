@@ -24,6 +24,13 @@ function onScroll() {
     const y = window.scrollY;
     const sh = svc?.offsetHeight ?? 0;
     h.classList.toggle('is-scrolled', y > sh);
+    const top = $('[data-totop]');
+    if (top) {
+      const on = y > window.innerHeight * 0.8;
+      top.classList.toggle('is-on', on);
+      top.tabIndex = on ? 0 : -1;
+      top.setAttribute('aria-hidden', String(!on));
+    }
     const menuOpen = !!$('[data-menu]:not([hidden])');
     const anyDialog = !!$('dialog[open]');
     if (!menuOpen && !anyDialog) {
@@ -102,6 +109,12 @@ export function bindHeader() {
       return;
     }
     if (t.closest('[data-search-close]')) { closeDialog($<HTMLDialogElement>('[data-search]')); return; }
+    if (t.closest('[data-totop]')) {
+      window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      // Devuelve el foco al principio de la página (el logo de la cabecera)
+      $<HTMLElement>('.brand')?.focus({ preventScroll: true });
+      return;
+    }
   });
   document.addEventListener('keydown', (e) => {
     const m = $('[data-menu]');

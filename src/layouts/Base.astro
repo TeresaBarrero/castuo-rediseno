@@ -5,6 +5,7 @@ import { ORG, type NavId } from '@/config';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import ConceptBanner from '@/components/ConceptBanner.astro';
+import FloatingActions from '@/components/FloatingActions.astro';
 import CartDrawer from '@/components/CartDrawer.astro';
 import fontDisplay from '@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-600-normal.woff2?url';
 import fontBody from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
@@ -92,6 +93,7 @@ const websiteLd = {
       <slot />
     </main>
     <Footer newsletter={footerNewsletter} />
+    <FloatingActions showContact={active !== 'contacto'} />
     <ConceptBanner />
     <CartDrawer />
     <div class="sr-only" aria-live="polite" data-live></div>

@@ -1,0 +1,53 @@
+---
+// Accesos fijos: CTA de contacto y «volver arriba». Se colocan encima del aviso de concepto.
+import Icon from './Icon.astro';
+interface Props { showContact?: boolean }
+const { showContact = true } = Astro.props;
+---
+<div class="fa" data-fa>
+  <button type="button" class="fa__top" aria-label="Volver arriba" data-totop tabindex="-1" aria-hidden="true">
+    <Icon name="arrow-up" size={20} width={2} />
+  </button>
+  {showContact && (
+    <a href="/contacto/" class="fa__contact" aria-label="Contacto">
+      <Icon name="mail" size={18} width={2} />
+      <span class="fa__lbl" aria-hidden="true">Contacto</span>
+    </a>
+  )}
+</div>
+
+<style>
+  .fa {
+    position: fixed; right: var(--gutter); bottom: calc(var(--banner-h) + 16px); z-index: 84;
+    display: flex; align-items: center; gap: 10px;
+    transition: transform .4s var(--ease);
+  }
+  /* En la ficha de producto, sube cuando aparece la barra fija «Añadir» (móvil) */
+  :global(body:has(.satc.is-on)) .fa { transform: translateY(-72px); }
+
+  .fa__contact {
+    display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px;
+    border-radius: var(--radius-pill); background: var(--olive); color: #fff; text-decoration: none;
+    font-weight: 600; font-size: 15px; box-shadow: 0 8px 24px rgba(23, 32, 26, .22);
+    transition: background-color .25s var(--ease), transform .25s var(--ease);
+  }
+  .fa__contact:hover { background: var(--ink); color: #fff; transform: translateY(-2px); }
+  .fa__contact:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  .fa__top {
+    width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line-strong);
+    background: var(--surface); color: var(--ink); display: grid; place-items: center;
+    box-shadow: 0 8px 24px rgba(23, 32, 26, .16);
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity .3s var(--ease), transform .3s var(--ease), background-color .25s;
+  }
+  .fa__top.is-on { opacity: 1; transform: none; pointer-events: auto; }
+  .fa__top:hover { background: var(--bg); }
+
+  @media (max-width: 560px) {
+    .fa { right: 16px; bottom: calc(var(--banner-h) + 12px); }
+    .fa__contact { width: 48px; padding: 0; justify-content: center; }
+    .fa__lbl { display: none; }
+  }
+  @media print { .fa { display: none; } }
+</style>
