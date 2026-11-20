@@ -27,7 +27,7 @@ const totals: Record<string, string> = { olivar: '7.000 ha de olivar en la coope
       <div class="wrap g3 fgrid" data-filter-grid data-reveal-group>
         {fincas.map((f) => (
           <article class="fc" data-item data-cat={f.data.group} data-order={f.data.order} data-price="0" data-reveal>
-            <Foto slot={f.id} crop={1.4} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="280px" class="fc__img" transitionName={`finca-${f.id}`} />
+            <Foto slot={f.id} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="280px" class="fc__img" transitionName={`finca-${f.id}`} />
             <div class="fc__b">
               <p class="eyebrow" style="margin:0">{f.data.groupLabel}</p>
               <h2 class="fc__t"><a href={`/fincas/${f.id}/`}>{f.data.name}</a></h2>

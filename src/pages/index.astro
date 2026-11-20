@@ -133,7 +133,7 @@ const jsonLd = [organization(site, logoUrl), localBusiness(site, heroUrl)];
           { slot: 'fincaAlmendro', href: '/fincas/?categoria=almendro', t: 'Almendro', d: 'Plantación superintensiva.' },
         ].map((f) => (
           <a href={f.href} class="fcard" data-reveal>
-            <Foto slot={f.slot} crop={1.5} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="260px" />
+            <Foto slot={f.slot} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="260px" />
             <h3 class="h3">{f.t}</h3><p class="muted">{f.d}</p>
           </a>
         ))}

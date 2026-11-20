@@ -11,16 +11,13 @@ Todo lo marcado `[ENTRE CORCHETES]` en el diseño se ha resuelto con datos publi
 
 | Hueco | Dónde | Motivo |
 |---|---|---|
-| Olivar | Inicio · Nuestras fincas | Las fotos de olivar de castuo.es son miniaturas de 400 px con el logo superpuesto (descartadas por < 600 px). |
-| Almendro | Inicio · Nuestras fincas | Igual: miniatura de 400 px. |
-| Olivar tradicional, intensivo y superintensivo | /fincas/ y subpáginas | Las subpáginas de castuo.es no tienen fotos en el HTML. |
-| Viña en vaso tradicional | /fincas/ y subpágina | Igual. |
 | Oficinas | Galería de Cooperativa | La galería «Oficinas» de castuo.es no contiene imágenes en el HTML. |
-| Ruta por el olivar | /visitas-almazara-guarena/ | Sin foto de olivar utilizable. |
 | Migas extremeñas | Blog | No hay fotos de recetas en la web oficial. |
 | Tostadas con AOVE | Blog | Ídem. |
 | Cata de aceite en la almazara / socios en la recepción de aceituna | Inicio | No existen; se han usado en su lugar fotos reales del equipo ante los depósitos y de los socios en el 50 aniversario. |
 | Sellos (Extrema Selección, ISO) | Inicio, Calidad, fichas | Los sellos ISO de castuo.es son logos de la certificadora (Applus+), un tercero: se han sustituido por insignias tipográficas. Pedir los sellos oficiales y su manual de uso. |
+
+**Fotos de fincas en baja resolución**: olivar (tradicional, intensivo y superintensivo), viña en vaso, almendro y la ruta por el olivar usan las miniaturas de 400 × 400 px de castuo.es, que llevan el logo superpuesto. Un recorte en servidor deja el logo fuera, pero a 2× se ven algo blandas. Habría que pedir los originales sin logo.
 
 **Fotos a encargar**: olivar aéreo al amanecer, almazara en campaña, cata, bodegón de producto con fondo neutro (las fotos de la tienda tienen el logo superpuesto y fondo gris) y recetas.
 

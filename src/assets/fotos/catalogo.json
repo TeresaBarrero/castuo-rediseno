@@ -3731,8 +3731,7 @@
     "ancho": 400,
     "alto": 400,
     "descripcion": "Miniatura de finca (olivar tradicional) con el logo superpuesto.",
-    "estado": "descartada",
-    "motivo_descarte": "Menos de 600 px de ancho."
+    "estado": "usada"
   },
   {
     "archivo": "2021-03-olivar-intensivo.jpg",
@@ -3743,8 +3742,7 @@
     "ancho": 400,
     "alto": 400,
     "descripcion": "Miniatura de finca (olivar intensivo) con el logo superpuesto.",
-    "estado": "descartada",
-    "motivo_descarte": "Menos de 600 px de ancho."
+    "estado": "usada"
   },
   {
     "archivo": "2021-03-olivar-superintensivo.jpg",
@@ -3755,8 +3753,7 @@
     "ancho": 400,
     "alto": 400,
     "descripcion": "Miniatura de finca (olivar superintensivo) con el logo superpuesto.",
-    "estado": "descartada",
-    "motivo_descarte": "Menos de 600 px de ancho."
+    "estado": "usada"
   },
   {
     "archivo": "2021-03-vina-vaso-tradicional.jpg",
@@ -3767,8 +3764,7 @@
     "ancho": 400,
     "alto": 400,
     "descripcion": "Miniatura de finca (vina vaso tradicional) con el logo superpuesto.",
-    "estado": "descartada",
-    "motivo_descarte": "Menos de 600 px de ancho."
+    "estado": "usada"
   },
   {
     "archivo": "2021-03-vina-espaldera.jpg",
@@ -3791,8 +3787,7 @@
     "ancho": 400,
     "alto": 400,
     "descripcion": "Miniatura de finca (almendro superintensivo) con el logo superpuesto.",
-    "estado": "descartada",
-    "motivo_descarte": "Menos de 600 px de ancho."
+    "estado": "usada"
   },
   {
     "archivo": "2025-04-3-imagen-de-whatsapp-2025-04-04-a-las-11.38.45_67544b66.jpg",

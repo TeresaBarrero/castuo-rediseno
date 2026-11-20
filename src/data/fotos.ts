@@ -9,9 +9,9 @@ export const FOTOS = {
   catVino: { file: '2022-12-vino-de-mesa-semi-dulce-el-castuo-categoria.jpg', alt: 'Botella de vino de mesa semidulce El Castúo sobre piedra clara', pos: '50% 50%' },
   catEstuches: { file: '2021-11-estuches-categoria.jpg', alt: 'Estuches regalo El Castúo de una, dos y tres botellas con aceite y vino', pos: '50% 50%' },
   historiaInicio: { file: '2015-07-cooperativa-de-san-pedro-115.jpg', alt: 'Socios y vecinos reunidos en el patio de la cooperativa durante la celebración de su 50 aniversario', pos: '50% 50%' },
-  fincaOlivar: { file: null, alt: 'Olivar de los socios de la cooperativa', label: 'Olivar · foto pendiente' },
+  fincaOlivar: { file: '2021-03-olivar-tradicional.jpg', alt: 'Olivos tradicionales de varios pies sobre tierra roja en una finca de socios', pos: '50% 0%' },
   fincaVinedo: { file: '2021-02-fincas-en-espaldera-2.jpg', alt: 'Calle de viñedo en espaldera de una finca de socios', pos: '50% 50%' },
-  fincaAlmendro: { file: null, alt: 'Almendros en plantación superintensiva', label: 'Almendro · foto pendiente' },
+  fincaAlmendro: { file: '2021-03-almendro-superintensivo.jpg', alt: 'Hileras de almendros en flor en plantación superintensiva', pos: '50% 100%' },
   visitasInicio: { file: '2025-05-premios-extrema-seleccion-aove-2025-10.jpg', alt: 'Equipo de la almazara de la cooperativa frente a los depósitos de aceite', pos: '50% 50%' },
   heroMovil: { file: '2025-05-premios-extrema-seleccion-aove-2025-12.jpg', alt: 'Depósitos blancos de la almazara de la Cooperativa del Campo San Pedro', pos: '62% 50%' },
 
@@ -23,12 +23,12 @@ export const FOTOS = {
   galOficinas: { file: null, alt: 'Oficinas de la cooperativa', label: 'Oficinas · foto pendiente' },
 
   // Fincas
-  'olivar-tradicional': { file: null, alt: 'Olivar tradicional', label: 'Olivar tradicional · foto pendiente' },
-  'olivar-intensivo': { file: null, alt: 'Olivar intensivo', label: 'Olivar intensivo · foto pendiente' },
-  'olivar-superintensivo': { file: null, alt: 'Olivar superintensivo', label: 'Olivar superintensivo · foto pendiente' },
-  'vina-vaso-tradicional': { file: null, alt: 'Viña en vaso tradicional', label: 'Viña en vaso · foto pendiente' },
+  'olivar-tradicional': { file: '2021-03-olivar-tradicional.jpg', alt: 'Olivar tradicional: olivos de varios pies a marco amplio sobre tierra roja', pos: '50% 0%' },
+  'olivar-intensivo': { file: '2021-03-olivar-intensivo.jpg', alt: 'Olivar intensivo: hileras de olivos de un solo pie con la tierra labrada', pos: '50% 100%' },
+  'olivar-superintensivo': { file: '2021-03-olivar-superintensivo.jpg', alt: 'Olivar superintensivo: olivos jóvenes en seto con tutores', pos: '50% 0%' },
+  'vina-vaso-tradicional': { file: '2021-03-vina-vaso-tradicional.jpg', alt: 'Viña en vaso tradicional: cepas viejas podadas, sin alambres', pos: '50% 100%' },
   'vina-en-espaldera': { file: '2021-02-fincas-en-espaldera-1.jpg', alt: 'Viña en espaldera con postes y alambres tras la poda de invierno', pos: '50% 50%' },
-  'almendro-superintensivo': { file: null, alt: 'Almendro superintensivo', label: 'Almendro · foto pendiente' },
+  'almendro-superintensivo': { file: '2021-03-almendro-superintensivo.jpg', alt: 'Almendro superintensivo: hileras de almendros en flor', pos: '50% 100%' },
 
   // Calidad
   premioCalidad: { file: '2025-05-premios-extrema-seleccion-aove-2025-1.jpg', alt: 'Los tres galardones de los Premios Extrema Selección 2025: Maestro Almazara, Medalla de Oro y Mejor AOVE producido en una cooperativa', pos: '50% 55%' },
@@ -37,7 +37,7 @@ export const FOTOS = {
   // Visitas
   heroVisitas: { file: '2025-05-premios-extrema-seleccion-aove-2025-5.jpg', alt: 'Depósitos de la almazara con el logo de la cooperativa y el trofeo Maestro Almazara en primer término', pos: '50% 40%' },
   visitaAlmazara: { file: '2025-05-premios-extrema-seleccion-aove-2025-9.jpg', alt: 'Grandes depósitos blancos de la almazara de Guareña', pos: '50% 30%' },
-  visitaOlivar: { file: null, alt: 'Ruta por el olivar', label: 'Ruta por el olivar · foto pendiente' },
+  visitaOlivar: { file: '2021-03-olivar-intensivo.jpg', alt: 'Hileras de olivos en una finca de socios', pos: '50% 100%' },
   visitaGrupos: { file: '2015-07-cooperativa-de-san-pedro-127.jpg', alt: 'Grupo de socios entre los depósitos de acero de la cooperativa', pos: '50% 50%' },
 
   // Blog
