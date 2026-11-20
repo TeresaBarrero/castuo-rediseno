@@ -17,3 +17,4 @@ lighthouse/
 test.log
 serve-pages.log
 scripts/*.log
+runwatch.log

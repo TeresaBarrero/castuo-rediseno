@@ -121,28 +121,26 @@ El sitio es `noindex` a propósito (comentario explicativo en el `<head>` de cad
 
 ### Lighthouse (móvil)
 
-Medido con `node scripts/lighthouse.mjs` (Lighthouse 12, configuración móvil por defecto: Moto G Power y 4G lenta simuladas) sobre el build servido con compresión, como en Vercel o Netlify (`npx serve dist`):
+Medido el 20/11/2026 sobre la **web publicada** (https://teresabarrero.github.io/castuo-rediseno/) con `node scripts/lighthouse.mjs`: Lighthouse 12, configuración móvil por defecto (Moto G Power y 4G lenta simuladas).
 
 | Página | Rendimiento | Accesibilidad | Buenas prácticas | SEO | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|---|
-| Inicio | 99 | 100 | 100 | 69* | 2,2 s | 0,009 | 0 ms |
-| Tienda | 100 | 100 | 100 | 69* | 1,6 s | 0 | 10 ms |
-| Ficha AOVE | 99 | 100 | 100 | 69* | 2,1 s | 0 | 0 ms |
-| Cooperativa | 98 | 100 | 100 | 69* | 2,1 s | 0,009 | 0 ms |
-| Fincas | 100 | 100 | 100 | 69* | 1,6 s | 0 | 0 ms |
-| Calidad y premios | 100 | 100 | 100 | 69* | 1,6 s | 0 | 30 ms |
-| Visitas | 99 | 100 | 100 | 69* | 2,1 s | 0 | 0 ms |
-| Blog | 99 | 100 | 100 | 69* | 2,1 s | 0 | 0 ms |
-| Artículo | 99 | 100 | 100 | 69* | 2,0 s | 0 | 0 ms |
-| FAQ | 99 | 100 | 100 | 69* | 1,8 s | 0 | 0 ms |
-| Socios | 100 | 100 | 100 | 69* | 1,7 s | 0 | 0 ms |
-| Contacto | 100 | 100 | 100 | 69* | 1,6 s | 0 | 0 ms |
+| Inicio | 99 | 100 | 100 | 69* | 1,8 s | 0,009 | 0 ms |
+| Tienda | 100 | 100 | 100 | 69* | 1,5 s | 0 | 10 ms |
+| Ficha AOVE | 99 | 100 | 100 | 69* | 1,8 s | 0 | 30 ms |
+| Cooperativa | 100 | 100 | 100 | 69* | 1,7 s | 0 | 20 ms |
+| Fincas | 100 | 100 | 100 | 69* | 1,3 s | 0,009 | 40 ms |
+| Calidad y premios | 100 | 100 | 100 | 69* | 1,6 s | 0 | 20 ms |
+| Visitas | 100 | 100 | 100 | 69* | 1,6 s | 0 | 10 ms |
+| Blog | 100 | 100 | 100 | 69* | 1,7 s | 0,009 | 0 ms |
+| Artículo | 100 | 100 | 100 | 69* | 1,5 s | 0 | 0 ms |
+| FAQ | 100 | 100 | 100 | 69* | 1,4 s | 0,009 | 10 ms |
+| Socios | 100 | 100 | 100 | 69* | 1,5 s | 0,009 | 0 ms |
+| Contacto | 100 | 100 | 100 | 69* | 1,4 s | 0,009 | 0 ms |
 
-\* **SEO 69 por el `noindex`** (la auditoría `is-crawlable` falla a propósito). Con una copia del build sin `noindex` (`node scripts/seo-demo.mjs`, que nunca se despliega) el SEO es **100** en todas las páginas medidas.
+* **SEO 69 por el `noindex`** (la auditoría `is-crawlable` falla a propósito). Con una copia del build sin `noindex` (`node scripts/seo-demo.mjs`, que nunca se despliega) el SEO es **100** en todas las páginas medidas.
 
-Notas de medición, para ser transparentes:
-- Lighthouse se lanza con `--disable-gpu`. En Chrome *headless* de Windows sin GPU, la rasterización por software (SwiftShader) bloqueaba el hilo principal más de 1 s en cualquier página larga, incluida una copia sin CSS ni JS. Es un artefacto del entorno (lo confirmó una traza: un `GPUTask` paralelo a la tarea larga) y `--disable-gpu` es la configuración habitual en integración continua.
-- El **LCP real observado** está entre 160 y 190 ms. Los valores de la tabla son los **simulados en 4G lenta**: seis páginas quedan entre 2,0 y 2,2 s, ligeramente por encima del objetivo de 2,0 s.
+Nota de medición: Lighthouse se lanza con `--disable-gpu`. En Chrome *headless* de Windows sin GPU, la rasterización por software (SwiftShader) bloqueaba el hilo principal más de 1 s en cualquier página larga, incluida una copia sin CSS ni JS. Es un artefacto del entorno (lo confirmó una traza: un `GPUTask` paralelo a la tarea larga) y `--disable-gpu` es la configuración habitual en integración continua.
 
 ## Scripts
 
@@ -171,4 +169,4 @@ Ver [`PENDIENTE.md`](PENDIENTE.md): fotos que faltan, logo en SVG, variedades, h
 
 **Decisiones.** La dirección «Campo contemporáneo» combina fondo piedra, tinta y oliva, tipografía Bricolage Grotesque y fotografía real de la cooperativa, sin degradados ni adornos. La arquitectura elimina el menú duplicado (los vinos viven en la Tienda) y diferencia los teléfonos («Oficinas» y «Atención al cliente»). Los productos agotados nunca aparecen en portada. Las 320 fotos de castuo.es se catalogaron a mano: lo que no existía se deja como hueco documentado en lugar de rellenarlo con imágenes de banco. Las animaciones son contenidas y sirven al producto: contadores, el carrito que recibe el producto, filtros con FLIP y la foto de la tarjeta que se convierte en la de la ficha.
 
-**Resultados.** 41 páginas estáticas con unos 14,5 KB de JavaScript comprimido por página. En Lighthouse móvil: rendimiento de 98 a 100, accesibilidad 100 y buenas prácticas 100 en todas las páginas, con CLS de 0 a 0,009. El SEO on-page llega a 100 al retirar el `noindex`, que se mantiene a propósito porque es un concepto.
+**Resultados.** 41 páginas estáticas con unos 14,5 KB de JavaScript comprimido por página. En Lighthouse móvil, sobre la web publicada: rendimiento de 99 a 100, accesibilidad 100 y buenas prácticas 100 en todas las páginas, LCP de 1,3 a 1,8 s y CLS de 0 a 0,009. El SEO on-page llega a 100 al retirar el `noindex`, que se mantiene a propósito porque es un concepto.
