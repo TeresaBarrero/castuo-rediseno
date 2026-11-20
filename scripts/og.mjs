@@ -4,6 +4,7 @@ import { chromium } from 'playwright';
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import fsSync from 'node:fs';
 
 const FOTOS = 'src/assets/fotos/original';
 const OUT = 'public/og';
@@ -14,7 +15,9 @@ const sq = path.join(FOTOS, '2014-11-cropped-logotipo-nuevo.png');
 await sharp(sq).resize(48, 48).png().toFile('public/favicon.png');
 await sharp(sq).resize(180, 180).flatten({ background: '#ffffff' }).png().toFile('public/apple-touch-icon.png');
 
-const b64 = async (file, w = 700, h = 630) => 'data:image/jpeg;base64,' + (await sharp(path.join(FOTOS, file)).resize(w, h, { fit: 'cover' }).jpeg({ quality: 82 }).toBuffer()).toString('base64');
+const fotoPath = (file) => { const a = path.join(FOTOS, file); try { require_exists(a); return a; } catch { return path.join('src/assets/fotos/externas', file); } };
+function require_exists(p) { if (!fsSync.existsSync(p)) throw new Error(p); }
+const b64 = async (file, w = 700, h = 630) => 'data:image/jpeg;base64,' + (await sharp(fotoPath(file)).resize(w, h, { fit: 'cover' }).jpeg({ quality: 82 }).toBuffer()).toString('base64');
 const font = async (f) => 'data:font/woff2;base64,' + (await fs.readFile(f)).toString('base64');
 const logo = 'data:image/png;base64,' + (await sharp('src/assets/logo/logotipo-castuo.png').resize(240).png().toBuffer()).toString('base64');
 const bric = await font('node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-600-normal.woff2');

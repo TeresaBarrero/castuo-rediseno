@@ -2,6 +2,8 @@
 import Base from '@/layouts/Base.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
+import { FOTOS, type Slot } from '@/data/fotos';
+const credits = Object.values(FOTOS as Record<string, Slot>).flatMap((s) => (s.credit ? [s.credit] : []));
 ---
 <Base title="Aviso legal del concepto de rediseño | Castuo" description="Información legal de este concepto de rediseño no oficial de castuo.es: autoría, privacidad, cookies y condiciones." og="default">
   <section class="lg">
@@ -15,6 +17,9 @@ import { PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
         <p>Este concepto <strong>no recoge ni envía datos personales</strong>. Los formularios (newsletter, reserva de visitas, acceso de socios, avisos de stock) solo validan los campos en tu navegador y muestran un mensaje de confirmación simulado.</p>
         <h2 id="cookies">Cookies</h2>
         <p>No se usan cookies propias ni de terceros, ni herramientas de analítica. El carrito se guarda únicamente en el almacenamiento local de tu navegador (localStorage) para que puedas probar la experiencia de compra; puedes vaciarlo cuando quieras.</p>
+        <h2 id="creditos">Créditos de imagen</h2>
+        <p>Salvo las indicadas aquí, las fotografías son de la Cooperativa del Campo San Pedro (castuo.es). Estas imágenes ilustrativas proceden de Wikimedia Commons, se han recortado y redimensionado, y no muestran productos ni instalaciones de la cooperativa:</p>
+        <ul>{credits.map((c) => <li>«{c.title}», de {c.author} · <a href={c.source} rel="noopener">Wikimedia Commons</a> · <a href={c.licenseUrl} rel="noopener license">{c.license}</a></li>)}</ul>
         <h2 id="condiciones">Condiciones de venta</h2>
         <p>No hay venta ni pago real. Los precios mostrados se tomaron de la tienda oficial a título ilustrativo y pueden no estar actualizados. Para comprar, visita <a href="https://castuo.es/tienda/">la tienda de castuo.es</a>.</p>
       </div>

@@ -6,7 +6,7 @@ import ProductCard from '@/components/ProductCard.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { fotoSrc } from '@/lib/images';
-import { FOTOS } from '@/data/fotos';
+import { FOTOS, type Slot } from '@/data/fotos';
 import { cardsFor, getProducts } from '@/lib/shop';
 import { fmtDate, slugCat } from '@/lib/blog';
 import { orgId } from '@/lib/schema';
@@ -20,7 +20,7 @@ const { Content } = await render(post);
 const d = post.data;
 const site = Astro.site!;
 const url = new URL(`/blog/${post.id}/`, site).href;
-const slot = (FOTOS as Record<string, { file: string | null }>)[post.id];
+const slot = (FOTOS as Record<string, Slot>)[post.id];
 const src = fotoSrc(slot?.file);
 const img = src ? new URL((await getImage({ src, width: 1200, format: 'jpg' })).src, site).href : undefined;
 const iso = d.date.toISOString().slice(0, 10);
@@ -57,6 +57,9 @@ const more = all.filter((p) => p.id !== post.id).sort((a, b) => (a.data.category
     </header>
     <div class="wrap">
       <Foto slot={post.id} crop={1.8} priority sizes="(max-width: 1240px) 100vw, 1176px" widths={[480, 800, 1200, 1600]} height="520px" class="post__img" transitionName={`post-${post.id}`} />
+      {slot?.credit && (
+        <p class="credit">Foto: «{slot.credit.title}», de {slot.credit.author}, en <a href={slot.credit.source} rel="noopener">Wikimedia Commons</a> · <a href={slot.credit.licenseUrl} rel="noopener license">{slot.credit.license}</a> · recortada y redimensionada. Imagen ilustrativa: no es de la cooperativa.</p>
+      )}
     </div>
     <div class="wrap post__body">
       <div class="prose"><Content /></div>
@@ -90,6 +93,8 @@ const more = all.filter((p) => p.id !== post.id).sort((a, b) => (a.data.category
   .post__t { max-width: 920px; }
   .post__lead { max-width: 720px; }
   .meta { font-size: 14px; color: var(--muted-2); }
+  .credit { margin-top: 10px; font-size: 13px; color: var(--muted-2); }
+  .credit a { color: var(--muted-2); }
   .post :global(.post__img) { border-radius: 8px; }
   .post__body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 72px; padding-top: 56px; padding-bottom: 96px; align-items: start; }
   .post__aside { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 20px; }

@@ -11,11 +11,11 @@ Todo lo marcado `[ENTRE CORCHETES]` en el diseño se ha resuelto con datos publi
 
 | Hueco | Dónde | Motivo |
 |---|---|---|
-| Oficinas | Galería de Cooperativa | La galería «Oficinas» de castuo.es no contiene imágenes en el HTML. |
-| Migas extremeñas | Blog | No hay fotos de recetas en la web oficial. |
-| Tostadas con AOVE | Blog | Ídem. |
+| Oficinas | Galería de Cooperativa | La galería «Oficinas» de castuo.es no contiene imágenes en el HTML, y no hay fotos libres del edificio (en Wikimedia Commons solo aparece el pueblo). |
 | Cata de aceite en la almazara / socios en la recepción de aceituna | Inicio | No existen; se han usado en su lugar fotos reales del equipo ante los depósitos y de los socios en el 50 aniversario. |
 | Sellos (Extrema Selección, ISO) | Inicio, Calidad, fichas | Los sellos ISO de castuo.es son logos de la certificadora (Applus+), un tercero: se han sustituido por insignias tipográficas. Pedir los sellos oficiales y su manual de uso. |
+
+**Fotos de recetas ilustrativas**: los artículos de migas y tostadas usan dos fotos de Wikimedia Commons (Juan Emilio Prades Bel, CC BY 4.0), con crédito bajo la foto y en /legal/#creditos. No son platos de la cooperativa: habría que sustituirlas por fotos propias.
 
 **Fotos de fincas en baja resolución**: olivar (tradicional, intensivo y superintensivo), viña en vaso, almendro y la ruta por el olivar usan las miniaturas de 400 × 400 px de castuo.es, que llevan el logo superpuesto. Un recorte en servidor deja el logo fuera, pero a 2× se ven algo blandas. Habría que pedir los originales sin logo.
 
