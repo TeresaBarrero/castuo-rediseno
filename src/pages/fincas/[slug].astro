@@ -1,0 +1,60 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('fincas')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((f) => ({ params: { slug: f.id }, props: { f, all } }));
+}
+const { f, all } = Astro.props as { f: CollectionEntry<'fincas'>; all: CollectionEntry<'fincas'>[] };
+const others = all.filter((x) => x.id !== f.id);
+const total = f.data.group === 'olivar' ? '7.000 ha de olivar entre todos los socios' : f.data.group === 'vina' ? '600 ha de vid entre todos los socios' : 'Consultar';
+---
+<Base title={`${f.data.name} en Guareña | Fincas Castuo`} description={`${f.data.desc} Conoce cómo cultivan los socios de la Cooperativa del Campo San Pedro el ${f.data.name.toLowerCase()}.`} active="fincas" og="fincas">
+  <section class="fd">
+    <div class="wrap stack" style="gap:24px">
+      <Breadcrumbs items={[{ label: 'Cooperativa', href: '/cooperativa/' }, { label: 'Fincas', href: '/fincas/' }, { label: f.data.name }]} />
+      <div class="g2" style="align-items:start">
+        <div class="stack" style="gap:20px">
+          <p class="eyebrow" style="margin:0">{f.data.groupLabel}</p>
+          <h1 class="h1 h1--page">{f.data.name}</h1>
+          <p class="lead">{f.data.desc}</p>
+          <dl class="fd__dl">
+            <div><dt>Superficie</dt><dd>{f.data.area}</dd></div>
+            <div><dt>Variedades</dt><dd>{f.data.varieties}</dd></div>
+            <div><dt>Cosecha</dt><dd>{f.data.harvest}</dd></div>
+            <div><dt>En la cooperativa</dt><dd>{total}</dd></div>
+          </dl>
+        </div>
+        <Foto slot={f.id} crop={1.29} priority sizes="(max-width: 960px) 100vw, 592px" widths={[400, 600, 800, 1200]} height="460px" transitionName={`finca-${f.id}`} />
+      </div>
+    </div>
+  </section>
+  <section class="sec--white fd__body">
+    <div class="wrap g2" style="align-items:start">
+      <h2 class="h2 h2--sm">Cómo se cultiva</h2>
+      <div class="stack fd__txt">{f.data.body.map((p) => <p>{p}</p>)}
+        <p>¿Quieres verlo en persona? Organizamos <a href="/visitas-almazara-guarena/">rutas por las fincas y visitas a la almazara</a>.</p>
+      </div>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap stack" style="gap:24px">
+      <h2 class="h2 h2--sm">Otras fincas</h2>
+      <ul class="chips" role="list" style="list-style:none;padding:0;margin:0">
+        {others.map((o) => <li><a class="chip" href={`/fincas/${o.id}/`}>{o.data.name}</a></li>)}
+      </ul>
+      <a class="btn self-start" href="/visitas-almazara-guarena/">Reservar una visita</a>
+    </div>
+  </section>
+</Base>
+<style>
+  .fd { padding: 40px 0 88px; }
+  .fd__dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 8px 0 0; padding-top: 20px; border-top: 1px solid var(--line); }
+  .fd__dl dt { color: var(--muted-2); font-size: 14px; }
+  .fd__dl dd { margin: 0; font-weight: 600; }
+  .fd__body { padding: 88px 0; }
+  .fd__txt { gap: 18px; line-height: 1.7; color: var(--body-2); font-size: 17px; }
+</style>

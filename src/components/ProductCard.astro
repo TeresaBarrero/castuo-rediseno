@@ -1,0 +1,81 @@
+---
+import { getImage } from 'astro:assets';
+import { fotoSrc } from '@/lib/images';
+import type { Card } from '@/lib/shop';
+import Foto from './Foto.astro';
+import Icon from './Icon.astro';
+interface Props { card: Card; variant?: 'home' | 'shop'; headingLevel?: 'h2' | 'h3'; sizes?: string; height?: string; reveal?: boolean }
+const { card: c, variant = 'shop', headingLevel = 'h3', sizes = '(max-width: 960px) 50vw, 300px', height = '300px', reveal = true } = Astro.props;
+const H = headingLevel;
+const src = fotoSrc(c.img);
+let payload = c.addPayload;
+if (payload && src) {
+  const t = await getImage({ src, width: 144, height: 144, fit: 'cover', format: 'webp', quality: 70 });
+  payload = JSON.stringify({ ...JSON.parse(payload), img: t.src });
+}
+---
+<article class:list={['pc', `pc--${variant}`, { 'has-hover': c.hoverImg }]} data-card data-item={variant === 'shop' ? '' : undefined}
+  data-cat={c.category + (c.tipo ? ` ${c.tipo}` : '')} data-formats={c.fmts.join(' ')} data-price={c.price} data-order={c.order} data-new={c.isNew ? 1 : 0}
+  data-reveal={reveal ? '' : undefined}>
+  <a href={c.href} class="pc__media" tabindex="-1" aria-hidden="true" style={`height:${height}`}>
+    <Foto file={c.img} alt="" sizes={sizes} widths={[320, 480, 720]} class="pc__img" fit="contain" transitionName={c.transitionName} />
+    {c.hoverImg && <Foto file={c.hoverImg} alt="" sizes={sizes} widths={[320, 480, 720]} class="pc__img pc__img--2" />}
+    {c.out && <span class="pc__badge">Agotado · avísame</span>}
+  </a>
+  <p class="cat-label">{c.catLabel}</p>
+  <H class="pc__t"><a href={c.href}>{c.name}</a></H>
+  <div class="pc__row">
+    <p class="price pc__p">{c.priceLabel}</p>
+    {variant === 'home' && payload ? (
+      <button type="button" class="pc__add" aria-label={`Añadir ${c.name} al carrito`} data-add={payload}><Icon name="plus" size={18} width={2} /></button>
+    ) : variant === 'home' ? (
+      <a href={c.href} class="pc__add" aria-label={`Ver ${c.name}`}><Icon name="arrow" size={18} width={2} /></a>
+    ) : c.cta === 'Añadir' && payload ? (
+      <button type="button" class="pc__cta" data-add={payload} aria-label={`Añadir ${c.name} al carrito`}>Añadir</button>
+    ) : (
+      <a href={c.href} class="pc__cta" aria-label={`${c.cta}: ${c.name}`}>{c.cta}</a>
+    )}
+  </div>
+</article>
+
+<style>
+  .pc { display: flex; flex-direction: column; gap: 10px; }
+  .pc[hidden] { display: none; }
+  .pc__media {
+    position: relative; display: block; border-radius: var(--radius-sm); overflow: hidden; background: #EEECE4;
+  }
+  .pc__media :global(.media), .pc__media :global(.ph) { position: absolute; inset: 0; height: 100%; background: #EEECE4; border-radius: 0; }
+  .pc__media :global(.pc__img img) { transition: transform .8s var(--ease), opacity .5s var(--ease); mix-blend-mode: multiply; }
+  .pc__media :global(.pc__img--2) { opacity: 0; transition: opacity .5s var(--ease); }
+  .pc__media :global(.pc__img--2 img) { object-fit: cover !important; mix-blend-mode: normal; }
+  .pc:hover .pc__media :global(.pc__img img) { transform: scale(1.04); }
+  .has-hover:hover .pc__media :global(.pc__img--2) { opacity: 1; }
+  .pc__badge { position: absolute; top: 12px; left: 12px; z-index: 2; background: var(--ink); color: var(--on-dark); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: var(--radius-pill); }
+  .pc .cat-label { margin-top: 4px; }
+  .pc__t { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.35; font-family: var(--font-body); letter-spacing: 0; }
+  .pc--home .pc__t { font-size: 17px; }
+  .pc__t a { color: var(--ink); text-decoration: none; }
+  .pc__t a::after { content: ''; }
+  .pc__t a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .pc__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: auto; }
+  .pc__p { font-size: 21px; }
+  .pc--home .pc__p { font-size: 22px; }
+  .pc__add {
+    position: relative; width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center; overflow: hidden; isolation: isolate;
+    transition: color .3s var(--ease);
+  }
+  .pc__add::before { content: ''; position: absolute; inset: 0; background: var(--ink); border-radius: 50%; transform: scale(0); transition: transform .35s var(--ease); z-index: -1; }
+  .pc:hover .pc__add, .pc__add:hover, .pc__add:focus-visible { color: var(--on-dark); }
+  .pc:hover .pc__add::before, .pc__add:hover::before, .pc__add:focus-visible::before { transform: scale(1); }
+  .pc__cta {
+    min-height: 44px; padding: 0 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    display: inline-flex; align-items: center; text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap;
+    transition: background-color .25s var(--ease), color .25s var(--ease);
+  }
+  .pc__cta:hover { background: var(--ink); color: var(--on-dark); }
+  @media (max-width: 560px) {
+    .pc__row { flex-wrap: wrap; }
+    .pc__p { font-size: 19px; }
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import { getCollection } from 'astro:content';
+
+const fincas = (await getCollection('fincas')).sort((a, b) => a.data.order - b.data.order);
+const tabs = [['todo', 'Todas'], ['olivar', 'Olivar'], ['vina', 'Viñedo'], ['almendro', 'Almendro']];
+const totals: Record<string, string> = { olivar: '7.000 ha de olivar en la cooperativa', vina: '600 ha de vid en la cooperativa', almendro: 'Consultar' };
+---
+<Base title="Olivar, viñedo y almendro en Guareña | Fincas Castuo"
+  description="Seis sistemas de cultivo en las fincas de los socios de la cooperativa: olivar tradicional, intensivo y superintensivo, viña en vaso y en espaldera y almendro."
+  active="fincas" og="fincas">
+  <div data-filter-root data-param="categoria" data-default="todo" data-inline-links>
+    <section class="fh">
+      <div class="wrap stack" style="gap:24px">
+        <Breadcrumbs items={[{ label: 'Cooperativa', href: '/cooperativa/' }, { label: 'Fincas' }]} />
+        <h1 class="h1 h1--page" style="max-width:960px">Nuestras fincas: olivar, viñedo y almendro en Guareña</h1>
+        <p class="lead" style="max-width:720px">Seis sistemas de cultivo conviven en las parcelas de nuestros socios. Cada uno tiene su ritmo, su cosecha y su forma de cuidar la tierra.</p>
+        <div class="chips" role="group" aria-label="Filtrar por cultivo">
+          {tabs.map(([id, l]) => <button type="button" class="chip" data-filter-cat={id} aria-pressed={id === 'todo' ? 'true' : 'false'}>{l}</button>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="fl" aria-label="Fincas">
+      <div class="wrap g3 fgrid" data-filter-grid data-reveal-group>
+        {fincas.map((f) => (
+          <article class="fc" data-item data-cat={f.data.group} data-order={f.data.order} data-price="0" data-reveal>
+            <Foto slot={f.id} crop={1.4} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="280px" class="fc__img" transitionName={`finca-${f.id}`} />
+            <div class="fc__b">
+              <p class="eyebrow" style="margin:0">{f.data.groupLabel}</p>
+              <h2 class="fc__t"><a href={`/fincas/${f.id}/`}>{f.data.name}</a></h2>
+              <p class="muted fc__d">{f.data.desc}</p>
+              <dl class="fc__dl">
+                <div><dt>Superficie</dt><dd>{f.data.area}</dd></div>
+                <div><dt>Variedades</dt><dd>{f.data.varieties}</dd></div>
+              </dl>
+              <a href={`/fincas/${f.id}/`} class="lnk fc__l" aria-hidden="true" tabindex="-1">Ver finca</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="wrap muted fnote">Superficie por sistema y variedades: pendiente de dato de la cooperativa. En total, los socios cultivan {totals.olivar} y {totals.vina}.</p>
+    </section>
+  </div>
+
+  <section class="dark on-dark fv">
+    <div class="wrap fv__in" data-reveal>
+      <div class="stack" style="max-width:640px;gap:14px">
+        <p class="eyebrow" style="margin:0">Visitas</p>
+        <h2 class="h2">Pasea entre olivos con quien los cultiva</h2>
+        <p class="lead lead--sm">Organizamos rutas por las fincas y visitas a la almazara para particulares, grupos y colegios.</p>
+      </div>
+      <a href="/visitas-almazara-guarena/" class="btn btn--light btn--lg">Reservar visita</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .fh { padding: 40px 0 72px; }
+  .fl { padding: 0 0 104px; }
+  .fc { background: var(--surface); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; position: relative; transition: box-shadow .5s var(--ease), transform .5s var(--ease); }
+  .fc[hidden] { display: none; }
+  .fc:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(23, 32, 26, .08); }
+  .fc :global(.fc__img) { border-radius: 0; }
+  .fc :global(.media img) { transition: transform .9s var(--ease); }
+  .fc:hover :global(.media img) { transform: scale(1.04); }
+  .fc__b { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .fc__t { font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -.015em; }
+  .fc__t a { color: var(--ink); text-decoration: none; }
+  .fc__t a::after { content: ''; position: absolute; inset: 0; }
+  .fc__d { line-height: 1.6; }
+  .fc__dl { margin: 4px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-size: 14px; }
+  .fc__dl dt { color: var(--muted-2); }
+  .fc__dl dd { margin: 0; font-weight: 600; }
+  .fc__l { margin-top: auto; align-self: flex-start; }
+  .fnote { margin-top: 32px; font-size: 14px; }
+  .fv { padding: 96px 0; }
+  .fv__in { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px; }
+  @media (max-width: 960px) { .fv { padding: 72px 0; } .fh { padding-bottom: 48px; } }
+</style>

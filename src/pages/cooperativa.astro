@@ -1,0 +1,187 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import Lightbox from '@/components/Lightbox.astro';
+import { ORG } from '@/config';
+import { FOTOS } from '@/data/fotos';
+import { organization } from '@/lib/schema';
+
+const hitos = [
+  { y: '1965', t: 'Nace la cooperativa', d: '137 socios fundan la Cooperativa del Campo San Pedro para comercializar la uva de mesa, el producto estrella de la época.' },
+  { y: 'Después', t: 'Llega el olivar y la almazara', d: 'Para diversificar, se integra el olivo y se instala una almazara que recibe la aceituna de los socios y comercializa un aceite de primera calidad.' },
+  { y: 'Más tarde', t: 'Del racimo al vino', d: 'Con más socios y nuevas variedades de uva, empezamos a elaborar y envasar vino: desde vino del año hasta caldos envejecidos de forma artesanal.' },
+  { y: 'Luego', t: 'Maíz y tomate', d: 'Nuevos cultivos amplían la actividad de los socios y de la cooperativa.' },
+  { y: 'Hoy', t: 'Más de 1.100 socios', d: 'Más grandes que ayer y, como decimos en casa, más pequeños de lo que vamos a ser.', now: true },
+];
+const prod = [
+  { c: 'Olivo', ha: '7.000', kg: '22.000.000', l: '4.500.000' },
+  { c: 'Vid', ha: '600', kg: '5.000.000', l: '5.000.000' },
+  { c: 'Tomate', ha: '2.000', kg: '10.000.000', l: '—' },
+  { c: 'Maíz', ha: '1.500', kg: '15.000.000', l: '—' },
+];
+const gal = [
+  { slot: 'galPremios', t: 'Premios Extrema Selección 2025' },
+  { slot: 'galAniversario', t: '50 aniversario' },
+  { slot: 'galInstalaciones', t: 'Instalaciones' },
+  { slot: 'galOficinas', t: 'Oficinas' },
+] as const;
+const lb = [
+  FOTOS.galPremios, FOTOS.calidadEquipo, FOTOS.heroInicio, FOTOS.heroVisitas,
+  FOTOS.galAniversario, FOTOS.historiaInicio, FOTOS.visitaGrupos,
+  FOTOS.galInstalaciones, FOTOS.heroCooperativa, FOTOS['vina-en-espaldera'],
+].filter((f) => f.file);
+const galIdx = [0, 4, 7, -1];
+---
+<Base title="Cooperativa del Campo San Pedro, Guareña · Historia desde 1965"
+  description="Desde 1965, la Cooperativa del Campo San Pedro reúne a más de 1.100 socios de 11 municipios de Badajoz. Historia, producción, valores y servicios."
+  active="cooperativa" og="cooperativa" jsonLd={organization(Astro.site!)}>
+
+  <section class="ch">
+    <div class="wrap stack" style="gap:24px">
+      <Breadcrumbs items={[{ label: 'Cooperativa' }]} />
+      <h1 class="h1 h1--page" style="max-width:980px">Cooperativa del Campo San Pedro: agricultores de Guareña desde 1965</h1>
+      <p class="lead" style="max-width:720px">Empezamos 137 socios vendiendo uva de mesa. Hoy somos más de 1.100, elaboramos aceite de oliva virgen extra y vino, y seguimos tomando las decisiones juntos.</p>
+      <Foto slot="heroCooperativa" priority sizes="(max-width: 1240px) 100vw, 1176px" widths={[480, 800, 1200, 1600, 1920]} height="520px" class="ch__img" parallax />
+    </div>
+  </section>
+
+  <section id="historia" aria-labelledby="hist" class="hist">
+    <div class="wrap stack" style="gap:32px">
+      <div data-reveal><p class="eyebrow" style="margin-bottom:14px">Historia</p><h2 id="hist" class="h2">De la uva de mesa a la almazara</h2></div>
+      <div class="tl" data-timeline>
+        <span class="tl__line" aria-hidden="true"></span>
+        <ol class="tl__list" role="list">
+        {hitos.map((h) => (
+          <li class:list={['tl__i', { 'tl__i--now': h.now }]} data-tl-item>
+            <p class="tl__y">{h.y}</p>
+            <div><h3 class="h3">{h.t}</h3><p class="tl__d">{h.d}</p></div>
+          </li>
+        ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="mun" class="sec--white mun">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:16px" data-reveal>
+        <p class="eyebrow" style="margin:0">Nuestros socios</p>
+        <h2 id="mun" class="h2">Once municipios, una sola cooperativa</h2>
+        <p class="muted" style="line-height:1.65">Los socios cultivan en Guareña y en los pueblos de alrededor. Cada campaña, su aceituna y su uva llegan a nuestras instalaciones.</p>
+      </div>
+      <ul class="towns" role="list" data-reveal-group>
+        {ORG.municipalities.map((m) => <li data-reveal>{m}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section id="produccion" aria-labelledby="prod" class="prod">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:16px" data-reveal>
+        <p class="eyebrow" style="margin:0">Producción</p>
+        <h2 id="prod" class="h2">Lo que cultivan y recogen nuestros socios</h2>
+        <p class="muted" style="line-height:1.65">Datos de producción publicados por la cooperativa. Nuestro objetivo es seguir aumentando la capacidad de molturación de la almazara y renovar las líneas de lavado y limpieza de la aceituna.</p>
+      </div>
+      <div class="tbl-wrap" data-reveal>
+        <table class="tbl">
+          <caption class="sr-only">Datos de producción por cultivo</caption>
+          <thead><tr><th scope="col">Cultivo</th><th scope="col">Hectáreas</th><th scope="col">Kilos producidos</th><th scope="col">Litros obtenidos</th></tr></thead>
+          <tbody>{prod.map((r) => <tr><th scope="row">{r.c}</th><td>{r.ha}</td><td>{r.kg}</td><td>{r.l}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="valores" aria-labelledby="val" class="dark on-dark vals">
+    <div class="wrap stack" style="gap:20px;max-width:900px" data-reveal>
+      <p class="eyebrow" style="margin:0">Valores · Compromiso</p>
+      <h2 id="val" class="h2">«Seguir creciendo y dar a nuestra comarca la relevancia que reclamamos»</h2>
+      <p class="lead lead--sm">A base de sacrificio, buen hacer, formación e innovación, queremos que el campo de Guareña tenga el sitio que merece en los mercados nacionales e internacionales.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="mas" class="mas">
+    <div class="wrap stack" style="gap:36px">
+      <h2 id="mas" class="h2" data-reveal>Conoce más de la cooperativa</h2>
+      <div class="g3" data-reveal-group>
+        <a href="#produccion" class="mcard" data-reveal><h3 class="h3">Producción</h3><p class="muted">Cómo trabajamos la aceituna y la uva, de la recepción al envasado.</p><span class="mcard__l">Ver producción</span></a>
+        <a href="#valores" class="mcard" data-reveal><h3 class="h3">Valores</h3><p class="muted">Crecer juntos y dar a nuestra comarca la relevancia que merece, con trabajo, formación e innovación.</p><span class="mcard__l">Ver valores</span></a>
+        <a href="/socios/" class="mcard" data-reveal><h3 class="h3">Servicios a socios</h3><p class="muted">Asesoramiento técnico, boletines A.T.R.I.A, documentación y balances.</p><span class="mcard__l">Área de socios</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria" aria-labelledby="gal" class="gal">
+    <div class="wrap stack" style="gap:28px">
+      <div class="sec-head" data-reveal><h2 id="gal" class="h2">Galería</h2><button type="button" class="lnk linkbtn" data-gallery-open="0">Ver galería completa</button></div>
+      <ul class="g4 m2 gal__grid" role="list" data-reveal-group>
+        {gal.map((g, i) => (
+          <li data-reveal>
+            {galIdx[i] >= 0 ? (
+              <button type="button" class="gcard" data-gallery-open={galIdx[i]} aria-label={`Abrir galería: ${g.t}`}>
+                <Foto slot={g.slot} crop={1.2} sizes="(max-width: 960px) 50vw, 290px" widths={[300, 450, 600]} height="240px" />
+                <span class="gcard__t">{g.t}</span>
+              </button>
+            ) : (
+              <div class="gcard gcard--ph"><Foto slot={g.slot} height="240px" /><span class="gcard__t">{g.t}</span></div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Lightbox items={lb} />
+</Base>
+
+<style>
+  .ch { padding: 40px 0 88px; }
+  .ch :global(.ch__img) { margin-top: 24px; border-radius: 8px; }
+  .hist { padding: 0 0 104px; }
+  .tl { position: relative; --p: 0; }
+  .tl__list { list-style: none; margin: 0; padding: 0; }
+  .tl__line { position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--line); }
+  .tl__line::after { content: ''; position: absolute; inset: 0; background: var(--olive); transform-origin: top; transform: scaleY(var(--p)); }
+  .tl__i { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 32px; padding: 32px 0 32px 32px; border-top: 1px solid var(--line); position: relative; }
+  .tl__i:last-of-type { border-bottom: 1px solid var(--line); }
+  .tl__i::before { content: ''; position: absolute; left: -5px; top: 46px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-strong); transition: background-color .4s, border-color .4s, transform .4s var(--ease); }
+  .tl__i.is-lit::before { background: var(--olive); border-color: var(--olive); transform: scale(1.15); }
+  .tl__y { font-family: var(--font-display); font-weight: 600; font-size: 34px; letter-spacing: -.02em; line-height: 1.1; color: var(--muted-2); transition: color .5s var(--ease); }
+  .tl__i.is-lit .tl__y { color: var(--ink); }
+  .tl__i--now.is-lit .tl__y { color: var(--olive); }
+  .tl__i .h3, .tl__d { transition: opacity .5s var(--ease); }
+
+  .tl__d { margin-top: 10px; line-height: 1.65; color: var(--muted); max-width: 720px; }
+  .mun { padding: 96px 0; }
+  .towns { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .towns li { padding: 10px 16px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); }
+  .prod { padding: 104px 0 96px; }
+  .tbl-wrap { overflow-x: auto; }
+  .tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .tbl th, .tbl td { padding: 14px 12px 14px 0; text-align: left; border-bottom: 1px solid var(--line); }
+  .tbl thead th { font-size: 13px; color: var(--muted-2); font-weight: 500; }
+  .tbl tbody th { font-weight: 600; }
+  .tbl td { font-family: var(--font-display); font-weight: 600; font-size: 20px; }
+  .vals { padding: 96px 0; }
+  .mas { padding: 104px 0; }
+  .mcard { background: var(--surface); border-radius: var(--radius-md); padding: 28px; display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; min-height: 220px; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+  .mcard:hover { color: var(--ink); transform: translateY(-4px); box-shadow: 0 18px 40px rgba(23, 32, 26, .08); }
+  .mcard .muted { line-height: 1.6; }
+  .mcard__l { margin-top: auto; font-weight: 600; color: var(--olive); }
+  .gal { padding: 0 0 112px; }
+  .linkbtn { background: none; border: 0; font-size: 16px; }
+  .gal__grid { list-style: none; margin: 0; padding: 0; gap: 16px; }
+  .gcard { display: flex; flex-direction: column; gap: 10px; width: 100%; padding: 0; border: 0; background: none; text-align: left; color: var(--ink); }
+  .gcard :global(.media img) { transition: transform .8s var(--ease); }
+  .gcard:hover :global(.media img) { transform: scale(1.04); }
+  .gcard__t { font-weight: 600; font-size: 15px; }
+  @media (max-width: 960px) {
+    .ch { padding-bottom: 64px; }
+    .ch :global(.ch__img) { height: 300px !important; }
+    .tl__i { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-left: 24px; }
+    .tl__i::before { top: 42px; }
+    .mun, .prod, .vals, .mas { padding: 72px 0; }
+    .tbl td { font-size: 16px; }
+    .tbl th, .tbl td { font-size: 14px; }
+  }
+</style>

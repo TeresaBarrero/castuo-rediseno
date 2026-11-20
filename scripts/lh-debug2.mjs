@@ -1,0 +1,13 @@
+import lighthouse from 'lighthouse';
+import * as chromeLauncher from 'chrome-launcher';
+import { chromium } from 'playwright';
+const url = process.argv[2];
+const chrome = await chromeLauncher.launch({ chromePath: chromium.executablePath(), chromeFlags: ['--headless=new', '--no-sandbox'] });
+const res = await lighthouse(url, { port: chrome.port, output: 'json', logLevel: 'error', onlyCategories: ['performance'] });
+const l = res.lhr;
+console.log('warnings:', l.runWarnings);
+console.log('benchmarkIndex:', l.environment.benchmarkIndex, 'throttling:', l.configSettings.throttlingMethod);
+const d = l.audits.diagnostics.details.items[0];
+console.log('diag', JSON.stringify({ numTasks: d.numTasks, numTasksOver50ms: d.numTasksOver50ms, totalTaskTime: d.totalTaskTime, maxRtt: d.maxRtt }));
+console.log(JSON.stringify(l.audits['long-tasks'].details.items.slice(0, 6)));
+await chrome.kill();

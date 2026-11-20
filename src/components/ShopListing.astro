@@ -1,0 +1,115 @@
+---
+import { CATS, type Card } from '@/lib/shop';
+import ProductCard from './ProductCard.astro';
+import Breadcrumbs, { type Crumb } from './Breadcrumbs.astro';
+import Icon from './Icon.astro';
+interface Props { cards: Card[]; active: 'todo' | 'aceite' | 'vino' | 'estuches'; h1: string; intro: string; crumbs: Crumb[] }
+const { cards, active, h1, intro, crumbs } = Astro.props;
+const inline = active === 'todo';
+const chips = [{ id: 'todo', href: '/tienda/', label: 'Todo', title: 'Todos los productos' }, ...CATS.map((c) => ({ id: c.id, href: `/tienda/${c.slug}/`, label: c.label, title: c.title }))];
+const fmts = [['250ml', 'Botella 250 ml'], ['500ml', 'Botella 500 ml'], ['750ml', 'Botella 750 ml'], ['2l', 'Garrafa 2 L'], ['3l', 'Garrafa 3 L'], ['5l', 'Garrafa 5 L']].filter(([k]) => cards.some((c) => c.fmts.includes(k)));
+const sorted = [...cards].sort((a, b) => a.order - b.order);
+---
+<div data-filter-root data-param="categoria" data-default={active} data-inline-links={inline ? '' : undefined}>
+  <section class="shop-head">
+    <div class="wrap stack" style="gap:20px">
+      <Breadcrumbs items={crumbs} />
+      <h1 class="h1 shop-h1">{h1}</h1>
+      <p class="lead shop-intro">{intro}</p>
+      <nav class="chips" aria-label="Categorías de la tienda" style="margin-top:8px">
+        {chips.map((c) => (
+          <a class="chip" href={c.href} data-filter-cat={c.id} data-title={c.title} aria-current={c.id === active ? 'page' : undefined}>{c.label}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <section class="shop-body" aria-label="Productos">
+    <div class="wrap layout">
+      <aside class="side" aria-label="Filtros">
+        <details class="flt" data-flt>
+          <summary class="flt__sum">Filtrar por formato y precio <Icon name="chevron" size={18} class="flt__chev" /></summary>
+          <div class="flt__in">
+            {fmts.length > 1 && (
+              <fieldset class="fs">
+                <legend>Formato</legend>
+                {fmts.map(([k, l]) => <label class="ck"><input type="checkbox" value={k} data-filter-fmt />{l}</label>)}
+              </fieldset>
+            )}
+            <fieldset class="fs">
+              <legend>Precio</legend>
+              <label class="ck"><input type="checkbox" value="lt15" data-filter-price />Menos de 15 €</label>
+              <label class="ck"><input type="checkbox" value="15-50" data-filter-price />15 € – 50 €</label>
+              <label class="ck"><input type="checkbox" value="gt50" data-filter-price />Más de 50 €</label>
+            </fieldset>
+            <button type="button" class="lnk reset" data-filter-reset>Quitar filtros</button>
+          </div>
+        </details>
+        <div class="ship">
+          <p><strong>Envíos</strong></p>
+          <p class="muted">Península con Envialia. Islas, Ceuta, Melilla y extranjero: te enviamos presupuesto.</p>
+          <a href="/preguntas-frecuentes/#pedidos-y-envios">Consultar precios de envío</a>
+        </div>
+      </aside>
+
+      <div class="main">
+        <div class="bar">
+          <p class="muted" aria-live="polite" data-filter-count data-unit="productos">{cards.length} productos</p>
+          <div class="sort">
+            <label for="ord">Ordenar por</label>
+            <select id="ord" data-sort aria-label="Ordenar productos por">
+              <option value="best">Más vendidos</option>
+              <option value="asc">Precio: menor a mayor</option>
+              <option value="desc">Precio: mayor a menor</option>
+              <option value="new">Novedades</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid" data-filter-grid data-reveal-group>
+          {sorted.map((c) => <ProductCard card={c} headingLevel="h2" sizes="(max-width: 960px) 50vw, 290px" />)}
+        </div>
+        <p class="empty muted" data-filter-empty hidden>No hay productos con esos filtros. <button type="button" class="lnk" data-filter-reset>Quitar filtros</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .shop-head { padding: 40px 0 48px; }
+  .shop-h1 { font-size: clamp(36px, 4.4vw, 60px); line-height: 1.04; max-width: 1000px; }
+  .shop-intro { max-width: 720px; font-size: 18px; }
+  .chips :global(.chip[aria-current]) { background: var(--ink); color: var(--on-dark); border-color: var(--ink); }
+  .shop-body { padding: 0 0 96px; }
+  .layout { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .side { flex: 1 1 240px; max-width: 280px; display: flex; flex-direction: column; gap: 32px; position: sticky; top: calc(var(--header-h) + 24px); }
+  .main { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+  .flt__sum { display: none; }
+  .flt__in { display: flex; flex-direction: column; gap: 32px; }
+  .fs { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+  .fs legend { font-weight: 600; margin-bottom: 12px; padding: 0; }
+  .ck { display: flex; gap: 10px; align-items: center; min-height: 36px; cursor: pointer; }
+  .ck input { width: 18px; height: 18px; accent-color: var(--olive); margin: 0; }
+  .reset { align-self: flex-start; background: none; border: 0; padding: 0 0 3px; font-size: 14px; }
+  .ship { background: var(--surface); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.55; }
+  .ship a { font-weight: 600; }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+  .sort { display: flex; gap: 10px; align-items: center; }
+  .sort label { font-size: 14px; color: var(--muted); }
+  .sort select { height: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); font: 14px var(--font-body); color: var(--ink); }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+  .empty { padding: 32px 0; }
+  .empty .lnk { background: none; border: 0; font-size: inherit; }
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+    .side { max-width: none; position: static; gap: 16px; }
+    .layout { gap: 24px; }
+    .flt { background: var(--surface); border-radius: var(--radius); }
+    .flt__sum { display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 18px; font-weight: 600; cursor: pointer; list-style: none; }
+    .flt__sum::-webkit-details-marker { display: none; }
+    .flt :global(.flt__chev) { transition: transform .3s var(--ease); transform: rotate(90deg); }
+    .flt[open] :global(.flt__chev) { transform: rotate(-90deg); }
+    .flt__in { padding: 4px 18px 20px; gap: 20px; }
+    .ship { display: none; }
+  }
+  @media (max-width: 560px) { .sort label { display: none; } }
+</style>

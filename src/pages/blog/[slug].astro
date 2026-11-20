@@ -1,0 +1,119 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { fotoSrc } from '@/lib/images';
+import { FOTOS } from '@/data/fotos';
+import { cardsFor, getProducts } from '@/lib/shop';
+import { fmtDate, slugCat } from '@/lib/blog';
+import { orgId } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p, all: posts } }));
+}
+const { post, all } = Astro.props as { post: CollectionEntry<'posts'>; all: CollectionEntry<'posts'>[] };
+const { Content } = await render(post);
+const d = post.data;
+const site = Astro.site!;
+const url = new URL(`/blog/${post.id}/`, site).href;
+const slot = (FOTOS as Record<string, { file: string | null }>)[post.id];
+const src = fotoSrc(slot?.file);
+const img = src ? new URL((await getImage({ src, width: 1200, format: 'jpg' })).src, site).href : undefined;
+const iso = d.date.toISOString().slice(0, 10);
+const author = { '@type': 'Organization', name: 'Equipo Castuo', url: new URL('/cooperativa/', site).href };
+const ld: object[] = [{
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: d.title, description: d.description, image: img,
+  datePublished: iso, dateModified: iso, author, publisher: { '@id': orgId(site) }, mainEntityOfPage: url, inLanguage: 'es-ES', articleSection: d.category,
+}];
+if (d.recipe) {
+  const r = d.recipe;
+  ld.push({
+    '@context': 'https://schema.org', '@type': 'Recipe', name: d.title, description: d.description, image: img ? [img] : undefined,
+    author, datePublished: iso, prepTime: r.prepTime, cookTime: r.cookTime, totalTime: r.totalTime, recipeYield: r.yield,
+    recipeCuisine: r.cuisine, recipeCategory: r.category, recipeIngredient: r.ingredients,
+    recipeInstructions: r.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, text: s })),
+    keywords: 'aceite de oliva virgen extra, receta extremeña',
+  });
+}
+const products = await getProducts();
+const relCards = d.products.map((id) => products.find((p) => p.id === id)).filter(Boolean).map((p) => {
+  const cs = cardsFor(p!);
+  return cs.find((c) => c.best === 1) ?? cs[0];
+});
+const more = all.filter((p) => p.id !== post.id).sort((a, b) => (a.data.category === d.category ? -1 : 0) - (b.data.category === d.category ? -1 : 0)).slice(0, 3);
+---
+<Base title={`${d.title} | Blog Castuo`} description={d.description} active="blog" og={`blog-${post.id}`} ogType="article" jsonLd={ld}>
+  <article class="post">
+    <header class="wrap post__h">
+      <Breadcrumbs items={[{ label: 'Blog', href: '/blog/' }, { label: d.title }]} />
+      <p class="eyebrow" style="margin:0"><a href={`/blog/?categoria=${slugCat(d.category)}`}>{d.category}</a></p>
+      <h1 class="h1 h1--page post__t">{d.title}</h1>
+      <p class="lead post__lead">{d.excerpt}</p>
+      <p class="meta">Por <strong>Equipo Castuo</strong> · <time datetime={iso}>{fmtDate(d.date)}</time> · {d.readingTime} min de lectura</p>
+    </header>
+    <div class="wrap">
+      <Foto slot={post.id} crop={1.8} priority sizes="(max-width: 1240px) 100vw, 1176px" widths={[480, 800, 1200, 1600]} height="520px" class="post__img" transitionName={`post-${post.id}`} />
+    </div>
+    <div class="wrap post__body">
+      <div class="prose"><Content /></div>
+      <aside class="post__aside" aria-label="Productos relacionados">
+        {relCards.length > 0 && <p class="eyebrow">Del artículo a tu mesa</p>}
+        <div class="post__prods">{relCards.map((c) => <ProductCard card={c} variant="home" headingLevel="h3" sizes="280px" height="240px" />)}</div>
+        <a class="lnk" href="/calidad-y-premios/">Cómo controlamos la calidad</a>
+      </aside>
+    </div>
+  </article>
+
+  <section class="sec sec--white" aria-labelledby="more-t">
+    <div class="wrap stack" style="gap:32px">
+      <div class="sec-head"><h2 id="more-t" class="h2 h2--sm">Sigue leyendo</h2><a href="/blog/" class="lnk">Todos los artículos</a></div>
+      <div class="g3" data-reveal-group>
+        {more.map((p) => (
+          <a href={`/blog/${p.id}/`} class="mc" data-reveal>
+            <Foto slot={p.id} crop={1.7} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="220px" transitionName={`post-${p.id}`} />
+            <p class="cat-label">{p.data.category}</p>
+            <h3 class="h3" style="font-size:20px">{p.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .post__h { padding-top: 40px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 18px; max-width: 980px; margin-left: max(calc((100% - var(--container)) / 2), 0px); }
+  .post__h .eyebrow a { color: inherit; text-decoration: none; }
+  .post__t { max-width: 920px; }
+  .post__lead { max-width: 720px; }
+  .meta { font-size: 14px; color: var(--muted-2); }
+  .post :global(.post__img) { border-radius: 8px; }
+  .post__body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 72px; padding-top: 56px; padding-bottom: 96px; align-items: start; }
+  .post__aside { position: sticky; top: calc(var(--header-h) + 24px); display: flex; flex-direction: column; gap: 20px; }
+  .post__aside .eyebrow { margin: 0; }
+  .post__prods { display: flex; flex-direction: column; gap: 32px; }
+  .prose { max-width: 700px; font-size: 18px; line-height: 1.75; color: var(--body-2); }
+  .prose :global(h2) { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -.02em; color: var(--ink); margin: 48px 0 16px; }
+  .prose :global(h3) { font-family: var(--font-display); font-weight: 600; font-size: 22px; color: var(--ink); margin: 32px 0 12px; }
+  .prose :global(p) { margin: 0 0 20px; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 24px; padding-left: 1.3em; }
+  .prose :global(li) { margin-bottom: 8px; padding-left: 4px; }
+  .prose :global(li::marker) { color: var(--olive); font-weight: 600; }
+  .prose :global(a) { color: var(--olive); font-weight: 500; text-decoration-thickness: 1.5px; }
+  .prose :global(a:hover) { color: var(--ink); }
+  .prose :global(strong) { color: var(--ink); }
+  .prose > :global(p:first-child) { font-size: 20px; color: var(--ink); }
+  .mc { display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; }
+  .mc:hover .h3 { color: var(--olive); }
+  .mc .cat-label { margin-top: 4px; }
+  @media (max-width: 960px) {
+    .post__body { grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: 40px; padding-bottom: 64px; }
+    .post__aside { position: static; }
+    .post__prods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .post :global(.post__img) { height: 280px !important; }
+    .prose { font-size: 17px; }
+  }
+</style>

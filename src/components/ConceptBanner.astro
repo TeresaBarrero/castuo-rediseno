@@ -1,0 +1,28 @@
+---
+import { PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
+---
+<aside class="concept" aria-label="Aviso sobre este sitio">
+  <p>
+    <strong>Concepto de rediseño no oficial</strong>
+    <span class="sep" aria-hidden="true">·</span>
+    <span>Proyecto de porfolio de {PORTFOLIO_AUTHOR}</span>
+    <span class="sep" aria-hidden="true">·</span>
+    <span>Web oficial: <a href={OFFICIAL_URL} rel="noopener">castuo.es</a></span>
+  </p>
+</aside>
+
+<style>
+  .concept {
+    position: fixed; inset: auto 0 0 0; z-index: 90;
+    min-height: var(--banner-h);
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px var(--gutter);
+    background: var(--surface); border-top: 1px solid var(--line-strong);
+    font-size: 13px; line-height: 1.35; color: var(--muted); text-align: center;
+  }
+  .concept p { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 8px; }
+  .concept strong { color: var(--ink); }
+  .concept a { color: var(--olive); font-weight: 600; }
+  .sep { color: var(--line-strong); }
+  @media (max-width: 560px) { .concept { font-size: 12px; padding-block: 6px; } }
+</style>

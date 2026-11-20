@@ -1,0 +1,29 @@
+---
+// Formulario de newsletter ficticio: valida en cliente y no envía nada.
+interface Props { id: string }
+const { id } = Astro.props;
+---
+<form class="nl" novalidate data-fake-form data-ok="¡Gracias! Esto es un concepto: no se ha guardado tu correo. Para suscribirte de verdad, visita castuo.es.">
+  <div class="nl__row">
+    <div class="nl__f">
+      <label for={id}>Correo electrónico</label>
+      <input id={id} name="email" type="email" placeholder="tu@correo.es" autocomplete="email" required aria-describedby={`${id}-msg`} />
+    </div>
+    <button type="submit" class="btn btn--light">Suscribirme</button>
+  </div>
+  <p id={`${id}-msg`} class="form-msg" role="status" aria-live="polite" data-form-msg></p>
+</form>
+<style>
+  .nl { display: flex; flex-direction: column; gap: 12px; max-width: 100%; }
+  .nl__row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+  .nl__f { display: flex; flex-direction: column; gap: 6px; flex: 1 1 260px; }
+  .nl label { font-size: 13px; color: var(--on-dark-muted-2); }
+  .nl input {
+    height: 50px; width: 300px; max-width: 100%; padding: 0 18px; border-radius: var(--radius-pill);
+    border: 1px solid var(--dark-line-2); background: var(--dark-input); color: var(--on-dark); font: 15px var(--font-body);
+  }
+  .nl input::placeholder { color: #9EA295; }
+  .nl input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .nl input[aria-invalid='true'] { border-color: #F2B8B5; }
+  @media (max-width: 560px) { .nl input { width: 100%; } .nl .btn { width: 100%; } }
+</style>

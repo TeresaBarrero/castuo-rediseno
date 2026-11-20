@@ -1,0 +1,38 @@
+---
+import Base from '@/layouts/Base.astro';
+import ShopListing from '@/components/ShopListing.astro';
+import BuyingGuide from '@/components/BuyingGuide.astro';
+import { CATS, getCards } from '@/lib/shop';
+import { itemList } from '@/lib/itemlist';
+
+export function getStaticPaths() {
+  const SEO = {
+    aceite: {
+      title: 'Comprar aceite de oliva virgen extra online | Castuo',
+      description: 'AOVE de cooperativa en garrafas de 2, 3 y 5 L y botellas de 250, 500 y 750 ml. Envasado en origen en Guareña (Badajoz). Envío a península.',
+      h1: 'Aceite de oliva virgen extra de cooperativa',
+      intro: 'Virgen extra de los socios de la Cooperativa del Campo San Pedro, molturado en nuestra almazara de Guareña y envasado en origen. En botella y en garrafa.',
+    },
+    vino: {
+      title: 'Vinos de Extremadura de la cooperativa: tinto, blanco y semidulce | Castuo',
+      description: 'Vino tinto, vino de mesa blanco y semidulce El Castúo, elaborados con la uva de nuestros socios. En botella, caja de 6 y garrafa de 5 L.',
+      h1: 'Vinos de la cooperativa: tinto, blanco y semidulce',
+      intro: 'Vinos elaborados en la bodega de la cooperativa con la uva de nuestros socios. Para el día a día y para la mesa de los domingos.',
+    },
+    estuches: {
+      title: 'Estuches regalo de aceite y vino para empresas | Castuo',
+      description: 'Estuches regalo de 1, 2 y 3 botellas con aceite de oliva virgen extra y vinos El Castúo. Ideales para empresas y celebraciones, desde 4,90 €.',
+      h1: 'Estuches regalo de aceite y vino',
+      intro: 'Estuches de 1, 2 y 3 botellas combinando aceite y vinos de la cooperativa. Para regalos de empresa, cestas y celebraciones. Para pedidos grandes, contacta con nosotros.',
+    },
+  } as const;
+  return CATS.map((c) => ({ params: { categoria: c.slug }, props: { cat: c, seo: SEO[c.id] } }));
+}
+const { cat, seo } = Astro.props;
+const cards = (await getCards()).filter((c) => c.category === cat.id);
+const site = Astro.site!;
+---
+<Base title={seo.title} description={seo.description} active="tienda" og={`tienda-${cat.id}`} jsonLd={itemList(site, cards, cat.title)}>
+  <ShopListing cards={cards} active={cat.id} h1={seo.h1} intro={seo.intro} crumbs={[{ label: 'Tienda', href: '/tienda/' }, { label: cat.title }]} />
+  {cat.id === 'aceite' && <BuyingGuide />}
+</Base>

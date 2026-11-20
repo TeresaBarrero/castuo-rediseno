@@ -1,0 +1,37 @@
+---
+import Base from '@/layouts/Base.astro';
+import Icon from '@/components/Icon.astro';
+---
+<Base title="Página no encontrada | Castuo" description="La página que buscas no existe o ha cambiado de dirección." og="default">
+  <section class="nf">
+    <div class="wrap g2">
+      <div class="stack" style="gap:24px">
+        <p class="eyebrow" style="margin:0">Error 404</p>
+        <h1 class="h1 h1--page">Este surco no lleva a ninguna parte</h1>
+        <p class="lead">La página que buscas no existe o ha cambiado de dirección. Si venías de un enlace antiguo de castuo.es, lo más probable es que ese contenido viva ahora en otra sección.</p>
+        <div class="nf__btns">
+          <a href="/" class="btn">Volver al inicio <Icon name="arrow" size={18} width={2} class="arrow" /></a>
+          <a href="/tienda/" class="btn btn--o">Ir a la tienda</a>
+        </div>
+      </div>
+      <nav aria-label="Secciones principales" class="nf__nav">
+        <ul role="list">
+          <li><a href="/tienda/aceite-de-oliva-virgen-extra/">Aceite de oliva virgen extra</a></li>
+          <li><a href="/tienda/vinos/">Vinos</a></li>
+          <li><a href="/tienda/estuches-regalo/">Estuches regalo</a></li>
+          <li><a href="/cooperativa/">La cooperativa</a></li>
+          <li><a href="/visitas-almazara-guarena/">Visitas a la almazara</a></li>
+          <li><a href="/blog/">Blog y recetas</a></li>
+          <li><a href="/preguntas-frecuentes/">Preguntas frecuentes</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { padding: 72px 0 120px; }
+  .nf__btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .nf__nav ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .nf__nav a { display: flex; justify-content: space-between; align-items: center; min-height: 60px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -.01em; transition: color .2s, padding .4s var(--ease); }
+  .nf__nav a:hover { color: var(--olive); padding-left: 8px; }
+</style>

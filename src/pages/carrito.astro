@@ -1,0 +1,53 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+---
+<Base title="Carrito | Castuo" description="Tu carrito de la tienda de la Cooperativa del Campo San Pedro. Concepto de rediseño: no se procesan pagos." active="tienda" og="tienda">
+  <section class="ct">
+    <div class="wrap stack" style="gap:24px">
+      <Breadcrumbs items={[{ label: 'Tienda', href: '/tienda/' }, { label: 'Carrito' }]} />
+      <h1 class="h1 h1--page">Tu carrito</h1>
+      <div class="ct__grid">
+        <div>
+          <ul class="ct__lines" role="list" data-cart-lines></ul>
+          <div class="ct__empty" data-cart-empty>
+            <p class="lead lead--sm">Tu carrito está vacío.</p>
+            <a href="/tienda/" class="btn">Ir a la tienda <Icon name="arrow" size={18} width={2} class="arrow" /></a>
+          </div>
+        </div>
+        <aside class="ct__sum" data-cart-foot aria-label="Resumen del pedido">
+          <h2 class="h3">Resumen</h2>
+          <div class="ct__row"><span>Total (IVA incluido)</span><strong class="price" data-cart-total>0,00 €</strong></div>
+          <p class="muted ct__note">Envío a península con Envialia. Islas, Ceuta, Melilla y extranjero: presupuesto a medida. Pago con PayPal o transferencia.</p>
+          <button type="button" class="btn btn--lg btn--block" data-checkout>Finalizar compra <Icon name="arrow" size={18} width={2} class="arrow" /></button>
+          <p class="ct__concept">Concepto de rediseño: este carrito funciona solo en tu navegador y no procesa pagos.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .ct { padding: 40px 0 112px; }
+  .ct__grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: start; }
+  .ct__lines { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .ct__lines :global(li) { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .ct__lines :global(img), .ct__lines :global(.thumb) { width: 96px; height: 96px; border-radius: 8px; object-fit: cover; background: var(--placeholder); }
+  .ct__lines :global(.n) { font-weight: 600; }
+  .ct__lines :global(.n a) { color: var(--ink); }
+  .ct__lines :global(.v) { font-size: 14px; color: var(--muted-2); }
+  .ct__lines :global(.q) { display: inline-flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 999px; margin-top: 10px; background: var(--surface); }
+  .ct__lines :global(.q button) { width: 44px; height: 44px; border: 0; background: none; font-size: 18px; border-radius: 50%; }
+  .ct__lines :global(.q span) { min-width: 28px; text-align: center; font-weight: 600; }
+  .ct__lines :global(.r) { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .ct__lines :global(.p) { font-family: var(--font-display); font-weight: 600; font-size: 20px; }
+  .ct__lines :global(.rm) { border: 0; background: none; color: var(--muted-2); font-size: 14px; text-decoration: underline; min-height: 44px; }
+  .ct__empty { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 32px 0; }
+  .ct__empty[hidden], .ct__sum[hidden] { display: none; }
+  .ct__sum { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: calc(var(--header-h) + 24px); }
+  .ct__row { display: flex; justify-content: space-between; align-items: baseline; }
+  .ct__row strong { font-size: 28px; }
+  .ct__note { font-size: 14px; line-height: 1.55; }
+  .ct__concept { font-size: 13px; color: var(--muted-2); }
+  @media (max-width: 960px) { .ct__grid { grid-template-columns: minmax(0, 1fr); } .ct__sum { position: static; } }
+</style>

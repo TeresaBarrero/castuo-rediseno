@@ -1,0 +1,27 @@
+[
+  { "id": "pedidos-y-envios", "order": 1, "label": "Pedidos y envíos", "items": [
+    { "q": "¿A dónde enviáis?", "a": "Enviamos a toda la España peninsular con Envialia. Para Baleares, Canarias, Ceuta, Melilla y otros países preparamos un presupuesto a medida." },
+    { "q": "¿Enviáis fuera de la península?", "a": "Sí. Para Baleares, Canarias, Ceuta, Melilla y el extranjero preparamos un presupuesto de envío a medida: escríbenos y te respondemos con el precio.", "home": true },
+    { "q": "¿Cuánto tarda en llegar mi pedido?", "a": "El plazo depende del destino y de la carga de trabajo de Envialia. Llámanos al 687 97 28 77 y te damos una fecha estimada para tu pedido." },
+    { "q": "¿Qué formas de pago aceptáis?", "a": "PayPal y transferencia bancaria. Los envíos se realizan con Envialia.", "home": true },
+    { "q": "¿Puedo hacer un pedido grande para mi empresa?", "a": "Sí. Para estuches de empresa o pedidos de volumen, contacta con nosotros y te preparamos una propuesta." },
+    { "q": "¿Hacéis estuches para empresas?", "a": "Sí, estuches de 1, 2 y 3 botellas combinando aceite y vino. Para pedidos grandes, contacta con nosotros.", "home": true }
+  ]},
+  { "id": "aceite-de-oliva", "order": 2, "label": "Aceite de oliva", "items": [
+    { "q": "¿Qué significa virgen extra?", "a": "Es la categoría más alta: aceite obtenido solo por procedimientos mecánicos, sin defectos en cata y con una acidez máxima de 0,8º." },
+    { "q": "¿Cómo conservo el aceite una vez abierto?", "a": "Lejos de la luz y del calor, bien cerrado. Si compras garrafa, trasvasa a una aceitera opaca la cantidad del día a día.", "home": true },
+    { "q": "¿Qué es la cosecha temprana?", "a": "Aceite de aceitunas recogidas antes de su maduración completa: más verde, intenso y con más amargor y picante." },
+    { "q": "¿Qué formato de aceite me conviene?", "a": "La botella de 500 ml es ideal para crudo y para probar; las cajas de 2 y 3 L, para el consumo familiar; y la caja de 3 × 5 L ofrece el mejor precio por litro." }
+  ]},
+  { "id": "vino", "order": 3, "label": "Vino", "items": [
+    { "q": "¿Qué vinos elabora la cooperativa?", "a": "Tinto, blanco y vino de mesa semidulce, también disponibles en estuche regalo." },
+    { "q": "¿A qué temperatura sirvo el semidulce?", "a": "Fresco, entre 6 y 8 ºC." },
+    { "q": "¿Vendéis vino a menores de edad?", "a": "No. Está prohibida la venta de alcohol a menores de 18 años. Consume con responsabilidad." }
+  ]},
+  { "id": "cooperativa-y-socios", "order": 4, "label": "Cooperativa y socios", "items": [
+    { "q": "¿Cómo me hago socio?", "a": "Pásate por las oficinas de la cooperativa en Calle Don Benito, 13 (Guareña) o llama al 924 350 278 y te explicamos los requisitos y los pasos para asociarte." },
+    { "q": "¿Dónde consulto los boletines A.T.R.I.A?", "a": "En el Área de socios, junto a descargas y balances." },
+    { "q": "¿Se puede visitar la cooperativa?", "a": "Sí, organizamos visitas a la almazara y a las fincas. Reserva desde la página de Visitas." },
+    { "q": "¿Qué servicios ofrecéis a los socios?", "a": "Trámite del pago único, descuentos en gasóleos y en fertilizantes y abonos, asesoramiento en trámites y gestiones administrativas y asesoramiento jurídico." }
+  ]}
+]

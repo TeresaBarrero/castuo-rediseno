@@ -1,0 +1,341 @@
+---
+import Base from '@/layouts/Base.astro';
+import Foto from '@/components/Foto.astro';
+import Icon from '@/components/Icon.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import Accordion from '@/components/Accordion.astro';
+import ContactBlock from '@/components/ContactBlock.astro';
+import { getCards } from '@/lib/shop';
+import { getCollection } from 'astro:content';
+import { organization, localBusiness } from '@/lib/schema';
+import { FOTOS } from '@/data/fotos';
+import { fotoSrc } from '@/lib/images';
+import { getImage } from 'astro:assets';
+import logo from '@/assets/logo/logotipo-castuo.png';
+
+const cards = await getCards();
+// «Los más pedidos»: nunca un producto agotado en portada (nota SEO del diseño)
+const best = [
+  ...cards.filter((c) => c.best && !c.out).sort((a, b) => a.best! - b.best!),
+  ...cards.filter((c) => c.productId === 'estuche-regalo-3-botellas'),
+].slice(0, 4);
+
+const faqGroups = await getCollection('faqs');
+const homeFaqs = faqGroups.sort((a, b) => a.data.order - b.data.order).flatMap((g) => g.data.items.filter((i) => i.home));
+const order = ['¿Enviáis fuera de la península?', '¿Qué formas de pago aceptáis?', '¿Cómo conservo el aceite una vez abierto?', '¿Hacéis estuches para empresas?'];
+homeFaqs.sort((a, b) => order.indexOf(a.q) - order.indexOf(b.q));
+
+const posts = await getCollection('posts');
+const pick = ['como-elegir-aceite-de-oliva-virgen-extra', 'cosecha-temprana-que-es', 'migas-extremenas-con-aceite'];
+const homePosts = pick.map((id) => posts.find((p) => p.id === id)).filter(Boolean) as typeof posts;
+
+const site = Astro.site!;
+const logoUrl = new URL((await getImage({ src: logo, width: 512, format: 'png' })).src, site).href;
+const heroSrc = fotoSrc(FOTOS.heroInicio.file);
+const heroUrl = heroSrc ? new URL((await getImage({ src: heroSrc, width: 1200, format: 'jpg' })).src, site).href : undefined;
+const jsonLd = [organization(site, logoUrl), localBusiness(site, heroUrl)];
+---
+<Base
+  title="Aceite de oliva virgen extra y vino de Extremadura | Castuo"
+  description="Cooperativa del Campo San Pedro en Guareña (Badajoz) desde 1965. Compra AOVE, vinos y estuches regalo directamente del productor."
+  active="inicio" og="inicio" jsonLd={jsonLd}>
+
+  <!-- HERO -->
+  <section class="hero" data-hero aria-labelledby="hero-t">
+    <div class="wrap hero__grid">
+      <div class="hero__txt">
+        <p class="eyebrow hero__fade"><span class="d-only">Cooperativa del Campo San Pedro · Guareña, Badajoz · Desde 1965</span><span class="m-only">Guareña, Badajoz · Desde 1965</span></p>
+        <h1 id="hero-t" class="h1 hero__h1" data-hero-title>Aceite de oliva virgen extra y vino de Extremadura, directos del campo.</h1>
+        <p class="lead hero__fade"><span class="d-only">Más de 1.100 familias de socios cultivan, recogen y elaboran cada botella. Sin intermediarios: del olivar de Guareña a tu mesa.</span><span class="m-only">Más de 1.100 familias de socios. Sin intermediarios.</span></p>
+        <div class="hero__btns hero__fade">
+          <a class="btn" href="/tienda/aceite-de-oliva-virgen-extra/">Comprar aceite <Icon name="arrow" size={18} width={2} class="arrow" /></a>
+          <a class="btn btn--o" href="/cooperativa/">Conoce la cooperativa</a>
+        </div>
+        <ul class="hero__trust hero__fade" aria-label="Garantías">
+          <li><Icon name="award" size={18} stroke="var(--olive)" width={2} />Premio Extrema Selección AOVE 2025</li>
+          <li><Icon name="shield" size={18} stroke="var(--olive)" width={2} />ISO 9001 · ISO 14001</li>
+          <li><Icon name="truck" size={18} stroke="var(--olive)" width={2} />Envío a toda la península</li>
+        </ul>
+      </div>
+      <div class="hero__media">
+        <Foto slot="heroInicio" crop={1} priority sizes="(max-width: 960px) calc(100vw - 40px), 592px" widths={[400, 600, 800, 1000, 1200]} class="hero__img" />
+      </div>
+    </div>
+  </section>
+
+  <!-- CIFRAS -->
+  <section class="nums" aria-label="Castuo en cifras">
+    <div class="wrap nums__grid" data-reveal-group>
+      <div data-reveal><p class="nums__n" data-count="1965" data-group="false">1965</p><p class="nums__l"><span class="d-only">Año de fundación, con 137 socios</span><span class="m-only">Fundación</span></p></div>
+      <div data-reveal><p class="nums__n" data-count="1100" data-prefix="+">+1.100</p><p class="nums__l"><span class="d-only">Socios agricultores hoy</span><span class="m-only">Socios</span></p></div>
+      <div data-reveal><p class="nums__n" data-count="11">11</p><p class="nums__l"><span class="d-only">Municipios de donde vienen nuestros socios</span><span class="m-only">Municipios</span></p></div>
+      <div data-reveal class="d-only-b"><p class="nums__n" data-count="4.5" data-decimals="1" data-suffix=" M">4,5 M</p><p class="nums__l">Litros de AOVE obtenidos, según los datos de producción de la cooperativa</p></div>
+      <div data-reveal class="m-only-b"><p class="nums__n">ISO</p><p class="nums__l">9001 · 14001</p></div>
+    </div>
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <section class="sec" aria-labelledby="cat-t">
+    <div class="wrap stack" style="gap:48px">
+      <div class="sec-head" data-reveal>
+        <div><p class="eyebrow">Tienda online</p><h2 id="cat-t" class="h2">Lo que sale de nuestra tierra</h2></div>
+        <a class="lnk d-only" href="/tienda/">Ver toda la tienda</a>
+      </div>
+      <div class="g3 cats" data-reveal-group>
+        {[
+          { slot: 'catAceite', href: '/tienda/aceite-de-oliva-virgen-extra/', t: 'Aceite de oliva virgen extra', d: 'Botellas de 250, 500 y 750 ml y garrafas de 2, 3 y 5 L', from: '5,00 €' },
+          { slot: 'catVino', href: '/tienda/vinos/', t: 'Vinos de la cooperativa', d: 'Tinto, blanco y vino de mesa semidulce', from: '3,00 €' },
+          { slot: 'catEstuches', href: '/tienda/estuches-regalo/', t: 'Estuches regalo', d: 'De 1, 2 o 3 botellas, para empresas y celebraciones', from: '4,90 €' },
+        ].map((c) => (
+          <a class="cat" href={c.href} data-reveal>
+            <Foto slot={c.slot} crop={1} sizes="(max-width: 960px) 88px, 390px" widths={[180, 400, 600, 800]} class="cat__img" />
+            <div class="cat__txt"><h3 class="h3">{c.t}</h3><p class="muted"><span class="d-only">{c.d} · </span>desde {c.from}</p></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTACADOS -->
+  <section class="sec sec--white best" aria-labelledby="dest-t">
+    <div class="wrap stack" style="gap:40px">
+      <div data-reveal><p class="eyebrow d-only">Los más pedidos</p><h2 id="dest-t" class="h2"><span class="d-only">Para la despensa de todo el año</span><span class="m-only">Los más pedidos</span></h2></div>
+      <div class="best__grid" data-reveal-group>
+        {best.map((c) => <ProductCard card={c} variant="home" sizes="(max-width: 960px) 200px, 290px" />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section class="sec" aria-labelledby="his-t">
+    <div class="wrap g2">
+      <Foto slot="historiaInicio" crop={1.05} sizes="(max-width: 960px) 100vw, 592px" widths={[400, 600, 800, 1200]} class="split-img" height="560px" parallax data-reveal />
+      <div class="stack" style="gap:24px" data-reveal>
+        <p class="eyebrow" style="margin:0">Quiénes somos</p>
+        <h2 id="his-t" class="h2">Una cooperativa que empezó con uva de mesa y hoy elabora aceite y vino</h2>
+        <p class="lead lead--sm">En 1965, 137 agricultores de Guareña se unieron para vender su uva de mesa. Después llegaron el olivar y la almazara, el vino, el maíz y el tomate. Hoy somos más de 1.100 socios de once municipios que deciden juntos cómo cuidar la tierra.</p>
+        <a class="lnk self-start" href="/cooperativa/">Leer nuestra historia</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINCAS -->
+  <section class="sec fincas-h" aria-labelledby="fin-t">
+    <div class="wrap stack" style="gap:40px">
+      <div class="sec-head" data-reveal>
+        <div><p class="eyebrow">Nuestras fincas</p><h2 id="fin-t" class="h2">Seis formas de cultivar, un mismo cuidado</h2></div>
+        <a class="lnk" href="/fincas/">Ver las fincas</a>
+      </div>
+      <div class="g3" data-reveal-group>
+        {[
+          { slot: 'fincaOlivar', href: '/fincas/?categoria=olivar', t: 'Olivar', d: 'Tradicional, intensivo y superintensivo.' },
+          { slot: 'fincaVinedo', href: '/fincas/?categoria=vina', t: 'Viñedo', d: 'Viña en vaso tradicional y en espaldera.' },
+          { slot: 'fincaAlmendro', href: '/fincas/?categoria=almendro', t: 'Almendro', d: 'Plantación superintensiva.' },
+        ].map((f) => (
+          <a href={f.href} class="fcard" data-reveal>
+            <Foto slot={f.slot} crop={1.5} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="260px" />
+            <h3 class="h3">{f.t}</h3><p class="muted">{f.d}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CALIDAD -->
+  <section class="dark on-dark quality" aria-labelledby="cal-t">
+    <div class="wrap g2">
+      <div class="stack" style="gap:24px" data-reveal>
+        <p class="eyebrow" style="margin:0">Calidad reconocida</p>
+        <h2 id="cal-t" class="h2">Premio Extrema Selección AOVE 2025</h2>
+        <p class="lead lead--sm"><span class="d-only">Nuestro aceite recibió en los premios Extrema Selección 2025 la Medalla de Oro al mejor aceite convencional y el galardón al mejor AOVE producido en una cooperativa; nuestra almazara, el de Maestro Almazara. Trabajamos con certificación ISO 9001 de calidad e ISO 14001 de gestión ambiental.</span><span class="m-only">Certificaciones ISO 9001 e ISO 14001.</span></p>
+        <a class="btn btn--light self-start" href="/calidad-y-premios/">Calidad y premios</a>
+      </div>
+      <ul class="seals" role="list" data-reveal-group>
+        <li class="seal" data-reveal><span class="seal__k">Extrema Selección</span><span class="seal__v">2025</span><span class="seal__s">Medalla de Oro · Maestro Almazara</span></li>
+        <li class="seal" data-reveal><span class="seal__k">ISO</span><span class="seal__v">9001</span><span class="seal__s">Gestión de la calidad</span></li>
+        <li class="seal" data-reveal><span class="seal__k">ISO</span><span class="seal__v">14001</span><span class="seal__s">Gestión ambiental</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- VISITAS -->
+  <section class="sec" aria-labelledby="vis-t">
+    <div class="wrap g2 visits">
+      <div class="stack" style="gap:24px" data-reveal>
+        <p class="eyebrow" style="margin:0">Visitas y catas</p>
+        <h2 id="vis-t" class="h2">Ven a ver cómo se hace tu aceite</h2>
+        <p class="lead lead--sm d-only">Recorre la almazara en Guareña, pasea entre olivos y cata nuestro virgen extra con quienes lo elaboran. Visitas para particulares, grupos y centros educativos.</p>
+        <div class="visits__btn"><a class="btn" href="/visitas-almazara-guarena/">Reservar una visita</a></div>
+      </div>
+      <Foto slot="visitasInicio" crop={1.23} sizes="(max-width: 960px) 100vw, 592px" widths={[400, 600, 800, 1200]} height="480px" class="visits__img" data-reveal />
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="sec sec--white d-only-b" aria-labelledby="blog-t">
+    <div class="wrap stack" style="gap:40px">
+      <div class="sec-head" data-reveal>
+        <div><p class="eyebrow">Del blog</p><h2 id="blog-t" class="h2">Cultura del aceite, recetas y campo</h2></div>
+        <a class="lnk" href="/blog/">Ir al blog</a>
+      </div>
+      <div class="g3" data-reveal-group>
+        {homePosts.map((p) => (
+          <a href={`/blog/${p.id}/`} class="bcard" data-reveal>
+            <Foto slot={p.id} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="240px" transitionName={`post-${p.id}`} />
+            <p class="cat-label">{p.data.category}</p>
+            <h3 class="h3" style="font-size:20px">{p.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" aria-labelledby="faq-t">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:20px" data-reveal>
+        <p class="eyebrow d-only" style="margin:0">Preguntas frecuentes</p>
+        <h2 id="faq-t" class="h2"><span class="d-only">Lo que más nos preguntáis</span><span class="m-only">Preguntas frecuentes</span></h2>
+        <a class="lnk self-start d-only" href="/preguntas-frecuentes/">Ver todas las preguntas</a>
+      </div>
+      <div data-reveal>
+        <Accordion items={homeFaqs} id="hfaq" />
+        <p class="m-only-b faq-more"><a class="lnk" href="/preguntas-frecuentes/">Ver todas las preguntas</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO / NAP -->
+  <section id="contacto" aria-labelledby="con-t" class="contact">
+    <div class="wrap"><ContactBlock /></div>
+  </section>
+</Base>
+
+<style>
+  .d-only { display: inline; } .m-only { display: none; }
+  .d-only-b { display: block; } .m-only-b { display: none; }
+  @media (max-width: 720px) {
+    .d-only, .d-only-b { display: none; } .m-only { display: inline; } .m-only-b { display: block; }
+  }
+
+  /* Hero */
+  .hero { padding: 56px 0 96px; }
+  .hero__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; align-items: center; }
+  .hero__txt { display: flex; flex-direction: column; gap: 28px; }
+  .hero__txt .eyebrow { margin: 0; }
+  .hero__btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero__trust { list-style: none; margin: 8px 0 0; padding: 20px 0 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px 28px; font-size: 14px; color: var(--muted); }
+  .hero__trust li { display: flex; gap: 8px; align-items: center; }
+  .hero__media { position: relative; }
+
+  .faq-more { margin-top: 20px; }
+  .hero__media :global(.hero__img) { height: 620px; border-radius: var(--radius-md); }
+
+  /* Entrada del hero */
+  .hero__h1 :global(.line) { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+  .hero__h1 :global(.line__in) { display: block; transform: translateY(105%); transition: transform .7s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i) * 80ms); }
+  :global(.js) [data-hero]:not(.is-ready) .hero__h1 { opacity: 0; }
+  :global(.js) [data-hero] .hero__fade { opacity: 0; transition: opacity .7s var(--ease); transition-delay: calc(var(--lines, 3) * 80ms + 450ms); }
+  :global(.js) [data-hero].is-in .hero__h1 :global(.line__in) { transform: none; }
+  :global(.js) [data-hero].is-in .hero__fade { opacity: 1; }
+  /* Si el JS tarda, el contenido aparece igualmente */
+  :global(.js) [data-hero]:not(.is-in) .hero__fade, :global(.js) [data-hero]:not(.is-ready) .hero__h1 { animation: hero-safety 0s 2.5s forwards; }
+  @keyframes hero-safety { to { opacity: 1; } }
+  /* Foto del hero: animación solo CSS que arranca al pintar (no espera al JS) y nunca la oculta del todo,
+     para no retrasar el LCP */
+  .hero__media :global(.media) { animation: hero-clip 1.1s cubic-bezier(.2, .7, .2, 1) both; }
+  .hero__media :global(img) { animation: hero-zoom 1.6s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes hero-clip { from { clip-path: inset(22% 0 0 0 round 12px); } to { clip-path: inset(0 0 0 0 round 12px); } }
+  @keyframes hero-zoom { from { transform: scale(1.06); } to { transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) [data-hero] .hero__fade, :global(.js) [data-hero] .hero__h1 { opacity: 1 !important; }
+    :global(.js) [data-hero] .hero__media :global(.media) { clip-path: none !important; }
+    :global(.js) [data-hero] .hero__media :global(img) { transform: none !important; }
+  }
+
+  /* Cifras */
+  .nums { border-block: 1px solid var(--line); background: var(--surface); }
+  .nums__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-block: 48px; }
+  .nums__n { font-family: var(--font-display); font-weight: 600; font-size: 52px; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .nums__l { margin-top: 6px; color: var(--muted); }
+
+  /* Categorías */
+  .cat { background: var(--surface); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; color: var(--ink); text-decoration: none; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+  .cat:hover { color: var(--ink); transform: translateY(-4px); box-shadow: 0 18px 40px rgba(23, 32, 26, .08); }
+  .cat :global(.cat__img) { height: 380px; border-radius: 0; }
+  .cat :global(.cat__img img) { transition: transform .9s var(--ease); }
+  .cat:hover :global(.cat__img img) { transform: scale(1.04); }
+  .cat__txt { padding: 8px 24px 28px; display: flex; flex-direction: column; gap: 8px; }
+  .cat__txt .h3 { margin-top: 16px; }
+
+  /* Destacados */
+  .best { padding-top: 96px; }
+  .best__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+
+  .split-img { border-radius: var(--radius-sm); }
+  .fincas-h { padding-top: 0; }
+  .fcard, .bcard { display: flex; flex-direction: column; gap: 14px; color: var(--ink); text-decoration: none; }
+  .bcard { gap: 12px; }
+  .fcard :global(.media img), .bcard :global(.media img) { transition: transform .9s var(--ease); }
+  .fcard:hover :global(.media img), .bcard:hover :global(.media img) { transform: scale(1.04); }
+  .fcard:hover .h3, .bcard:hover .h3 { color: var(--olive); }
+  .bcard .cat-label { margin-top: 4px; }
+
+  /* Calidad */
+  .quality { padding: 104px 0; }
+  .seals { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .seal { height: 200px; background: var(--dark-surface); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; padding: 16px; border: 1px solid var(--dark-line); }
+  .seal__k { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .seal__v { font-family: var(--font-display); font-weight: 600; font-size: 40px; letter-spacing: -.02em; color: var(--on-dark); line-height: 1.1; }
+  .seal__s { font-size: 13px; color: var(--on-dark-muted); line-height: 1.4; }
+
+  .visits__btn { display: flex; gap: 12px; flex-wrap: wrap; }
+  .contact { padding: 0 0 112px; }
+
+  @media (max-width: 960px) {
+    .hero { padding: 24px 0 40px; }
+    .hero__grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .hero__txt { gap: 18px; }
+    .hero__media :global(.hero__img) { height: 300px; border-radius: 8px; }
+    .nums__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-block: 28px; gap: 24px; }
+    .best__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .seals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .quality { padding: 72px 0; }
+    .contact { padding-bottom: 72px; }
+    .split-img { height: 400px !important; }
+  }
+  @media (max-width: 720px) {
+    .hero__txt .lead { font-size: 16px; }
+    .hero__btns { flex-direction: column; }
+    .hero__btns .btn { width: 100%; min-height: 52px; }
+    .hero__trust { display: none; }
+    .nums__n { font-size: 34px; }
+    .nums__l { font-size: 13px; margin-top: 2px; }
+    /* Categorías como tarjetas horizontales (Movil.dc.html) */
+    .cats { gap: 14px; }
+    .cat { flex-direction: row; align-items: center; gap: 14px; padding: 10px; }
+    .cat :global(.cat__img) { width: 88px; height: 88px; flex: none; border-radius: 8px; }
+    .cat__txt { padding: 0; gap: 4px; }
+    .cat__txt .h3 { margin: 0; font: 600 16px/1.3 var(--font-body); letter-spacing: 0; }
+    .cat__txt .muted { font-size: 14px; }
+    /* Los más pedidos en carrusel horizontal */
+    .best { padding-top: 0; background: var(--bg); }
+    .best .h2 { font-size: 26px; }
+    .best__grid { display: flex; align-items: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); gap: 12px; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
+    .best__grid::-webkit-scrollbar { display: none; }
+    .best__grid > :global(*) { flex: 0 0 200px; scroll-snap-align: start; }
+    .best__grid :global(.pc__media) { height: 220px !important; }
+    .best__grid :global(.cat-label) { display: none; }
+    .best__grid :global(.pc__t) { font-size: 15px; }
+    .best__grid :global(.pc__p) { font-size: 20px; }
+    .seals { display: none; }
+    .quality .h2 { font-size: 28px; }
+    .quality .btn { width: 100%; }
+    .visits { display: flex; flex-direction: column; }
+    .visits > :global(.stack) { display: contents; }
+    .visits :global(.visits__img) { order: 3; height: 200px !important; }
+    .visits__btn { order: 4; }
+    .visits__btn .btn { width: 100%; }
+    .visits .h2 { font-size: 28px; }
+  }
+</style>

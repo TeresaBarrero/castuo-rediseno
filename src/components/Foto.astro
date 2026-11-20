@@ -1,0 +1,66 @@
+---
+// Foto real optimizada (AVIF + WebP, srcset responsive, width/height explícitos) o placeholder.
+import { Picture } from 'astro:assets';
+import { fotoSrc } from '@/lib/images';
+import { FOTOS, type Slot } from '@/data/fotos';
+
+interface Props {
+  slot?: string;            // clave de FOTOS
+  file?: string | null;     // o archivo directo
+  alt?: string;
+  label?: string;
+  sizes?: string;
+  widths?: number[];
+  priority?: boolean;
+  class?: string;
+  imgClass?: string;
+  ratio?: string;           // p. ej. '4 / 5'
+  height?: string;          // alto CSS fijo (como en el diseño)
+  pos?: string;             // object-position
+  fit?: 'cover' | 'contain';
+  transitionName?: string;
+  parallax?: boolean;
+  bg?: string;              // color de fondo del placeholder
+  crop?: number;            // relación ancho/alto aproximada con la que se muestra (recorte en servidor)
+  [k: string]: any;
+}
+const { slot, file, alt, label, sizes = '100vw', widths, priority = false, class: cls, imgClass, ratio, height, pos, fit = 'cover', transitionName, parallax = false, bg, crop, ...rest } = Astro.props;
+const s: Slot | undefined = slot ? (FOTOS as Record<string, Slot>)[slot] : undefined;
+const src = fotoSrc(file !== undefined ? file : s?.file);
+const altText = alt ?? s?.alt ?? '';
+const objPos = pos ?? s?.pos ?? '50% 50%';
+const w = widths ?? [400, 720, 1080, 1440, 1920];
+// Recorte en servidor (crop = ancho/alto con que se muestra): evita descargar píxeles que object-fit ocultaría
+const srcRatio = src ? src.width / src.height : 1;
+const doCrop = !!(src && crop && fit === 'cover' && Math.abs(srcRatio - crop) / crop > 0.12);
+const maxW = src ? (doCrop ? Math.min(src.width, Math.floor(src.height * crop!)) : src.width) : 0;
+const usable = src ? w.filter((x) => x <= maxW) : [];
+if (src && (!usable.length || usable[usable.length - 1] < maxW)) usable.push(Math.min(maxW, 2400));
+const [px, py] = objPos.split(' ').map((v) => parseFloat(v));
+const gravity = [py < 35 ? 'top' : py > 65 ? 'bottom' : '', px < 35 ? 'left' : px > 65 ? 'right' : ''].filter(Boolean).reverse().join(' ') || 'centre';
+const cropProps = doCrop ? { width: maxW, height: Math.round(maxW / crop!), fit: 'cover' as const, position: gravity } : {};
+const style = [ratio && `aspect-ratio:${ratio}`, height && `height:${height}`, bg && `background:${bg}`].filter(Boolean).join(';');
+---
+{src ? (
+  <div class:list={['media', cls, { 'is-parallax': parallax }]} style={style || undefined} data-parallax={parallax ? '' : undefined} transition:name={transitionName} {...rest}>
+    <Picture src={src} alt={altText} formats={['avif']} fallbackFormat="webp" widths={usable} sizes={sizes} {...cropProps}
+      quality={55} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async"
+      class={imgClass} style={`object-position:${objPos};object-fit:${fit}`} />
+  </div>
+) : (
+  <div class:list={['ph', cls]} style={style || undefined} role={altText ? 'img' : undefined} aria-label={altText || undefined} transition:name={transitionName} {...rest}>
+    <span class="ph__lbl" aria-hidden="true">{label ?? s?.label ?? 'Foto pendiente'}</span>
+  </div>
+)}
+<style>
+  .media :global(picture) { display: block; width: 100%; height: 100%; }
+  .media :global(img) { width: 100%; height: 100%; display: block; }
+  .ph__lbl { font-size: 12px; letter-spacing: .03em; color: #4A4A40; background: rgba(246, 245, 240, .7); padding: 4px 8px; border-radius: 4px; }
+  .is-parallax :global(img) { transform: scale(1.1); will-change: transform; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .is-parallax :global(img) { animation: px linear both; animation-timeline: view(); }
+    }
+  }
+  @keyframes px { from { transform: translate3d(0, -20px, 0) scale(1.1); } to { transform: translate3d(0, 20px, 0) scale(1.1); } }
+</style>

@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="cart-drawer" class="drawer" aria-labelledby="cart-t" data-cart-drawer>
+  <div class="drawer__in">
+    <div class="drawer__head">
+      <h2 id="cart-t" class="drawer__t">Tu carrito</h2>
+      <button type="button" class="x" aria-label="Cerrar carrito" data-cart-close><Icon name="close" size={22} /></button>
+    </div>
+    <ul class="drawer__lines" role="list" data-cart-lines></ul>
+    <div class="drawer__empty" data-cart-empty>
+      <p>Tu carrito está vacío.</p>
+      <a href="/tienda/" class="btn btn--o">Ir a la tienda</a>
+    </div>
+    <div class="drawer__foot" data-cart-foot>
+      <div class="drawer__sum"><span>Total (IVA incluido)</span><strong class="price" data-cart-total>0,00 €</strong></div>
+      <p class="drawer__note">Envío a península con Envialia. Gastos de envío calculados al finalizar.</p>
+      <a href="/carrito/" class="btn btn--o btn--block">Ver carrito</a>
+      <button type="button" class="btn btn--block" data-checkout>Finalizar compra <Icon name="arrow" size={18} width={2} class="arrow" /></button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="cmodal" aria-labelledby="cm-t" aria-describedby="cm-d" data-concept-modal>
+  <div class="cmodal__in">
+    <p class="eyebrow">Concepto de rediseño</p>
+    <h2 id="cm-t" class="h3" data-cm-title>Esto es un concepto</h2>
+    <p id="cm-d" class="muted" data-cm-text>Esta web es una propuesta de porfolio y no vende productos. Para comprar, visita la tienda oficial en castuo.es.</p>
+    <div class="cmodal__btns">
+      <a href="https://castuo.es/tienda/" class="btn" rel="noopener">Ir a castuo.es <Icon name="arrow" size={18} width={2} class="arrow" /></a>
+      <button type="button" class="btn btn--o" data-cm-close>Seguir explorando</button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .drawer {
+    position: fixed; inset: 0 0 0 auto; margin: 0; height: 100dvh; max-height: none;
+    width: min(440px, 100%); padding: 0; border: 0; background: var(--bg); color: var(--ink);
+    box-shadow: -20px 0 60px rgba(23, 32, 26, .18);
+  }
+  .drawer::backdrop { background: rgba(23, 32, 26, .4); }
+  .drawer[open] { animation: slide-in .45s var(--ease-out); }
+  .drawer[open]::backdrop { animation: fade .3s ease; }
+  .drawer.is-closing { animation: slide-out .3s var(--ease) forwards; }
+  @keyframes slide-in { from { transform: translateX(100%); } to { transform: none; } }
+  @keyframes slide-out { to { transform: translateX(100%); } }
+  @keyframes fade { from { opacity: 0; } }
+  .drawer__in { display: flex; flex-direction: column; height: 100%; padding-bottom: var(--banner-h); }
+  .drawer__head { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+  .drawer__t { font-family: var(--font-display); font-weight: 600; font-size: 26px; letter-spacing: -.02em; }
+  .x { width: 44px; height: 44px; border: 0; background: none; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+  .x:hover { background: rgba(23, 32, 26, .06); }
+  .drawer__lines { flex: 1; overflow-y: auto; list-style: none; margin: 0; padding: 8px 24px; }
+  .drawer__lines :global(li) { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .drawer__lines :global(img), .drawer__lines :global(.thumb) { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; background: var(--placeholder); }
+  .drawer__lines :global(.n) { font-weight: 600; font-size: 15px; line-height: 1.3; }
+  .drawer__lines :global(.v) { font-size: 13px; color: var(--muted-2); }
+  .drawer__lines :global(.q) { display: inline-flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 999px; margin-top: 8px; background: var(--surface); }
+  .drawer__lines :global(.q button) { width: 36px; height: 36px; border: 0; background: none; font-size: 18px; border-radius: 50%; }
+  .drawer__lines :global(.q span) { min-width: 24px; text-align: center; font-weight: 600; font-size: 14px; }
+  .drawer__lines :global(.r) { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .drawer__lines :global(.p) { font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+  .drawer__lines :global(.rm) { border: 0; background: none; color: var(--muted-2); font-size: 13px; text-decoration: underline; min-height: 32px; }
+  .drawer__empty { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 32px 24px; color: var(--muted); }
+  .drawer__empty[hidden], .drawer__foot[hidden] { display: none; }
+  .drawer__foot { display: flex; flex-direction: column; gap: 10px; padding: 20px 24px 24px; border-top: 1px solid var(--line); background: var(--surface); }
+  .drawer__sum { display: flex; justify-content: space-between; align-items: baseline; }
+  .drawer__sum strong { font-size: 26px; }
+  .drawer__note { font-size: 13px; color: var(--muted-2); margin-bottom: 6px; }
+
+  .cmodal { width: min(520px, calc(100% - 32px)); padding: 0; border: 0; border-radius: var(--radius-lg); background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px rgba(23, 32, 26, .25); }
+  .cmodal::backdrop { background: rgba(23, 32, 26, .45); }
+  .cmodal[open] { animation: pop .3s var(--ease); }
+  @keyframes pop { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+  .cmodal__in { padding: 36px; display: flex; flex-direction: column; gap: 14px; }
+  .cmodal .eyebrow { margin: 0; }
+  .cmodal__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+</style>

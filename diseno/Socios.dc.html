@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Castuo · Área de socios</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&amp;family=Inter:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F6F5F0}
+*{box-sizing:border-box}
+a{color:#3F5B2E}a:hover{color:#17201A}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.eyebrow{font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#3F5B2E;margin:0}
+.h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(40px,5vw,72px);line-height:1.03;letter-spacing:-.025em;margin:0}
+.h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(26px,2.6vw,36px);line-height:1.1;letter-spacing:-.02em;margin:0}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px;align-items:start}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.in{height:50px;padding:0 16px;border-radius:8px;border:1px solid #CFCBBE;background:#fff;font:15px Inter,sans-serif;color:#17201A;width:100%}
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-top:1px solid #DAD7CB;flex-wrap:wrap}
+@media (max-width:960px){.g2{grid-template-columns:repeat(1,minmax(0,1fr));gap:32px}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</helmet>
+<div style="width:100%;font-family:Inter,system-ui,sans-serif;color:#17201A;background:#F6F5F0">
+<dc-import name="Header" active="" hint-size="100%,132px"></dc-import>
+<main>
+  <section style="padding:40px 0 72px">
+    <div class="wrap g2" style="align-items:center">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <nav aria-label="Migas de pan" style="font-size:14px;color:#55594F"><a href="Main.dc.html">Inicio</a> / <span aria-current="page">Área de socios</span></nav>
+        <h1 class="h1">Área de socios</h1>
+        <p style="margin:0;font-size:19px;line-height:1.6;color:#4B4F45">Boletines fitosanitarios, documentación, balances y servicios de la cooperativa en un solo lugar.</p>
+      </div>
+      <form style="background:#fff;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:16px">
+        <h2 class="h2" style="font-size:24px">Acceso socios</h2>
+        <div style="display:flex;flex-direction:column;gap:6px"><label for="s-id" style="font-size:14px;font-weight:500">Nº de socio o correo</label><input id="s-id" type="text" autocomplete="username" class="in"></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><label for="s-pw" style="font-size:14px;font-weight:500">Contraseña</label><input id="s-pw" type="password" autocomplete="current-password" class="in"></div>
+        <button type="submit" style="height:52px;border-radius:999px;border:0;background:#17201A;color:#F6F5F0;font:600 16px Inter,sans-serif;cursor:pointer">Entrar</button>
+        <a href="Socios.dc.html" style="font-size:14px">¿Has olvidado tu contraseña?</a>
+      </form>
+    </div>
+  </section>
+
+  <section aria-label="Accesos rápidos" style="padding:0 0 88px">
+    <div class="wrap g4">
+      <a href="#atria" style="background:#fff;border-radius:12px;padding:24px;min-height:160px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#17201A"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3F5B2E" stroke-width="1.8" aria-hidden="true"><path d="M12 21c-4-3-7-6-7-10a7 7 0 0 1 14 0c0 4-3 7-7 10z"/><path d="M12 8v6M9 11h6"/></svg><span style="font-weight:600;font-size:17px">Boletines A.T.R.I.A</span><span style="color:#4B4F45;font-size:14px">Avisos fitosanitarios</span></a>
+      <a href="#docs" style="background:#fff;border-radius:12px;padding:24px;min-height:160px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#17201A"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3F5B2E" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span style="font-weight:600;font-size:17px">Descargas</span><span style="color:#4B4F45;font-size:14px">Impresos y documentación</span></a>
+      <a href="#docs" style="background:#fff;border-radius:12px;padding:24px;min-height:160px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#17201A"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3F5B2E" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span style="font-weight:600;font-size:17px">Balances</span><span style="color:#4B4F45;font-size:14px">Cuentas anuales</span></a>
+      <a href="Cooperativa.dc.html" style="background:#fff;border-radius:12px;padding:24px;min-height:160px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:#17201A"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3F5B2E" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c.8-3.5 3.2-5 6-5s5.2 1.5 6 5M15 15c3 0 5 1.5 6 4"/></svg><span style="font-weight:600;font-size:17px">Servicios</span><span style="color:#4B4F45;font-size:14px">Asesoramiento y suministros</span></a>
+    </div>
+  </section>
+
+  <section id="atria" aria-labelledby="at" style="background:#fff;padding:88px 0">
+    <div class="wrap g2">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <p class="eyebrow">A.T.R.I.A</p>
+        <h2 id="at" class="h2">Últimos boletines fitosanitarios</h2>
+        <p style="margin:0;color:#4B4F45;line-height:1.6">Recomendaciones de tratamiento para olivar y viñedo de la Agrupación de Tratamientos Integrados en Agricultura.</p>
+      </div>
+      <div>
+        <div class="row"><div><p style="margin:0;font-weight:600">Boletín olivar · [nº / fecha]</p><p style="margin:4px 0 0;font-size:14px;color:#55594F">PDF · [tamaño]</p></div><a href="#atria" style="font-weight:600">Descargar</a></div>
+        <div class="row"><div><p style="margin:0;font-weight:600">Boletín viñedo · [nº / fecha]</p><p style="margin:4px 0 0;font-size:14px;color:#55594F">PDF · [tamaño]</p></div><a href="#atria" style="font-weight:600">Descargar</a></div>
+        <div class="row" style="border-bottom:1px solid #DAD7CB"><div><p style="margin:0;font-weight:600">Boletín almendro · [nº / fecha]</p><p style="margin:4px 0 0;font-size:14px;color:#55594F">PDF · [tamaño]</p></div><a href="#atria" style="font-weight:600">Descargar</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs" aria-labelledby="dc" style="padding:88px 0 104px">
+    <div class="wrap g2">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <p class="eyebrow">Documentación</p>
+        <h2 id="dc" class="h2">Descargas y balances</h2>
+        <p style="margin:0;color:#4B4F45;line-height:1.6">Algunos documentos requieren acceso de socio.</p>
+      </div>
+      <div>
+        <div class="row"><p style="margin:0;font-weight:600">Balance anual · [ejercicio]</p><span style="font-size:13px;padding:6px 10px;border-radius:999px;background:#F1EFE7">Solo socios</span></div>
+        <div class="row"><p style="margin:0;font-weight:600">Certificados ISO 9001 e ISO 14001</p><a href="#docs" style="font-weight:600">Descargar</a></div>
+        <div class="row"><p style="margin:0;font-weight:600">Documentación de ayudas y subvenciones</p><a href="#docs" style="font-weight:600">Descargar</a></div>
+        <div class="row" style="border-bottom:1px solid #DAD7CB"><p style="margin:0;font-weight:600">Impresos para socios</p><span style="font-size:13px;padding:6px 10px;border-radius:999px;background:#F1EFE7">Solo socios</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<dc-import name="Footer" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+---
+import { NAV, ORG, type NavId } from '@/config';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+interface Props { active?: NavId }
+const { active = '' } = Astro.props;
+---
+<header class="site-header" data-header>
+  <div class="svc dark" data-svc>
+    <div class="wrap svc__in">
+      <p>Atención al cliente <a href={`tel:${ORG.phoneCustomer.tel}`}>{ORG.phoneCustomer.display}</a><span class="svc__more"> · Envíos a península · Islas y extranjero: <a href="/preguntas-frecuentes/#pedidos-y-envios">consulta precio</a></span></p>
+      <nav aria-label="Enlaces de servicio" class="svc__nav">
+        <a href="/socios/">Área de socios</a>
+        <a href="/socios/#atria">Boletines A.T.R.I.A</a>
+        <a href="/preguntas-frecuentes/">Ayuda</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="bar" data-bar>
+    <div class="wrap bar__in">
+      <button type="button" class="icon-btn menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu" data-menu-open>
+        <Icon name="menu" size={22} />
+      </button>
+
+      <a href="/" class="brand" aria-label="Castuo · Cooperativa del Campo San Pedro, ir al inicio">
+        <Logo height={52} />
+      </a>
+
+      <nav aria-label="Principal" class="nav">
+        <ul role="list">
+          {NAV.map((n) => (
+            <li><a href={n.href} aria-current={n.id === active ? 'page' : undefined} class="nav__a">{n.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="tools">
+        <button type="button" class="icon-btn" aria-label="Buscar" data-search-open aria-haspopup="dialog">
+          <Icon name="search" />
+        </button>
+        <a href="/socios/" class="icon-btn hide-sm" aria-label="Mi cuenta (área de socios)"><Icon name="user" /></a>
+        <a href="/carrito/" class="cart-btn" data-cart-open aria-haspopup="dialog" aria-controls="cart-drawer">
+          <Icon name="bag" size={18} />
+          <span class="cart-btn__n" data-cart-count>0</span>
+          <span class="sr-only" data-cart-label>Carrito, 0 productos</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Menú móvil a pantalla completa -->
+<div id="mobile-menu" class="mm dark" role="dialog" aria-modal="true" aria-label="Menú" hidden data-menu>
+  <div class="mm__top wrap">
+    <a href="/" class="mm__brand" aria-label="Castuo, inicio"><Logo height={40} light eager={false} /></a>
+    <button type="button" class="icon-btn icon-btn--light" aria-label="Cerrar menú" data-menu-close><Icon name="close" size={24} /></button>
+  </div>
+  <nav aria-label="Principal (móvil)" class="wrap mm__nav">
+    <ul role="list">
+      <li style="--i:0"><a href="/" aria-current={active === 'inicio' ? 'page' : undefined}>Inicio</a></li>
+      {NAV.map((n, i) => (
+        <li style={`--i:${i + 1}`}><a href={n.href} aria-current={n.id === active ? 'page' : undefined}>{n.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+  <div class="wrap mm__foot" style="--i:9">
+    <a href="/socios/">Área de socios</a>
+    <a href="/preguntas-frecuentes/">Ayuda</a>
+    <a href={`tel:${ORG.phoneCustomer.tel}`}>Atención al cliente · {ORG.phoneCustomer.display}</a>
+  </div>
+</div>
+
+<!-- Buscador -->
+<dialog class="search" aria-label="Buscar en la web" data-search>
+  <form method="dialog" class="search__in" role="search" data-search-form>
+    <label for="q" class="sr-only">Buscar productos y artículos</label>
+    <Icon name="search" size={22} />
+    <input id="q" type="search" placeholder="Buscar aceite, vino, recetas…" autocomplete="off" data-search-input />
+    <button type="button" class="icon-btn" aria-label="Cerrar buscador" data-search-close><Icon name="close" /></button>
+  </form>
+  <p class="search__status sr-only" aria-live="polite" data-search-status></p>
+  <ul class="search__res" role="list" data-search-results></ul>
+</dialog>
+
+<style>
+  .site-header {
+    position: sticky; top: calc(var(--svc-h, 38px) * -1); z-index: 80;
+    transition: transform .45s var(--ease);
+  }
+  .site-header.is-hidden { transform: translateY(-100%); }
+  .svc { font-size: 13px; color: var(--on-dark-2); }
+  .svc__in { display: flex; flex-wrap: wrap; gap: 6px 24px; justify-content: space-between; align-items: center; padding-block: 9px; }
+  .svc a { color: var(--on-dark); }
+  .svc p a { font-weight: 600; text-decoration: none; }
+  .svc__more a { font-weight: 400; text-decoration: underline; }
+  .svc__nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  .svc__nav a { color: var(--on-dark-2); text-decoration: none; }
+  .svc__nav a:hover { color: var(--on-dark); text-decoration: underline; }
+
+  .bar {
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    transition: background-color .3s var(--ease), border-color .3s var(--ease);
+  }
+  .is-scrolled .bar {
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom-color: var(--line-strong);
+  }
+  .bar__in { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 12px; min-height: var(--header-h); }
+  .brand { display: flex; align-items: center; min-height: 44px; }
+
+  .nav ul { display: flex; flex-wrap: wrap; gap: 4px 28px; align-items: center; list-style: none; margin: 0; padding: 0; }
+  .nav__a {
+    position: relative; display: inline-flex; align-items: center; min-height: 44px;
+    color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500;
+  }
+  .nav__a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 6px; height: 2px; background: var(--olive);
+    transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease);
+  }
+  .nav__a:hover { color: var(--ink); }
+  .nav__a:hover::after, .nav__a[aria-current='page']::after { transform: scaleX(1); transform-origin: left; }
+  .nav__a[aria-current='page'] { font-weight: 600; }
+
+  .tools { display: flex; gap: 4px; align-items: center; }
+  .icon-btn {
+    width: 44px; height: 44px; border: 0; background: none; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; color: var(--ink); flex: none;
+    transition: background-color .2s;
+  }
+  .icon-btn:hover { background: rgba(23, 32, 26, .06); color: var(--ink); }
+  .icon-btn--light { color: var(--on-dark); }
+  .icon-btn--light:hover { background: rgba(246, 245, 240, .1); color: var(--on-dark); }
+  .cart-btn {
+    height: 44px; padding: 0 16px; border-radius: var(--radius-pill); background: var(--ink); color: var(--on-dark);
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: 14px;
+    transition: background-color .25s var(--ease);
+  }
+  .cart-btn:hover { background: var(--olive); color: #fff; }
+  .cart-btn__n { min-width: 1ch; display: inline-block; font-variant-numeric: tabular-nums; }
+  .cart-btn__n.bump { animation: bump .5s var(--ease); }
+  @keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.45); } 70% { transform: scale(.9); } 100% { transform: scale(1); } }
+
+  .menu-btn { display: none; margin-left: -10px; }
+  @media (max-width: 1120px) {
+    .nav { display: none; }
+    .menu-btn { display: inline-flex; }
+    .bar__in { padding-block: 10px; gap: 8px; }
+    .svc__nav, .svc__more { display: none; }
+    .svc__in { justify-content: center; padding-block: 8px; font-size: 12px; }
+    .brand :global(img), .brand :global(.logo-txt) { max-height: 40px; width: auto; }
+  }
+  @media (max-width: 560px) { .hide-sm { display: none; } .cart-btn { padding: 0 14px; } }
+
+  /* Menú móvil */
+  .mm {
+    position: fixed; inset: 0; z-index: 200; overflow-y: auto; display: flex; flex-direction: column;
+    padding-bottom: calc(var(--banner-h) + 24px);
+  }
+  .mm[hidden] { display: none; }
+  .mm.is-open { animation: mm-in .35s var(--ease) both; }
+  .mm.is-closing { animation: mm-out .25s var(--ease) both; }
+  @keyframes mm-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes mm-out { from { opacity: 1; } to { opacity: 0; } }
+  .mm__top { display: flex; justify-content: space-between; align-items: center; min-height: 72px; }
+  .mm__nav { flex: 1; padding-block: 24px 32px; }
+  .mm__nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+  .mm__nav li, .mm__foot { opacity: 0; transform: translateY(18px); }
+  .mm.is-open .mm__nav li, .mm.is-open .mm__foot {
+    animation: mm-li .6s var(--ease) both; animation-delay: calc(60ms + var(--i) * 55ms);
+  }
+  @keyframes mm-li { to { opacity: 1; transform: none; } }
+  .mm__nav a {
+    display: inline-flex; align-items: center; min-height: 56px;
+    font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 9vw, 52px); letter-spacing: -.025em; line-height: 1.05;
+    color: var(--on-dark); text-decoration: none;
+  }
+  .mm__nav a[aria-current='page'] { color: var(--gold); }
+  .mm__nav a:hover { color: var(--gold); }
+  .mm__foot { display: flex; flex-direction: column; gap: 4px; padding-top: 24px; border-top: 1px solid var(--dark-line); font-size: 15px; }
+  .mm__foot a { color: var(--on-dark-muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  @media (prefers-reduced-motion: reduce) {
+    .mm__nav li, .mm__foot { opacity: 1; transform: none; }
+  }
+
+  /* Buscador */
+  .search {
+    width: min(720px, calc(100% - 32px)); margin: 10vh auto auto; padding: 0; border: 0; border-radius: var(--radius-lg);
+    background: var(--surface); color: var(--ink); box-shadow: 0 30px 80px rgba(23, 32, 26, .25);
+  }
+  .search::backdrop { background: rgba(23, 32, 26, .45); }
+  .search[open] { animation: pop .3s var(--ease); }
+  @keyframes pop { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+  .search__in { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 20px; border-bottom: 1px solid var(--line); }
+  .search__in input { flex: 1; height: 52px; border: 0; background: none; font-size: 18px; outline: none; min-width: 0; }
+  .search__in:focus-within { box-shadow: inset 0 -2px 0 var(--olive); }
+  .search__res { list-style: none; margin: 0; padding: 8px; max-height: 60vh; overflow-y: auto; }
+  .search__res:empty { display: none; }
+  .search__res :global(a) { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: var(--radius); color: var(--ink); text-decoration: none; }
+  .search__res :global(a:hover), .search__res :global(a:focus-visible) { background: var(--bg); }
+  .search__res :global(small) { color: var(--olive); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .search__res :global(.none) { padding: 16px 14px; color: var(--muted); }
+</style>

@@ -1,0 +1,4 @@
+# Concepto de rediseño no oficial (proyecto de porfolio).
+# No debe competir con la web oficial https://castuo.es en buscadores.
+User-agent: *
+Disallow: /

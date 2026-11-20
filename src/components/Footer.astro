@@ -1,0 +1,116 @@
+---
+import { ORG, PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import NewsletterForm from './NewsletterForm.astro';
+const year = new Date().getFullYear();
+---
+<footer class="ft dark on-dark">
+  <div class="wrap ft__in">
+    <div class="ft__nl">
+      <div class="ft__nl-txt">
+        <p class="ft__nl-t">Recibe la campaña nueva antes que nadie</p>
+        <p class="ft__muted">Un correo al mes: cosecha, recetas y ofertas para socios y clientes.</p>
+      </div>
+      <NewsletterForm id="nl-footer" />
+    </div>
+
+    <div class="ft__cols">
+      <div class="ft__brand">
+        <a href="/" aria-label="Castuo, inicio" class="ft__logo"><Logo height={48} light eager={false} /></a>
+        <address>
+          {ORG.name}<br />{ORG.street}<br />{ORG.postalCode} {ORG.locality} ({ORG.region})<br />
+          <a href={`tel:${ORG.phoneOffice.tel}`}>{ORG.phoneOffice.display}</a> · <a href={`mailto:${ORG.email}`}>{ORG.email}</a>
+        </address>
+        <div class="ft__social" aria-label="Redes sociales (pendiente de enlazar perfiles verificados)">
+          <span class="soc" title="Instagram · perfil pendiente de verificar"><Icon name="instagram" size={18} /><span class="sr-only">Instagram: perfil pendiente</span></span>
+          <span class="soc" title="Facebook · perfil pendiente de verificar"><Icon name="facebook" size={18} /><span class="sr-only">Facebook: perfil pendiente</span></span>
+          <span class="soc" title="YouTube · canal pendiente de verificar"><Icon name="youtube" size={18} /><span class="sr-only">YouTube: canal pendiente</span></span>
+        </div>
+      </div>
+      <nav aria-labelledby="ft-tienda" class="ft__nav">
+        <p id="ft-tienda" class="ft__h">Tienda</p>
+        <a href="/tienda/aceite-de-oliva-virgen-extra/">Aceite de oliva virgen extra</a>
+        <a href="/producto/vino-tinto-el-castuo/">Vino tinto</a>
+        <a href="/producto/vino-de-mesa-blanco-el-castuo/">Vino blanco</a>
+        <a href="/producto/vino-de-mesa-semidulce-el-castuo/">Vino de mesa semidulce</a>
+        <a href="/tienda/estuches-regalo/">Estuches regalo</a>
+      </nav>
+      <nav aria-labelledby="ft-coop" class="ft__nav">
+        <p id="ft-coop" class="ft__h">Cooperativa</p>
+        <a href="/cooperativa/#historia">Historia</a>
+        <a href="/cooperativa/#produccion">Producción</a>
+        <a href="/cooperativa/#valores">Valores</a>
+        <a href="/fincas/">Nuestras fincas</a>
+        <a href="/calidad-y-premios/">Calidad y premios</a>
+        <a href="/cooperativa/#galeria">Galería</a>
+      </nav>
+      <nav aria-labelledby="ft-desc" class="ft__nav">
+        <p id="ft-desc" class="ft__h">Descubre</p>
+        <a href="/visitas-almazara-guarena/">Visitas a la almazara</a>
+        <a href="/blog/">Blog y recetas</a>
+        <a href="/blog/?categoria=noticias">Noticias</a>
+        <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
+        <a href="/contacto/">Contacto</a>
+      </nav>
+      <nav aria-labelledby="ft-soc" class="ft__nav">
+        <p id="ft-soc" class="ft__h">Socios</p>
+        <a href="/socios/">Área de socios</a>
+        <a href="/socios/#atria">Boletines A.T.R.I.A</a>
+        <a href="/socios/#servicios">Servicios</a>
+        <a href="/socios/#docs">Descargas</a>
+        <a href="/socios/#docs">Balances</a>
+      </nav>
+    </div>
+
+    <div class="ft__badges">
+      <ul role="list" aria-label="Certificaciones, pagos y envíos">
+        <li>ISO 9001</li><li>ISO 14001</li><li>PayPal</li><li>Transferencia</li><li>Envíos Envialia</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ft__legal">
+    <div class="wrap ft__legal-in">
+      <p>© {year} {ORG.name} · Castuo</p>
+      <nav aria-label="Legal">
+        <a href="/legal/">Aviso legal</a><a href="/legal/#privacidad">Privacidad</a><a href="/legal/#cookies">Cookies</a><a href="/legal/#condiciones">Condiciones de venta</a><a href="/preguntas-frecuentes/#pedidos-y-envios">Envíos y devoluciones</a>
+      </nav>
+    </div>
+    <div class="wrap ft__credit">
+      <p>Concepto de rediseño no oficial · Proyecto de porfolio de {PORTFOLIO_AUTHOR} · Web oficial: <a href={OFFICIAL_URL} rel="noopener">castuo.es</a>.
+      Fotografías y marca propiedad de Cooperativa del Campo San Pedro (castuo.es), usadas solo con fines de demostración.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft { color: var(--on-dark-2); }
+  .ft__in { padding-top: 72px; display: flex; flex-direction: column; gap: 56px; }
+  .ft__nl { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; padding-bottom: 48px; border-bottom: 1px solid var(--dark-line); }
+  .ft__nl-txt { max-width: 520px; display: flex; flex-direction: column; gap: 10px; }
+  .ft__nl-t { font-family: var(--font-display); font-weight: 600; font-size: 32px; line-height: 1.1; letter-spacing: -.02em; color: var(--on-dark); }
+  .ft__muted, .ft address { color: var(--on-dark-muted-2); }
+  .ft__cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px; }
+  .ft__brand { display: flex; flex-direction: column; gap: 16px; }
+  .ft__logo { align-self: flex-start; }
+  .ft address { line-height: 1.75; font-size: 14px; }
+  .ft address a { color: var(--on-dark-2); }
+  .ft__social { display: flex; gap: 8px; }
+  .soc { width: 44px; height: 44px; border: 1px solid var(--dark-line-2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--on-dark-muted-2); opacity: .7; }
+  .ft__nav { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+  .ft__h { margin: 0 0 8px; font-weight: 600; color: var(--on-dark); }
+  .ft__nav a { color: var(--on-dark-muted-2); text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; align-self: flex-start; }
+  .ft__nav a:hover { color: var(--on-dark); text-decoration: underline; }
+  .ft__badges { padding: 28px 0; border-top: 1px solid var(--dark-line); }
+  .ft__badges ul { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--on-dark-muted-2); list-style: none; margin: 0; padding: 0; }
+  .ft__badges li { border: 1px solid var(--dark-line-2); border-radius: 4px; padding: 6px 10px; }
+  .ft__legal { border-top: 1px solid var(--dark-line); font-size: 13px; color: var(--on-dark-muted-2); }
+  .ft__legal-in { padding-block: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  .ft__legal nav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+  .ft__legal a { color: var(--on-dark-muted-2); min-height: 32px; display: inline-flex; align-items: center; }
+  .ft__legal a:hover { color: var(--on-dark); }
+  .ft__credit { padding-bottom: calc(var(--banner-h) + 20px); font-size: 12px; line-height: 1.6; }
+  .ft__credit p { max-width: 860px; }
+  .ft__credit a { color: var(--on-dark-2); }
+</style>

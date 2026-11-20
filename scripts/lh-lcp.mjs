@@ -1,0 +1,11 @@
+import lighthouse from 'lighthouse';
+import * as chromeLauncher from 'chrome-launcher';
+import { chromium } from 'playwright';
+const chrome = await chromeLauncher.launch({ chromePath: chromium.executablePath(), chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu'] });
+const res = await lighthouse(process.argv[2], { port: chrome.port, output: 'json', logLevel: 'error', onlyCategories: ['performance'] });
+const a = res.lhr.audits;
+console.log('LCP', a['largest-contentful-paint'].displayValue, 'FCP', a['first-contentful-paint'].displayValue, 'SI', a['speed-index'].displayValue);
+console.log(JSON.stringify(a["largest-contentful-paint-element"].details.items[0].items[0].node.snippet.slice(0,160)));
+console.log(JSON.stringify(a["largest-contentful-paint-element"].details.items[1]?.items?.map((x) => [x.phase, Math.round(x.timing)])));
+console.log(JSON.stringify(a['render-blocking-resources']?.details?.items?.map((i) => [i.url, i.wastedMs])));
+await chrome.kill();

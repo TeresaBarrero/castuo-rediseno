@@ -1,0 +1,51 @@
+---
+// Bloque «Dónde estamos» (Inicio y Contacto). Sin iframe de Google Maps: mapa estático y enlace.
+import { ORG } from '@/config';
+import Icon from './Icon.astro';
+interface Props { headingLevel?: 'h1' | 'h2'; id?: string }
+const { headingLevel = 'h2', id = 'con-t' } = Astro.props;
+const H = headingLevel;
+---
+<div class="cb wrap-inner" data-reveal>
+  <div class="cb__txt">
+    <p class="eyebrow">Dónde estamos</p>
+    <H id={id} class="h2 cb__t">{ORG.name}</H>
+    <address class="cb__addr">
+      {ORG.street}<br />{ORG.postalCode} {ORG.locality} ({ORG.region})<br />
+      Oficinas: <a href={`tel:${ORG.phoneOffice.tel}`}>{ORG.phoneOffice.display}</a><br />
+      Atención al cliente (tienda online): <a href={`tel:${ORG.phoneCustomer.tel}`}>{ORG.phoneCustomer.display}</a><br />
+      <a href={`mailto:${ORG.email}`}>{ORG.email}</a>
+    </address>
+    <p class="muted">Horario: consulta el horario de oficina y tienda llamando al {ORG.phoneOffice.display}.</p>
+    <a class="btn btn--o self-start" href={ORG.mapsUrl} rel="noopener" target="_blank">Cómo llegar <span class="sr-only">(abre Google Maps en una pestaña nueva)</span><Icon name="arrow" size={18} width={2} class="arrow" /></a>
+  </div>
+  <a class="cb__map" href={ORG.mapsUrl} rel="noopener" target="_blank">
+    <svg viewBox="0 0 600 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true" class="cb__svg">
+      <rect width="600" height="380" fill="#E4E1D6" />
+      <g stroke="#F6F5F0" stroke-width="14" fill="none" stroke-linecap="round">
+        <path d="M-20 250 C 120 230, 220 210, 330 190 S 520 150, 640 120" />
+        <path d="M250 -20 C 270 90, 300 160, 330 190 S 380 320, 400 420" />
+        <path d="M-20 90 C 100 110, 200 140, 330 190" />
+      </g>
+      <g stroke="#F6F5F0" stroke-width="6" fill="none" opacity=".8">
+        <path d="M60 -10 L 140 400" /><path d="M460 -10 L 520 400" /><path d="M-10 330 L 610 300" /><path d="M-10 40 L 610 70" />
+      </g>
+      <g fill="#D6D9C4"><rect x="380" y="220" width="90" height="60" rx="6" /><rect x="90" y="140" width="70" height="50" rx="6" /><rect x="420" y="40" width="110" height="60" rx="6" /></g>
+    </svg>
+    <span class="cb__pin"><Icon name="pin" size={30} width={1.6} /></span>
+    <span class="cb__lbl">Calle Don Benito, 13 · Guareña · Ver en Google Maps</span>
+  </a>
+</div>
+<style>
+  .cb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; align-items: center; background: var(--surface); border-radius: var(--radius-lg); padding: 48px; }
+  .cb__txt { display: flex; flex-direction: column; gap: 20px; }
+  .cb__txt .eyebrow { margin: 0; }
+  .cb__t { font-size: 36px; }
+  .cb__addr { line-height: 1.8; font-size: 17px; }
+  .cb__map { position: relative; display: block; height: 380px; border-radius: var(--radius-sm); overflow: hidden; color: var(--ink); text-decoration: none; }
+  .cb__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cb__pin { position: absolute; left: 55%; top: 50%; transform: translate(-50%, -100%); color: var(--olive); background: var(--surface); border-radius: 50%; width: 52px; height: 52px; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(23, 32, 26, .15); transition: transform .35s var(--ease); }
+  .cb__map:hover .cb__pin { transform: translate(-50%, calc(-100% - 6px)); }
+  .cb__lbl { position: absolute; left: 16px; bottom: 16px; background: var(--surface); padding: 8px 12px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600; }
+  @media (max-width: 960px) { .cb { grid-template-columns: minmax(0, 1fr); padding: 28px 20px; gap: 32px; } .cb__map { height: 260px; } .cb__t { font-size: 30px; } }
+</style>

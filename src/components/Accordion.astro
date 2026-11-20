@@ -1,0 +1,48 @@
+---
+// Acordeón accesible: botones con aria-expanded; la altura se anima con grid-template-rows 0fr → 1fr.
+interface Props { items: { q: string; a: string }[]; id: string; openFirst?: boolean; size?: 'md' | 'lg'; single?: boolean }
+const { items, id, openFirst = true, size = 'md', single = true } = Astro.props;
+---
+<div class:list={['acc', `acc--${size}`]} data-acc-group data-single={single ? '' : undefined}>
+  {items.map((f, i) => (
+    <div class="acc__item">
+      <h3 class="acc__h">
+        <button type="button" class="acc__btn" id={`${id}-b${i}`} aria-expanded={openFirst && i === 0 ? 'true' : 'false'} aria-controls={`${id}-p${i}`} data-acc-btn>
+          <span>{f.q}</span>
+          <span class="acc__ico" aria-hidden="true"></span>
+        </button>
+      </h3>
+      <div class="acc__p" id={`${id}-p${i}`} role="region" aria-labelledby={`${id}-b${i}`}>
+        <div class="acc__in"><p set:html={f.a} /></div>
+      </div>
+    </div>
+  ))}
+</div>
+<style>
+  .acc__item { border-top: 1px solid var(--line); }
+  .acc__item:last-child { border-bottom: 1px solid var(--line); }
+  .acc__h { margin: 0; font: inherit; }
+  .acc__btn {
+    width: 100%; min-height: 64px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    background: none; border: 0; padding: 18px 0; font: 600 17px/1.4 var(--font-body); color: var(--ink); text-align: left;
+  }
+  .acc--lg .acc__btn { min-height: 68px; padding: 20px 0; font-size: 18px; }
+  .acc__btn:hover { color: var(--olive); }
+  .acc__ico { position: relative; width: 16px; height: 16px; flex: none; }
+  .acc__ico::before, .acc__ico::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -.75px; background: currentColor; transition: transform .4s var(--ease); }
+  .acc__ico::after { transform: rotate(90deg); }
+  [aria-expanded='true'] .acc__ico::after { transform: rotate(0deg); }
+  [aria-expanded='true'] .acc__ico::before { transform: rotate(180deg); }
+  .acc__p { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
+  .acc__in { overflow: hidden; min-height: 0; }
+  .acc__in p { margin: 0 0 22px; color: var(--muted); line-height: 1.65; max-width: 760px; opacity: 0; transition: opacity .3s var(--ease); }
+  .acc--lg .acc__in p { line-height: 1.7; font-size: 16px; margin-bottom: 24px; }
+  .acc__btn[aria-expanded='true'] + * { }
+  .acc__item:has([aria-expanded='true']) .acc__p { grid-template-rows: 1fr; }
+  .acc__item:has([aria-expanded='true']) .acc__in p { opacity: 1; transition-delay: .1s; }
+  .acc__item:has([aria-expanded='false']) .acc__p { visibility: hidden; transition: grid-template-rows .45s var(--ease), visibility 0s .45s; }
+  /* Sin JS: todo abierto */
+  :global(html:not(.js)) .acc__p { grid-template-rows: 1fr; visibility: visible; }
+  :global(html:not(.js)) .acc__in p { opacity: 1; }
+  .acc__in :global(a) { color: var(--olive); }
+</style>

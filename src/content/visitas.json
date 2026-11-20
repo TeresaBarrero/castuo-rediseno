@@ -1,0 +1,11 @@
+[
+  { "id": "almazara-cata", "order": 1, "name": "Visita almazara + cata", "foto": "visitaAlmazara",
+    "desc": "Recorrido por la recepción, la molturación y la bodega de aceite. Terminamos con una cata guiada de nuestro virgen extra.",
+    "dur": "Duración a medida", "price": "Precio: consultar", "who": "Particulares" },
+  { "id": "ruta-olivar", "order": 2, "name": "Ruta por el olivar", "foto": "visitaOlivar",
+    "desc": "Paseo por una finca de socios para conocer los sistemas tradicional, intensivo y superintensivo.",
+    "dur": "Duración a medida", "price": "Precio: consultar", "who": "Particulares y grupos" },
+  { "id": "grupos", "order": 3, "name": "Grupos y centros educativos", "foto": "visitaGrupos",
+    "desc": "Visita adaptada para colegios, asociaciones y empresas, con taller de cata y desayuno con aceite.",
+    "dur": "A medida", "price": "Consultar", "who": "Grupos: consultar" }
+]

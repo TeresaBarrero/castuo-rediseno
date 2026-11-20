@@ -1,0 +1,132 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import Icon from '@/components/Icon.astro';
+import { organization } from '@/lib/schema';
+
+const CERT = {
+  9001: 'https://castuo.es/certificados/9001%20CAST%20-%20COOP.%20DEL%20CAMPO%20SAN%20PEDRO%20DE%20GUARENA_signed.pdf',
+  14001: 'https://castuo.es/certificados/14001%20CAST%20-%20COOP.%20DEL%20CAMPO%20SAN%20PEDRO%20DE%20GUARENA_signed.pdf',
+};
+const steps = [
+  ['Campo', 'Los socios cultivan y recogen en su punto.'],
+  ['Recepción', 'Cada partida se pesa, se clasifica y se registra.'],
+  ['Almazara', 'Limpieza, molienda, batido y separación del aceite por procedimientos mecánicos.'],
+  ['Análisis y envasado', 'Control analítico y envasado en origen.'],
+  ['Tu casa', 'Envío directo, sin intermediarios.'],
+];
+const awards = [
+  ['Medalla de Oro', 'Mejor aceite convencional'],
+  ['Mejor AOVE', 'Producido en una cooperativa'],
+  ['Maestro Almazara', 'Reconocimiento al trabajo de la almazara'],
+];
+---
+<Base title="Calidad, premios y certificaciones ISO | Castuo"
+  description="Premios Extrema Selección 2025, certificaciones ISO 9001 e ISO 14001 y trazabilidad del olivo a tu mesa en la Cooperativa del Campo San Pedro."
+  active="calidad" og="calidad" jsonLd={organization(Astro.site!)}>
+  <section class="qh">
+    <div class="wrap stack" style="gap:24px">
+      <Breadcrumbs items={[{ label: 'Cooperativa', href: '/cooperativa/' }, { label: 'Calidad y premios' }]} />
+      <h1 class="h1 h1--page" style="max-width:900px">Calidad, premios y certificaciones</h1>
+      <p class="lead" style="max-width:720px">Controlamos cada paso, desde que la aceituna entra en la cooperativa hasta que el aceite llega a tu casa. Y lo certificamos.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="pr" class="dark on-dark qp">
+    <div class="wrap g2">
+      <Foto slot="premioCalidad" crop={1.29} sizes="(max-width: 960px) 100vw, 592px" widths={[400, 600, 800, 1200]} height="460px" class="qp__img" parallax data-reveal />
+      <div class="stack" style="gap:20px" data-reveal>
+        <p class="eyebrow" style="margin:0">Premios</p>
+        <h2 id="pr" class="h2">Premio Extrema Selección AOVE 2025</h2>
+        <p class="lead lead--sm">Los premios Extrema Selección, que concede la Junta de Extremadura, distinguen a los mejores aceites de la región. En la edición de 2025, la cooperativa recibió tres galardones:</p>
+        <ul class="aw" role="list">
+          {awards.map(([k, v]) => <li><Icon name="award" size={22} stroke="var(--gold)" width={1.8} /><span><strong>{k}</strong><br />{v}</span></li>)}
+        </ul>
+        <p class="muted">Nuestro AOVE de cosecha temprana, monovarietal Picual, luce la Medalla de Oro en su etiqueta.</p>
+        <a href="/producto/aove-cosecha-temprana-6x2l/" class="btn btn--light self-start">Comprar el aceite premiado</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="iso" class="qi">
+    <div class="wrap stack" style="gap:36px">
+      <div data-reveal><p class="eyebrow" style="margin-bottom:14px">Certificaciones</p><h2 id="iso" class="h2">Dos normas, un compromiso</h2></div>
+      <div class="g2 isos" data-reveal-group>
+        <article class="iso" data-reveal>
+          <div class="iso__seal" aria-hidden="true"><span>ISO</span><strong>9001</strong></div>
+          <div class="stack" style="gap:10px"><h3 class="h3">ISO 9001 · Gestión de la calidad</h3><p class="muted">Procesos documentados y auditados para que cada lote cumpla lo que promete la etiqueta. Certificado n.º EC-12254/26.</p><a href={CERT[9001]} rel="noopener" class="lnk self-start">Descargar certificado (PDF, castuo.es)</a></div>
+        </article>
+        <article class="iso" data-reveal>
+          <div class="iso__seal" aria-hidden="true"><span>ISO</span><strong>14001</strong></div>
+          <div class="stack" style="gap:10px"><h3 class="h3">ISO 14001 · Gestión ambiental</h3><p class="muted">Medimos y reducimos el impacto de la actividad de la almazara y la bodega sobre el entorno. Certificado n.º MA-5443/26.</p><a href={CERT[14001]} rel="noopener" class="lnk self-start">Descargar certificado (PDF, castuo.es)</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="tz" class="sec--white qt">
+    <div class="wrap stack" style="gap:40px">
+      <div data-reveal><p class="eyebrow" style="margin-bottom:14px">Trazabilidad</p><h2 id="tz" class="h2">Del olivo a tu mesa en cinco pasos</h2></div>
+      <ol class="trace" role="list" data-trace>
+        {steps.map(([t, d], i) => (
+          <li style={`--i:${i}`}>
+            <span class="trace__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="h3">{t}</h3>
+            <p class="muted">{d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="qd">
+    <div class="wrap">
+      <div class="qd__box" data-reveal>
+        <div class="stack" style="max-width:620px;gap:10px"><h2 class="h2" style="font-size:30px">Fichas técnicas y análisis</h2><p class="muted">Consulta la ficha de cata y los parámetros de cada aceite de la campaña.</p></div>
+        <a href="/socios/#docs" class="btn">Ver descargas</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .qh { padding: 40px 0 96px; }
+  .qp { padding: 104px 0; }
+  .qp :global(.qp__img) { border-radius: 8px; background: var(--dark-surface); }
+  .aw { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .aw li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-top: 1px solid var(--dark-line); color: var(--on-dark-muted); line-height: 1.45; }
+  .aw strong { color: var(--on-dark); }
+  .aw :global(svg) { flex: none; margin-top: 2px; }
+  .qi { padding: 104px 0; }
+  .isos { gap: 24px; align-items: stretch; }
+  .iso { background: var(--surface); border-radius: var(--radius-md); padding: 32px; display: flex; gap: 24px; align-items: flex-start; }
+  .iso__seal { width: 96px; height: 96px; flex: none; border-radius: 50%; border: 1.5px solid var(--olive); color: var(--olive); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+  .iso__seal span { font-size: 11px; letter-spacing: .14em; font-weight: 600; }
+  .iso__seal strong { font-family: var(--font-display); font-size: 26px; letter-spacing: -.02em; margin-top: 4px; }
+  .iso .muted { line-height: 1.6; }
+  .qt { padding: 104px 0; }
+  .trace { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  .trace li { position: relative; padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .trace li::before, .trace li::after { content: ''; position: absolute; top: 0; left: 0; height: 2px; }
+  .trace li::before { right: 0; background: var(--line); }
+  .trace li::after { width: 100%; background: var(--ink); transform-origin: left; }
+  :global(.js) .trace li::after { transform: scaleX(0); transition: transform .7s var(--ease); transition-delay: calc(var(--i) * 350ms); }
+
+  :global(.js) .trace.is-on li::after { transform: scaleX(1); }
+
+  .trace__n { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--olive); }
+  .trace .h3 { font-size: 20px; }
+  .trace .muted { line-height: 1.55; font-size: 15px; }
+  .qd { padding: 96px 0 112px; }
+  .qd__box { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 40px 48px; }
+  @media (max-width: 960px) {
+    .qh { padding-bottom: 64px; }
+    .qp, .qi, .qt { padding: 72px 0; }
+    .qp :global(.qp__img) { height: 320px !important; }
+    .trace { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .iso { flex-direction: column; padding: 24px; }
+    .qd__box { padding: 28px 24px; }
+    .qd { padding: 64px 0 88px; }
+  }
+</style>

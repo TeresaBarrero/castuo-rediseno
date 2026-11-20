@@ -1,0 +1,76 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Accordion from '@/components/Accordion.astro';
+import { getCollection } from 'astro:content';
+import { ORG } from '@/config';
+
+const groups = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order);
+// Evita duplicados exactos en la página completa
+const seen = new Set<string>();
+const clean = groups.map((g) => ({ id: g.id, label: g.data.label, items: g.data.items.filter((i) => (seen.has(i.q) ? false : (seen.add(i.q), true))) }));
+const ld = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: clean.flatMap((g) => g.items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } }))),
+};
+---
+<Base title="Preguntas frecuentes: envíos, aceite y vino | Castuo"
+  description="Respuestas cortas sobre envíos, formas de pago, conservación del aceite, cosecha temprana, vinos y cómo hacerse socio de la Cooperativa del Campo San Pedro."
+  og="faq" jsonLd={ld}>
+  <section class="fqh">
+    <div class="wrap stack" style="gap:22px">
+      <Breadcrumbs items={[{ label: 'Preguntas frecuentes' }]} />
+      <h1 class="h1 h1--page">Preguntas frecuentes</h1>
+      <p class="lead" style="max-width:680px">Envíos, pagos, conservación del aceite y todo lo que nos soléis preguntar.</p>
+    </div>
+  </section>
+
+  <section class="fqb" data-tabs>
+    <div class="wrap lay">
+      <div class="side">
+        <div class="tabs" role="tablist" aria-label="Temas" aria-orientation="vertical">
+          {clean.map((g, i) => (
+            <button type="button" role="tab" class="tab" id={`tab-${g.id}`} aria-controls={g.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={g.id}>{g.label}</button>
+          ))}
+        </div>
+        <div class="help">
+          <p><strong>¿No encuentras tu respuesta?</strong></p>
+          <p class="muted">Llámanos al <a href={`tel:${ORG.phoneCustomer.tel}`}>{ORG.phoneCustomer.display}</a> (atención al cliente) o escribe a <a href={`mailto:${ORG.email}`}>{ORG.email}</a>.</p>
+        </div>
+      </div>
+      <div class="main">
+        {clean.map((g, i) => (
+          <div class="panel" id={g.id} role="tabpanel" aria-labelledby={`tab-${g.id}`} data-panel={g.id} hidden={i !== 0 ? true : undefined} tabindex="-1">
+            <h2 class="panel__t">{g.label}</h2>
+            <Accordion items={g.items} id={`fq-${g.id}`} size="lg" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .fqh { padding: 40px 0 64px; }
+  .fqb { padding: 0 0 104px; }
+  .lay { display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start; }
+  .side { flex: 1 1 240px; max-width: 300px; display: flex; flex-direction: column; gap: 24px; position: sticky; top: calc(var(--header-h) + 24px); }
+  .tabs { display: flex; flex-direction: column; gap: 8px; }
+  .tab { min-height: 48px; padding: 0 18px; border-radius: var(--radius); text-align: left; font: 500 15px var(--font-body); background: transparent; color: var(--ink); border: 1px solid var(--line); transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s; }
+  .tab:hover { border-color: var(--ink); }
+  .tab[aria-selected='true'] { background: var(--ink); color: var(--on-dark); border-color: var(--ink); }
+  .help { background: var(--surface); border-radius: var(--radius-md); padding: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.55; }
+  .main { flex: 999 1 560px; min-width: 0; }
+  .panel { outline: none; }
+  .panel:not([hidden]) { animation: pfade .45s var(--ease); }
+  @keyframes pfade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .panel__t { font-family: var(--font-display); font-weight: 600; font-size: 30px; letter-spacing: -.02em; margin: 0 0 16px; }
+  :global(html:not(.js)) .panel[hidden] { display: block; margin-top: 48px; }
+  @media (max-width: 960px) {
+    .side { max-width: none; position: static; }
+    .tabs { flex-direction: row; flex-wrap: wrap; }
+    .tab { border-radius: var(--radius-pill); }
+    .lay { gap: 32px; }
+    .fqb { padding-bottom: 72px; }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
+---
+<Base title="Aviso legal del concepto de rediseño | Castuo" description="Información legal de este concepto de rediseño no oficial de castuo.es: autoría, privacidad, cookies y condiciones." og="default">
+  <section class="lg">
+    <div class="wrap stack" style="gap:24px;max-width:820px">
+      <Breadcrumbs items={[{ label: 'Aviso legal' }]} />
+      <h1 class="h1 h1--page">Aviso legal</h1>
+      <div class="prose">
+        <p>Este sitio es un <strong>concepto de rediseño no oficial</strong> de la web de la Cooperativa del Campo San Pedro (Castuo), realizado por {PORTFOLIO_AUTHOR} como proyecto de porfolio. No es un encargo de la cooperativa ni sustituye a su web: la web oficial es <a href={OFFICIAL_URL}>castuo.es</a>.</p>
+        <p>Fotografías y marca propiedad de Cooperativa del Campo San Pedro (castuo.es), usadas solo con fines de demostración. Los textos legales vigentes de la cooperativa (aviso legal, condiciones de compra, envíos y devoluciones) están en su web oficial.</p>
+        <h2 id="privacidad">Privacidad</h2>
+        <p>Este concepto <strong>no recoge ni envía datos personales</strong>. Los formularios (newsletter, reserva de visitas, acceso de socios, avisos de stock) solo validan los campos en tu navegador y muestran un mensaje de confirmación simulado.</p>
+        <h2 id="cookies">Cookies</h2>
+        <p>No se usan cookies propias ni de terceros, ni herramientas de analítica. El carrito se guarda únicamente en el almacenamiento local de tu navegador (localStorage) para que puedas probar la experiencia de compra; puedes vaciarlo cuando quieras.</p>
+        <h2 id="condiciones">Condiciones de venta</h2>
+        <p>No hay venta ni pago real. Los precios mostrados se tomaron de la tienda oficial a título ilustrativo y pueden no estar actualizados. Para comprar, visita <a href="https://castuo.es/tienda/">la tienda de castuo.es</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .lg { padding: 40px 0 112px; }
+  .prose { font-size: 17px; line-height: 1.75; color: var(--body-2); display: flex; flex-direction: column; gap: 16px; }
+  .prose h2 { font-family: var(--font-display); font-weight: 600; font-size: 28px; color: var(--ink); margin-top: 24px; letter-spacing: -.02em; scroll-margin-top: 120px; }
+</style>

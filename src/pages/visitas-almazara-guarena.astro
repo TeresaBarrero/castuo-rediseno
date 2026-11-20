@@ -1,0 +1,137 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import Icon from '@/components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { ORG } from '@/config';
+import { address, orgId } from '@/lib/schema';
+import { getImage } from 'astro:assets';
+import { fotoSrc } from '@/lib/images';
+import { FOTOS } from '@/data/fotos';
+
+const exps = (await getCollection('visitas')).sort((a, b) => a.data.order - b.data.order);
+const site = Astro.site!;
+const img = fotoSrc(FOTOS.heroVisitas.file);
+const imgUrl = img ? new URL((await getImage({ src: img, width: 1200, format: 'jpg' })).src, site).href : undefined;
+const ld = {
+  '@context': 'https://schema.org', '@type': 'TouristAttraction',
+  name: 'Visitas a la almazara de la Cooperativa del Campo San Pedro',
+  description: 'Visitas a la almazara y a las fincas de los socios en Guareña (Badajoz), con cata guiada de aceite de oliva virgen extra.',
+  url: new URL('/visitas-almazara-guarena/', site).href, image: imgUrl,
+  address: address(), geo: { '@type': 'GeoCoordinates', latitude: ORG.geo.lat, longitude: ORG.geo.lng },
+  touristType: ['Oleoturismo', 'Grupos', 'Centros educativos'], isAccessibleForFree: false, availableLanguage: 'es',
+  provider: { '@id': orgId(site) },
+};
+const qa = [
+  ['¿Cuál es la mejor época para visitar la almazara?', 'Durante la campaña de recogida, cuando la almazara está en funcionamiento. La campaña se desarrolla en otoño e invierno: consúltanos las fechas de cada año.'],
+  ['¿Las visitas son accesibles?', 'Cuéntanos en el formulario si alguna persona del grupo necesita condiciones de accesibilidad y adaptamos el recorrido.'],
+  ['¿Puedo comprar aceite durante la visita?', 'Sí, en la tienda de la cooperativa. También puedes <a href="/tienda/">comprar online</a>.'],
+];
+---
+<Base title="Visitas a almazara en Guareña (Badajoz) · Cata de AOVE | Castuo"
+  description="Visita la almazara de la Cooperativa del Campo San Pedro en Guareña, pasea por las fincas de olivar y cata aceite de oliva virgen extra. Particulares, grupos y colegios."
+  active="visitas" og="visitas" jsonLd={ld}>
+  <section class="vh">
+    <div class="wrap g2">
+      <div class="stack" style="gap:24px">
+        <Breadcrumbs items={[{ label: 'Visitas' }]} />
+        <h1 class="h1 h1--page">Visitas a la almazara y fincas en Guareña (Badajoz)</h1>
+        <p class="lead">Descubre cómo se elabora un aceite de oliva virgen extra de cooperativa y cátalo con quienes lo hacen.</p>
+        <a href="#reserva" class="btn btn--lg self-start">Reservar ahora <Icon name="arrow" size={18} width={2} class="arrow" /></a>
+      </div>
+      <Foto slot="heroVisitas" crop={1.14} priority sizes="(max-width: 960px) 100vw, 592px" widths={[400, 600, 800, 1200]} height="520px" class="vh__img" parallax />
+    </div>
+  </section>
+
+  <section aria-labelledby="exp" class="sec--white ve">
+    <div class="wrap stack" style="gap:36px">
+      <div data-reveal><p class="eyebrow" style="margin-bottom:14px">Experiencias</p><h2 id="exp" class="h2">Elige tu visita</h2></div>
+      <div class="g3" data-reveal-group>
+        {exps.map((e, i) => (
+          <article class:list={['xc', { 'is-on': i === 0 }]} data-reveal>
+            <Foto slot={e.data.foto} crop={1.6} sizes="(max-width: 960px) 100vw, 360px" widths={[360, 540, 720]} height="220px" />
+            <h3 class="xc__t">{e.data.name}</h3>
+            <p class="muted xc__d">{e.data.desc}</p>
+            <ul class="xc__tags" role="list"><li>{e.data.dur}</li><li>{e.data.price}</li><li>{e.data.who}</li></ul>
+            <button type="button" class="xc__btn" data-pick-visit={e.data.name} aria-pressed={i === 0 ? 'true' : 'false'}>{i === 0 ? 'Seleccionada' : 'Elegir esta visita'}</button>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="reserva" aria-labelledby="res" class="vr">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:18px" data-reveal>
+        <p class="eyebrow" style="margin:0">Reserva</p>
+        <h2 id="res" class="h2">Solicita tu visita</h2>
+        <p class="muted" style="line-height:1.65">Te confirmamos disponibilidad por correo lo antes posible. Las visitas durante la campaña de aceituna, en otoño e invierno, permiten ver la almazara en marcha.</p>
+        <div class="howto">
+          <p><strong>Cómo llegar</strong></p>
+          <address>{ORG.name}<br />{ORG.street} · {ORG.postalCode} {ORG.locality} ({ORG.region})<br />Tel. <a href={`tel:${ORG.phoneOffice.tel}`}>{ORG.phoneOffice.display}</a></address>
+          <a href={ORG.mapsUrl} class="lnk self-start" rel="noopener" target="_blank">Abrir en Google Maps <span class="sr-only">(pestaña nueva)</span></a>
+        </div>
+      </div>
+      <form class="vform" novalidate data-fake-form data-ok="¡Solicitud registrada! Esto es un concepto de rediseño: no se ha enviado nada. Para reservar de verdad, llama al 924 350 278." data-reveal>
+        <p class="form-note">Formulario de demostración: valida los datos pero no envía nada.</p>
+        <div class="field"><label for="v-exp">Experiencia</label>
+          <select id="v-exp" class="input" required>{exps.map((e) => <option>{e.data.name}</option>)}</select></div>
+        <div class="fr">
+          <div class="field"><label for="v-date">Fecha preferida</label><input id="v-date" type="date" class="input" required data-min-today aria-describedby="v-date-err" /><span class="field-error" id="v-date-err"></span></div>
+          <div class="field"><label for="v-n">Personas</label><input id="v-n" type="number" min="1" value="2" class="input" required inputmode="numeric" aria-describedby="v-n-err" /><span class="field-error" id="v-n-err"></span></div>
+        </div>
+        <div class="field"><label for="v-name">Nombre</label><input id="v-name" type="text" autocomplete="name" class="input" required aria-describedby="v-name-err" /><span class="field-error" id="v-name-err"></span></div>
+        <div class="fr">
+          <div class="field"><label for="v-mail">Correo electrónico</label><input id="v-mail" type="email" autocomplete="email" class="input" required aria-describedby="v-mail-err" /><span class="field-error" id="v-mail-err"></span></div>
+          <div class="field"><label for="v-tel">Teléfono</label><input id="v-tel" type="tel" autocomplete="tel" class="input" /></div>
+        </div>
+        <div class="field"><label for="v-msg">Comentarios (opcional)</label><textarea id="v-msg" rows="3" class="input"></textarea></div>
+        <div class="field"><label class="check" for="v-ok"><input id="v-ok" type="checkbox" required aria-describedby="v-ok-err" />He leído y acepto la <a href="/legal/#privacidad">política de privacidad</a>.</label><span class="field-error" id="v-ok-err"></span></div>
+        <button type="submit" class="btn btn--lg btn--block">Enviar solicitud</button>
+        <p class="form-msg" role="status" aria-live="polite" data-form-msg></p>
+      </form>
+    </div>
+  </section>
+
+  <section aria-labelledby="vfaq" class="sec--white vq">
+    <div class="wrap g2" style="align-items:start">
+      <h2 id="vfaq" class="h2" data-reveal>Dudas sobre las visitas</h2>
+      <dl class="vq__dl" data-reveal>
+        {qa.map(([q, a]) => <><dt>{q}</dt><dd set:html={a} /></>)}
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .vh { padding: 40px 0 80px; }
+  .vh :global(.vh__img) { border-radius: 8px; }
+  .ve { padding: 96px 0; }
+  .xc { border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 14px; background: var(--bg); outline: 1px solid var(--placeholder); transition: outline-color .3s, box-shadow .4s var(--ease); }
+  .xc.is-on { outline: 2px solid var(--ink); }
+  .xc :global(.media), .xc :global(.ph) { border-radius: 8px; }
+  .xc__t { font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -.015em; }
+  .xc__d { line-height: 1.6; }
+  .xc__tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; }
+  .xc__tags li { padding: 6px 12px; border-radius: var(--radius-pill); background: var(--chip-bg); }
+  .xc__btn { margin-top: auto; min-height: 48px; border-radius: var(--radius-pill); font: 600 15px var(--font-body); background: transparent; color: var(--ink); border: 1.5px solid var(--ink); transition: background-color .25s, color .25s; }
+  .xc__btn[aria-pressed='true'], .xc__btn:hover { background: var(--ink); color: var(--on-dark); }
+  .vr { padding: 104px 0; }
+  .howto { background: var(--surface); border-radius: var(--radius-md); padding: 24px; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .howto address { line-height: 1.7; color: var(--body-2); }
+  .vform { background: var(--surface); border-radius: var(--radius-lg); padding: 36px; display: flex; flex-direction: column; gap: 18px; }
+  .form-note { font-size: 13px; color: var(--muted-2); background: var(--chip-bg); padding: 8px 12px; border-radius: 8px; }
+  .fr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .vq { padding: 96px 0 112px; }
+  .vq__dl { margin: 0; display: flex; flex-direction: column; }
+  .vq__dl dt { font-weight: 600; padding-top: 20px; border-top: 1px solid var(--line); }
+  .vq__dl dd { margin: 8px 0 20px; color: var(--muted); line-height: 1.6; }
+  @media (max-width: 960px) {
+    .vh { padding-bottom: 56px; }
+    .vh :global(.vh__img) { height: 320px !important; }
+    .ve, .vr, .vq { padding: 72px 0; }
+    .fr { grid-template-columns: minmax(0, 1fr); }
+    .vform { padding: 24px 20px; }
+  }
+</style>

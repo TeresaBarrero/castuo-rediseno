@@ -1,0 +1,18 @@
+---
+import Base from '@/layouts/Base.astro';
+import ShopListing from '@/components/ShopListing.astro';
+import BuyingGuide from '@/components/BuyingGuide.astro';
+import { getCards } from '@/lib/shop';
+import { itemList } from '@/lib/itemlist';
+
+const cards = await getCards();
+const site = Astro.site!;
+---
+<Base title="Tienda online: AOVE, vinos y estuches regalo | Castuo"
+  description="Compra aceite de oliva virgen extra, vinos y estuches regalo directamente a la Cooperativa del Campo San Pedro (Guareña). Envío a península."
+  active="tienda" og="tienda" jsonLd={itemList(site, cards, 'Tienda Castuo')}>
+  <ShopListing cards={cards} active="todo" h1="Tienda online: aceite de oliva virgen extra, vinos y estuches"
+    intro="Compra directamente a la cooperativa de Guareña. Aceite de nuestros socios, envasado en origen y enviado a toda la península."
+    crumbs={[{ label: 'Tienda' }]} />
+  <BuyingGuide />
+</Base>

@@ -1,0 +1,10 @@
+import lighthouse from 'lighthouse';
+import * as chromeLauncher from 'chrome-launcher';
+import { chromium } from 'playwright';
+const [, , url, block] = process.argv;
+const chrome = await chromeLauncher.launch({ chromePath: chromium.executablePath(), chromeFlags: ['--headless=new', '--no-sandbox', ...(process.env.LH_FLAGS ? process.env.LH_FLAGS.split(' ') : [])] });
+const res = await lighthouse(url, { port: chrome.port, output: 'json', logLevel: 'error', onlyCategories: ['performance'], blockedUrlPatterns: block ? block.split(',') : [] });
+const a = res.lhr.audits;
+console.log(block || '(sin bloqueo)', 'perf', Math.round(res.lhr.categories.performance.score * 100), 'TBT', a['total-blocking-time'].displayValue, 'LCP', a['largest-contentful-paint'].displayValue);
+console.log(JSON.stringify(a['mainthread-work-breakdown'].details.items.map((i) => [i.group, Math.round(i.duration)])));
+await chrome.kill();

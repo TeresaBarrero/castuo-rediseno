@@ -1,0 +1,18 @@
+---
+// Logo oficial de la cooperativa, sin modificar (PNG descargado de castuo.es).
+// No existe versión vectorial ni clara: sobre fondo oscuro se muestra en una pastilla clara.
+import { Image } from 'astro:assets';
+import logo from '@/assets/logo/logotipo-castuo.png';
+interface Props { height?: number; light?: boolean; eager?: boolean }
+const { height = 52, light = false, eager = true } = Astro.props;
+const width = Math.round((logo.width / logo.height) * height);
+---
+<span class:list={['logo', { 'logo--pill': light }]}>
+  <Image src={logo} alt="Cooperativa del Campo San Pedro" width={width} height={height}
+    densities={[1, 2]} format="webp" quality={90} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; }
+  .logo img { height: auto; width: auto; max-height: 100%; }
+  .logo--pill { background: var(--bg); border-radius: var(--radius); padding: 6px 12px; }
+</style>

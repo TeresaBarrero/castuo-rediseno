@@ -1,0 +1,101 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+
+const CERT = 'https://castuo.es/certificados/9001%20CAST%20-%20COOP.%20DEL%20CAMPO%20SAN%20PEDRO%20DE%20GUARENA_signed.pdf';
+const services = ['Trámite del pago único', 'Descuentos en gasóleos', 'Descuentos en fertilizantes y abonos', 'Asesoramiento en trámites y gestiones administrativas', 'Asesoramiento jurídico'];
+---
+<Base title="Área de socios: boletines A.T.R.I.A, descargas y balances | Castuo"
+  description="Área de socios de la Cooperativa del Campo San Pedro: boletines fitosanitarios A.T.R.I.A, descargas, balances y servicios para los socios."
+  og="socios">
+  <section class="sh">
+    <div class="wrap g2">
+      <div class="stack" style="gap:22px">
+        <Breadcrumbs items={[{ label: 'Área de socios' }]} />
+        <h1 class="h1 h1--page">Área de socios</h1>
+        <p class="lead">Boletines fitosanitarios, documentación, balances y servicios de la cooperativa en un solo lugar.</p>
+      </div>
+      <form class="login" novalidate data-fake-form data-ok="Acceso simulado: este concepto no tiene área privada ni guarda credenciales. Los socios acceden desde castuo.es.">
+        <h2 class="h2 h2--sm" style="font-size:24px">Acceso socios</h2>
+        <p class="form-note">Demostración: no introduzcas tus credenciales reales. Este formulario no envía nada.</p>
+        <div class="field"><label for="s-id">Nº de socio o correo</label><input id="s-id" type="text" autocomplete="off" class="input" required aria-describedby="s-id-err" /><span class="field-error" id="s-id-err"></span></div>
+        <div class="field"><label for="s-pw">Contraseña</label><input id="s-pw" type="password" autocomplete="off" class="input" required aria-describedby="s-pw-err" /><span class="field-error" id="s-pw-err"></span></div>
+        <button type="submit" class="btn btn--lg btn--block">Entrar</button>
+        <p class="form-msg" role="status" aria-live="polite" data-form-msg></p>
+        <a href="/contacto/" class="small">¿Has olvidado tu contraseña? Contacta con las oficinas</a>
+      </form>
+    </div>
+  </section>
+
+  <section aria-label="Accesos rápidos" class="qa">
+    <ul class="wrap g4 m2 qa__grid" role="list" data-reveal-group>
+      <li data-reveal><a href="#atria" class="qa__c"><Icon name="leaf" size={28} stroke="var(--olive)" /><span class="qa__t">Boletines A.T.R.I.A</span><span class="muted">Avisos fitosanitarios</span></a></li>
+      <li data-reveal><a href="#docs" class="qa__c"><Icon name="download" size={28} stroke="var(--olive)" /><span class="qa__t">Descargas</span><span class="muted">Impresos y documentación</span></a></li>
+      <li data-reveal><a href="#docs" class="qa__c"><Icon name="chart" size={28} stroke="var(--olive)" /><span class="qa__t">Balances</span><span class="muted">Cuentas anuales</span></a></li>
+      <li data-reveal><a href="#servicios" class="qa__c"><Icon name="people" size={28} stroke="var(--olive)" /><span class="qa__t">Servicios</span><span class="muted">Asesoramiento y suministros</span></a></li>
+    </ul>
+  </section>
+
+  <section id="atria" aria-labelledby="at" class="sec--white blk">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:14px" data-reveal>
+        <p class="eyebrow" style="margin:0">A.T.R.I.A</p>
+        <h2 id="at" class="h2 h2--sm">Últimos boletines fitosanitarios</h2>
+        <p class="muted" style="line-height:1.6">Recomendaciones de tratamiento para olivar y viñedo de la Agrupación de Tratamientos Integrados en Agricultura.</p>
+      </div>
+      <ul class="rows" role="list" data-reveal>
+        {['olivar', 'viñedo', 'almendro'].map((c) => (
+          <li class="row"><div><p class="row__t">Boletín {c} · última edición</p><p class="row__m">PDF · disponible en castuo.es</p></div><a href="https://castuo.es/boletines-fitosanitarios-a-t-r-i-a/" rel="noopener" class="lnk">Consultar <span class="sr-only">boletín de {c} en castuo.es</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="docs" aria-labelledby="dc" class="blk">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:14px" data-reveal>
+        <p class="eyebrow" style="margin:0">Documentación</p>
+        <h2 id="dc" class="h2 h2--sm">Descargas y balances</h2>
+        <p class="muted" style="line-height:1.6">Algunos documentos requieren acceso de socio.</p>
+      </div>
+      <ul class="rows" role="list" data-reveal>
+        <li class="row"><p class="row__t">Balance anual · último ejercicio</p><span class="tag">Solo socios</span></li>
+        <li class="row"><p class="row__t">Certificados ISO 9001 e ISO 14001</p><a href="/calidad-y-premios/#iso" class="lnk">Ver certificados</a></li>
+        <li class="row"><p class="row__t">Documentación de ayudas y subvenciones</p><a href="https://castuo.es/descargas/" rel="noopener" class="lnk">Consultar <span class="sr-only">en castuo.es</span></a></li>
+        <li class="row"><p class="row__t">Fichas técnicas de los aceites de la campaña</p><span class="tag">Próximamente</span></li>
+        <li class="row"><p class="row__t">Impresos para socios</p><span class="tag">Solo socios</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="servicios" aria-labelledby="sv" class="sec--white blk">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:14px" data-reveal>
+        <p class="eyebrow" style="margin:0">Servicios</p>
+        <h2 id="sv" class="h2 h2--sm">Lo que la cooperativa hace por sus socios</h2>
+      </div>
+      <ul class="rows" role="list" data-reveal>{services.map((s) => <li class="row"><p class="row__t">{s}</p></li>)}</ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .sh { padding: 40px 0 72px; }
+  .login { background: var(--surface); border-radius: var(--radius-lg); padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .form-note { font-size: 13px; color: var(--muted-2); background: var(--chip-bg); padding: 8px 12px; border-radius: 8px; }
+  .small { font-size: 14px; }
+  .qa { padding: 0 0 88px; }
+  .qa__grid { list-style: none; margin: 0 auto; gap: 16px; }
+  .qa__c { background: var(--surface); border-radius: var(--radius-md); padding: 24px; min-height: 160px; height: 100%; display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--ink); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+  .qa__c:hover { color: var(--ink); transform: translateY(-4px); box-shadow: 0 18px 40px rgba(23, 32, 26, .08); }
+  .qa__t { font-weight: 600; font-size: 17px; }
+  .qa .muted { font-size: 14px; }
+  .blk { padding: 88px 0; }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .row:last-child { border-bottom: 1px solid var(--line); }
+  .row__t { font-weight: 600; }
+  .row__m { margin-top: 4px; font-size: 14px; color: var(--muted-2); }
+  .tag { font-size: 13px; padding: 6px 10px; border-radius: var(--radius-pill); background: var(--chip-bg); }
+  @media (max-width: 960px) { .blk { padding: 64px 0; } .qa { padding-bottom: 64px; } .login { padding: 24px 20px; } }
+</style>

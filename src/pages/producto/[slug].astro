@@ -1,0 +1,306 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import Icon from '@/components/Icon.astro';
+import ProductCard from '@/components/ProductCard.astro';
+import Lightbox from '@/components/Lightbox.astro';
+import { CATS, cardsFor, getProducts, productUrl, type Product } from '@/lib/shop';
+import { fotoSrc } from '@/lib/images';
+import { FOTOS } from '@/data/fotos';
+import { eur } from '@/config';
+import { orgId } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const all = await getProducts();
+  return all.map((p) => ({ params: { slug: p.id }, props: { p, all } }));
+}
+const { p, all } = Astro.props as { p: Product; all: Product[] };
+const d = p.data;
+const site = Astro.site!;
+const cat = CATS.find((c) => c.id === d.category)!;
+const multi = d.formats.length > 1;
+const useSelect = d.formats.length > 6;
+const initial = d.defaultFormat ?? d.formats[0].key;
+const initIdx = Math.max(0, d.formats.findIndex((f) => f.key === initial));
+const cur = d.formats[initIdx];
+
+// Miniatura para el carrito
+const thumbFor = async (file: string) => { const s = fotoSrc(file); return s ? (await getImage({ src: s, width: 144, height: 144, fit: 'cover', format: 'webp', quality: 70 })).src : ''; };
+const formatsData = await Promise.all(d.formats.map(async (f) => ({ key: f.key, label: f.label, title: f.title, short: f.short, price: f.price, litres: f.litres, out: !!(f.out || d.out), img: await thumbFor(f.img) })));
+const base = { id: p.id, name: d.name, url: productUrl(p.id), img: formatsData[initIdx].img };
+
+// Galería: foto de cada formato (si son pocos) + fotos de ambiente
+const mainImgs = d.formats.map((f) => ({ key: f.key, file: f.img, alt: `${d.fullName} · ${f.title}` }));
+const galleryExtra = d.gallery.map((g, i) => ({ key: `g${i}`, file: g, alt: FOTOS_ALT(g) }));
+function FOTOS_ALT(file: string) {
+  const slot = Object.values(FOTOS).find((s) => s.file === file);
+  return slot?.alt ?? `${d.fullName}`;
+}
+const thumbs = [...(useSelect ? [mainImgs[initIdx]] : mainImgs), ...galleryExtra].slice(0, 8);
+const lbItems = [...mainImgs.filter((m) => !useSelect || m.key === cur.key), ...galleryExtra];
+
+const related = d.related.map((id) => all.find((x) => x.id === id)).filter(Boolean).map((x) => cardsFor(x!)[x!.data.listing === 'perFormat' ? Math.max(0, x!.data.formats.findIndex((f) => f.key === (x!.data.defaultFormat ?? ''))) : 0]);
+const relPost = d.wine
+  ? { href: '/blog/vino-semidulce-cuando-servirlo/', t: 'Blog · Vino semidulce: cuándo servirlo y con qué', slot: 'vino-semidulce-cuando-servirlo' }
+  : { href: '/blog/como-conservar-el-aceite-en-casa/', t: 'Blog · Cómo conservar el aceite en casa', slot: 'como-conservar-el-aceite-en-casa' };
+
+// JSON-LD Product + Offer (sin AggregateRating: no hay opiniones reales)
+const imgUrls = await Promise.all([...new Set([cur.img, ...d.gallery])].slice(0, 4).map(async (f) => { const s = fotoSrc(f); return s ? new URL((await getImage({ src: s, width: 1000, format: 'jpg' })).src, site).href : null; }));
+const offer = (f: typeof d.formats[number]) => ({
+  '@type': 'Offer', price: f.price.toFixed(2), priceCurrency: 'EUR',
+  availability: f.out || d.out ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+  itemCondition: 'https://schema.org/NewCondition', url: new URL(productUrl(p.id, multi ? f.key : undefined), site).href,
+  seller: { '@id': orgId(site) }, name: f.short,
+  priceSpecification: { '@type': 'UnitPriceSpecification', price: f.price.toFixed(2), priceCurrency: 'EUR', valueAddedTaxIncluded: true },
+  shippingDetails: { '@type': 'OfferShippingDetails', shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'ES' }, deliveryTime: { '@type': 'ShippingDeliveryTime' } },
+});
+const prices = d.formats.map((f) => f.price);
+const productLd = {
+  '@context': 'https://schema.org', '@type': 'Product', name: d.fullName, description: d.intro,
+  image: imgUrls.filter(Boolean), sku: p.id, brand: { '@type': 'Brand', name: 'El Castúo' },
+  manufacturer: { '@id': orgId(site) }, category: cat.title, countryOfOrigin: 'ES',
+  offers: multi
+    ? { '@type': 'AggregateOffer', priceCurrency: 'EUR', lowPrice: Math.min(...prices).toFixed(2), highPrice: Math.max(...prices).toFixed(2), offerCount: d.formats.length, offers: d.formats.map(offer) }
+    : offer(d.formats[0]),
+};
+const title = d.category === 'aceite' && p.id === 'aceite-de-oliva-virgen-extra'
+  ? 'AOVE Castuo: botella y garrafas de 2, 3 y 5 L | Cooperativa Guareña'
+  : `${d.name} | Cooperativa Guareña · Castuo`;
+const description = `${d.intro.split('. ')[0]}. ${multi ? `Desde ${eur(Math.min(...prices))}` : eur(cur.price)}, IVA incluido. Envío a península.`;
+const priceRange = multi && useSelect ? `${eur(Math.min(...prices))} – ${eur(Math.max(...prices))}` : '';
+---
+<Base title={title} description={description.slice(0, 158)} active="tienda" og={`producto-${p.id}`} ogType="product" jsonLd={productLd}>
+  <div class="wrap crumb-wrap">
+    <Breadcrumbs items={[{ label: 'Tienda', href: '/tienda/' }, { label: cat.title, href: `/tienda/${cat.slug}/` }, { label: multi ? cur.short : d.name }]} dynamicLast={multi} />
+  </div>
+
+  <section class="wrap pd" data-product data-formats={JSON.stringify(formatsData)} data-base={JSON.stringify(base)} data-initial={initial}>
+    <div class="pd__gal">
+      <div class="pd__main">
+        {mainImgs.map((m, i) => (
+          <div class:list={['pd__slide', { 'is-active': i === initIdx }]} data-main-img={m.key} data-g-idx={useSelect ? 0 : i} aria-hidden={i === initIdx ? 'false' : 'true'}>
+            <Foto file={m.file} alt={m.alt} priority={i === initIdx} sizes="(max-width: 960px) 100vw, 588px" widths={[400, 600, 800, 1000]} fit="contain"
+              transitionName={d.listing === 'perFormat' ? `prod-${p.id}-${m.key}` : i === initIdx ? `prod-${p.id}` : undefined} />
+          </div>
+        ))}
+        <button type="button" class="pd__zoom" data-zoom aria-label="Ampliar foto"><Icon name="expand" size={20} /></button>
+        {d.out && <span class="pd__badge">Agotado</span>}
+      </div>
+      {thumbs.length > 1 && (
+        <ul class="pd__thumbs" role="list" aria-label="Más fotos">
+          {thumbs.map((t, i) => (
+            <li><button type="button" class="pd__thumb" data-thumb={i} aria-label={`Ver foto ${i + 1} de ${thumbs.length} ampliada`}>
+              <Foto file={t.file} alt="" sizes="120px" widths={[160, 240]} fit="cover" />
+            </button></li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <div class="pd__info">
+      <div class="stack" style="gap:14px">
+        <p class="eyebrow" style="margin:0">{d.eyebrow}</p>
+        <h1 class="pd__h1">{d.listing === 'perFormat' ? <>{d.name} · <span data-p-title>{cur.title}</span></> : d.name}</h1>
+        <p class="lead lead--sm">{d.intro}</p>
+      </div>
+
+      <div class="pd__price">
+        <p class="price pd__pv" data-p-price>{eur(cur.price)}</p>
+        <p class="pd__pm">IVA incluido{cur.litres ? <> · <span data-p-per>{eur(cur.price / cur.litres)}/L</span></> : <span data-p-per></span>}{priceRange && <> · rango {priceRange}</>}</p>
+      </div>
+
+      {multi && !useSelect && (
+        <fieldset class="pd__fmts">
+          <legend>Formato</legend>
+          <div class="pd__fgrid">
+            {d.formats.map((f, i) => (
+              <button type="button" class="pd__fmt" data-fmt={i} aria-pressed={i === initIdx ? 'true' : 'false'}>
+                <span class="pd__fl">{f.label}</span><span class="pd__fp">{eur(f.price)}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      )}
+      {useSelect && (
+        <div class="field">
+          <label for="fmt-sel">Composición del estuche</label>
+          <select id="fmt-sel" class="input" data-fmt-select>
+            {d.formats.map((f, i) => <option value={i} selected={i === initIdx}>{f.label} · {eur(f.price)}</option>)}
+          </select>
+        </div>
+      )}
+
+      {d.out ? (
+        <div class="pd__out">
+          <p><strong>Agotado por ahora.</strong> Déjanos tu correo y te avisamos cuando vuelva (simulación: no se guarda nada).</p>
+          <form class="pd__notify" novalidate data-fake-form data-ok="¡Anotado! Esto es un concepto: no se ha guardado tu correo. Para recibir avisos reales, contacta con castuo.es.">
+            <div class="field" style="flex:1 1 240px"><label for="notify-mail">Correo electrónico</label><input id="notify-mail" type="email" class="input" required autocomplete="email" /><span class="field-error" id="notify-mail-err"></span></div>
+            <button type="submit" class="btn">Avísame</button>
+            <p class="form-msg" role="status" aria-live="polite" data-form-msg></p>
+          </form>
+          <a class="lnk self-start" href="/producto/aceite-de-oliva-virgen-extra/">Ver el aceite de oliva virgen extra disponible</a>
+        </div>
+      ) : (
+        <div class="pd__buy" data-p-main-add>
+          <div class="qty" role="group" aria-label="Cantidad">
+            <button type="button" aria-label="Restar unidad" data-p-q="-1">−</button>
+            <span aria-live="polite" data-p-qty id="p-qty">1</span>
+            <button type="button" aria-label="Sumar unidad" data-p-q="1">+</button>
+          </div>
+          <button type="button" class="btn btn--lg pd__add" data-p-add data-add={JSON.stringify({ ...base, variant: multi ? cur.short : undefined, price: cur.price })} data-qty-from="#p-qty" data-fly-from="[data-main-img].is-active img">
+            Añadir al carrito · <span data-p-total>{eur(cur.price)}</span>
+          </button>
+        </div>
+      )}
+
+      <ul class="pd__ship" role="list">
+        <li><Icon name="truck" stroke="var(--olive)" width={2} />Envío a península con Envialia</li>
+        <li><Icon name="clock" stroke="var(--olive)" width={2} /><span>Islas y extranjero: <a href="/preguntas-frecuentes/#pedidos-y-envios">pide presupuesto</a></span></li>
+        <li><Icon name="card" stroke="var(--olive)" width={2} />Pago con PayPal o transferencia</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec--white pd__tech">
+    <div class="wrap g2" style="align-items:start">
+      <div class="stack" style="gap:20px" data-reveal>
+        <h2 class="h2 h2--sm">Ficha técnica</h2>
+        <dl class="spec">
+          {d.spec.map(([k, v]) => <><dt>{k}</dt><dd data-p-spec-fmt={k === 'Formato' && multi ? '' : undefined}>{k === 'Formato' && multi ? cur.title.charAt(0).toUpperCase() + cur.title.slice(1) : v}</dd></>)}
+        </dl>
+      </div>
+      <div class="stack" style="gap:20px" data-reveal>
+        <h2 class="h2 h2--sm">{d.wine ? 'Servicio y maridaje' : 'Cata y usos'}</h2>
+        <p class="body2">{d.tasting}</p>
+        <p class="body2"><strong>Ideal para:</strong> {d.uses}</p>
+        <a href="/calidad-y-premios/" class="award">
+          <span class="award__seal" aria-hidden="true">{d.awardLink ? <>Extrema<br />Selección<br />2025</> : <>ISO<br />9001<br />14001</>}</span>
+          <span>{d.awardLink ? <strong>Premio Extrema Selección AOVE 2025</strong> : <strong>Calidad certificada ISO 9001 e ISO 14001</strong>}<br /><span class="muted-2">Ver calidad y certificaciones</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec reviews" aria-labelledby="op">
+    <div class="wrap stack" style="gap:20px;max-width:820px">
+      <h2 id="op" class="h2 h2--sm">Opiniones de clientes</h2>
+      <div class="reviews__empty">
+        <p class="muted">Todavía no hay opiniones. Las valoraciones verificadas de compradores aparecerán aquí.</p>
+        <button type="button" class="btn btn--o" data-concept="En la web real, solo los compradores verificados podrían dejar su opinión. Este concepto no recoge datos." data-concept-title="Opiniones verificadas">Escribir una opinión</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="related" aria-labelledby="rel">
+    <div class="wrap stack" style="gap:32px">
+      <h2 id="rel" class="h2 h2--sm">También te puede gustar</h2>
+      <div class="g4 m2 rel-grid" data-reveal-group>
+        {related.map((c) => <ProductCard card={c} variant="home" sizes="(max-width: 960px) 50vw, 290px" height="240px" />)}
+        <a href={relPost.href} class="relpost" data-reveal>
+          <Foto slot={relPost.slot} crop={1.2} sizes="(max-width: 960px) 50vw, 290px" widths={[300, 450, 600]} height="240px" />
+          <span class="relpost__t">{relPost.t}</span><span class="relpost__l">Leer artículo</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra fija «Añadir al carrito» en móvil -->
+  {!d.out && (
+    <div class="satc" data-sticky-atc inert aria-label="Compra rápida">
+      <div class="satc__txt"><span class="satc__n">{d.name}</span><span class="price satc__p" data-p-total>{eur(cur.price)}</span></div>
+      <button type="button" class="btn" data-p-add data-add={JSON.stringify({ ...base, variant: multi ? cur.short : undefined, price: cur.price })} data-qty-from="#p-qty" data-fly-from="[data-main-img].is-active img">Añadir</button>
+    </div>
+  )}
+
+  <Lightbox items={lbItems} />
+</Base>
+
+<style>
+  .crumb-wrap { padding-block: 28px; }
+  .pd { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; align-items: start; padding-bottom: 96px; }
+  .pd__gal { display: flex; flex-direction: column; gap: 12px; position: sticky; top: calc(var(--header-h) + 16px); }
+  .pd__main { position: relative; height: 600px; background: #E3E5D3; border-radius: 8px; overflow: hidden; }
+  .pd__slide { position: absolute; inset: 0; display: none; }
+  .pd__slide.is-active, .pd__slide.is-leaving { display: block; }
+  .pd__slide.is-active { z-index: 1; }
+  .pd__slide.is-entering { animation: xfade .5s var(--ease) both; }
+  .pd__slide.is-leaving { animation: xfade-out .5s var(--ease) both; }
+  @keyframes xfade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes xfade-out { from { opacity: 1; } to { opacity: 0; } }
+  .pd__slide :global(.media), .pd__slide :global(.ph) { height: 100%; background: transparent; }
+  .pd__slide :global(img) { mix-blend-mode: multiply; padding: 24px; }
+  .pd__zoom { position: absolute; right: 14px; bottom: 14px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--surface); display: grid; place-items: center; box-shadow: 0 4px 14px rgba(23, 32, 26, .12); }
+  .pd__zoom:hover { background: var(--ink); color: var(--on-dark); }
+  .pd__badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--ink); color: var(--on-dark); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: var(--radius-pill); }
+  .pd__thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; list-style: none; margin: 0; padding: 0; }
+  .pd__thumb { display: block; width: 100%; height: 120px; padding: 0; border: 1px solid transparent; border-radius: 8px; overflow: hidden; background: #E7E8DA; transition: border-color .2s; }
+  .pd__thumb:hover { border-color: var(--ink); }
+  .pd__thumb :global(.media) { height: 100%; }
+  .pd__info { display: flex; flex-direction: column; gap: 24px; padding-top: 8px; }
+  .pd__h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.06; letter-spacing: -.02em; }
+  .pd__price { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .pd__pv { font-size: 40px; }
+  .pd__pm { color: var(--muted-2); font-size: 14px; }
+  .pd__fmts { border: 0; padding: 0; margin: 0; }
+  .pd__fmts legend { font-weight: 600; margin-bottom: 12px; padding: 0; }
+  .pd__fgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pd__fmt { min-height: 64px; padding: 12px 16px; border-radius: var(--radius); display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; border: 1px solid var(--line-strong); background: transparent; color: var(--ink); transition: border-color .25s, background-color .25s, box-shadow .25s; }
+  .pd__fmt:hover { border-color: var(--ink); }
+  .pd__fmt[aria-pressed='true'] { box-shadow: inset 0 0 0 1px var(--ink); border-color: var(--ink); background: var(--surface); }
+  .pd__fl { font-weight: 600; }
+  .pd__fp { font-size: 14px; }
+  .pd__buy { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .qty { display: flex; align-items: center; border: 1.5px solid var(--line-strong); border-radius: var(--radius-pill); height: 54px; background: var(--surface); }
+  .qty button { width: 50px; height: 50px; border: 0; background: none; font-size: 22px; border-radius: 50%; color: var(--ink); }
+  .qty button:hover { background: var(--bg); }
+  .qty span { min-width: 28px; text-align: center; font-weight: 600; }
+  .pd__add { flex: 1 1 220px; }
+  .pd__add[disabled] { opacity: .5; }
+  .pd__out { display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1.5px dashed var(--line-strong); border-radius: var(--radius); }
+  .pd__notify { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+  .pd__notify .form-msg { flex-basis: 100%; }
+  .pd__ship { list-style: none; margin: 0; padding: 20px; background: var(--surface); border-radius: var(--radius); display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
+  .pd__ship li { display: flex; gap: 10px; align-items: center; }
+  .pd__ship :global(svg) { flex: none; }
+
+  .pd__tech { padding: 88px 0; }
+  .spec { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); margin: 0; }
+  .spec dt, .spec dd { margin: 0; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .spec dt { color: var(--muted-2); padding-right: 16px; }
+  .body2 { line-height: 1.7; color: var(--body-2); }
+  .award { display: flex; gap: 14px; align-items: center; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); text-decoration: none; transition: border-color .25s, transform .4s var(--ease); }
+  .award:hover { border-color: var(--olive); color: var(--ink); transform: translateY(-2px); }
+  .award__seal { width: 64px; height: 64px; flex: none; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; line-height: 1.15; display: grid; place-items: center; text-align: center; }
+  .muted-2 { color: var(--muted-2); font-size: 14px; }
+
+  .reviews { padding: 88px 0; }
+  .reviews__empty { border: 1.5px dashed var(--line-strong); border-radius: var(--radius-md); padding: 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; }
+  .related { padding: 0 0 104px; }
+  .relpost { display: flex; flex-direction: column; gap: 10px; color: var(--ink); text-decoration: none; }
+  .relpost__t { font-weight: 600; }
+  .relpost__l { color: var(--olive); font-weight: 600; }
+  .relpost:hover .relpost__t { text-decoration: underline; }
+  .rel-grid :global(.pc__media) { height: 240px !important; }
+
+  /* Barra fija móvil */
+  .satc { display: none; }
+  @media (max-width: 960px) {
+    .pd { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 72px; }
+    .pd__gal { position: static; }
+    .pd__main { height: min(110vw, 520px); }
+    .pd__thumb { height: 80px; }
+    .satc {
+      display: flex; position: fixed; left: 0; right: 0; bottom: var(--banner-h); z-index: 85; gap: 12px; align-items: center; justify-content: space-between;
+      padding: 10px var(--gutter); background: color-mix(in srgb, var(--bg) 92%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line-strong); transform: translateY(120%); transition: transform .4s var(--ease);
+    }
+    .satc.is-on { transform: none; }
+    .satc__txt { display: flex; flex-direction: column; min-width: 0; }
+    .satc__n { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .satc__p { font-size: 20px; }
+    .pd__tech, .reviews { padding: 64px 0; }
+  }
+
+</style>

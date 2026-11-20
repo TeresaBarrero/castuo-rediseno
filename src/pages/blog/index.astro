@@ -1,0 +1,95 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import { getCollection } from 'astro:content';
+import { slugCat, fmtDate } from '@/lib/blog';
+
+const posts = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p !== featured);
+const cats = ['Todo', 'Cultura del AOVE', 'Recetas', 'Vino', 'Vida en la cooperativa', 'Noticias'];
+const site = Astro.site!;
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Blog', name: 'Blog de Castuo', url: new URL('/blog/', site).href, inLanguage: 'es-ES',
+  blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.data.title, url: new URL(`/blog/${p.id}/`, site).href, datePublished: p.data.date.toISOString().slice(0, 10) })),
+};
+---
+<Base title="Blog de aceite de oliva, recetas y campo | Castuo"
+  description="Cultura del aceite de oliva virgen extra, recetas extremeñas, vino y vida en la cooperativa de Guareña. Consejos para elegir, conservar y disfrutar el AOVE."
+  active="blog" og="blog" jsonLd={ld}>
+  <div data-filter-root data-param="categoria" data-default="todo" data-inline-links>
+    <section class="bh">
+      <div class="wrap stack" style="gap:22px">
+        <Breadcrumbs items={[{ label: 'Blog' }]} />
+        <h1 class="h1 h1--page" style="max-width:900px">Blog: cultura del aceite, recetas y vida en el campo</h1>
+        <p class="lead" style="max-width:680px">Lo que aprendemos cada campaña, contado por la cooperativa.</p>
+        <div class="chips" role="group" aria-label="Filtrar por categoría" style="margin-top:6px">
+          {cats.map((c) => <button type="button" class="chip" data-filter-cat={c === 'Todo' ? 'todo' : slugCat(c)} aria-pressed={c === 'Todo' ? 'true' : 'false'}>{c}</button>)}
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Artículo destacado" class="bf">
+      <a class="wrap g2 bf__a" href={`/blog/${featured.id}/`}>
+        <Foto slot={featured.id} crop={1.26} priority sizes="(max-width: 960px) 100vw, 580px" widths={[400, 600, 800, 1200]} height="460px" transitionName={`post-${featured.id}`} />
+        <div class="stack" style="gap:16px">
+          <p class="eyebrow" style="margin:0">Destacado · {featured.data.category}</p>
+          <h2 class="h2 bf__t">{featured.data.title}</h2>
+          <p class="muted" style="line-height:1.65;font-size:17px">{featured.data.excerpt}</p>
+          <p class="meta">Equipo Castuo · <time datetime={featured.data.date.toISOString().slice(0, 10)}>{fmtDate(featured.data.date)}</time> · {featured.data.readingTime} min de lectura</p>
+        </div>
+      </a>
+    </section>
+
+    <section aria-label="Artículos" class="bl">
+      <div class="wrap bgrid" data-filter-grid data-reveal-group>
+        {rest.map((p, i) => (
+          <a href={`/blog/${p.id}/`} class="pcard" data-item data-cat={slugCat(p.data.category)} data-order={i} data-price="0" data-reveal>
+            <Foto slot={p.id} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="240px" transitionName={`post-${p.id}`} />
+            <p class="eyebrow" style="margin:0">{p.data.category}</p>
+            <h2 class="pcard__t">{p.data.title}</h2>
+            <p class="muted pcard__d">{p.data.excerpt}</p>
+          </a>
+        ))}
+      </div>
+      <p class="wrap muted bempty" data-filter-empty hidden>Todavía no hay artículos en esta categoría. Muy pronto publicaremos aquí las noticias de la cooperativa.</p>
+    </section>
+  </div>
+
+  <section class="dark on-dark bn">
+    <div class="wrap bn__in" data-reveal>
+      <div class="stack" style="max-width:560px;gap:12px"><h2 class="h2">Una receta y una historia del campo, cada mes</h2><p class="muted">Sin spam. Te puedes dar de baja cuando quieras.</p></div>
+      <NewsletterForm id="nl-blog" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bh { padding: 40px 0 56px; }
+  .bf { padding: 0 0 88px; }
+  .bf__a { color: var(--ink); text-decoration: none; }
+  .bf__a:hover { color: var(--ink); }
+  .bf__a:hover .bf__t { color: var(--olive); }
+  .bf__a :global(.media img), .pcard :global(.media img) { transition: transform .9s var(--ease); }
+  .bf__a:hover :global(.media img), .pcard:hover :global(.media img) { transform: scale(1.04); }
+  .meta { font-size: 14px; color: var(--muted-2); }
+  .bl { padding: 0 0 104px; }
+  .bgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
+  .pcard { display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; }
+  .pcard[hidden] { display: none; }
+  .pcard:hover { color: var(--ink); }
+  .pcard:hover .pcard__t { color: var(--olive); }
+  .pcard__t { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.2; letter-spacing: -.015em; transition: color .2s; }
+  .pcard__d { line-height: 1.55; font-size: 15px; }
+  .bempty { padding-block: 24px; }
+  .bn { padding: 88px 0; }
+  .bn__in { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
+  @media (max-width: 960px) {
+    .bgrid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .bf :global(.media) { height: 300px !important; }
+    .bf, .bl { padding-bottom: 64px; }
+    .bn { padding: 64px 0; }
+  }
+</style>

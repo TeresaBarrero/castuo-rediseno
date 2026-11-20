@@ -1,0 +1,38 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+---
+<Base title="Buscar | Castuo" description="Busca productos y artículos en la web de la Cooperativa del Campo San Pedro." og="default">
+  <section class="sr">
+    <div class="wrap stack" style="gap:24px;max-width:820px">
+      <Breadcrumbs items={[{ label: 'Buscar' }]} />
+      <h1 class="h1 h1--page">Buscar</h1>
+      <form class="sr__f" role="search" action="/buscar/" method="get" data-page-search>
+        <label for="pq" class="sr-only">Buscar productos y artículos</label>
+        <input id="pq" name="q" type="search" class="input" placeholder="Aceite, vino, recetas…" />
+        <button type="submit" class="btn">Buscar</button>
+      </form>
+      <p class="muted" aria-live="polite" data-page-search-status></p>
+      <ul class="sr__res" role="list" data-page-search-results></ul>
+    </div>
+  </section>
+</Base>
+<script>
+  import { runSearch } from '@/scripts/header';
+  const go = () => {
+    const input = document.getElementById('pq') as HTMLInputElement | null;
+    const list = document.querySelector<HTMLElement>('[data-page-search-results]');
+    if (!input || !list) return;
+    const q = new URL(location.href).searchParams.get('q') ?? '';
+    input.value = q;
+    if (q) runSearch(q, list, document.querySelector('[data-page-search-status]'));
+  };
+  document.addEventListener('astro:page-load', go);
+</script>
+<style>
+  .sr { padding: 40px 0 112px; }
+  .sr__f { display: flex; gap: 10px; }
+  .sr__res { list-style: none; margin: 0; padding: 0; }
+  .sr__res :global(a) { display: flex; flex-direction: column; gap: 2px; padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 600; }
+  .sr__res :global(small) { color: var(--olive); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+</style>
