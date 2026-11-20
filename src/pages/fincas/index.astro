@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 
 const fincas = (await getCollection('fincas')).sort((a, b) => a.data.order - b.data.order);
 const tabs = [['todo', 'Todas'], ['olivar', 'Olivar'], ['vina', 'Viñedo'], ['almendro', 'Almendro']];
-const totals: Record<string, string> = { olivar: '7.000 ha de olivar en la cooperativa', vina: '600 ha de vid en la cooperativa', almendro: 'Consultar' };
+const totals: Record<string, string> = { olivar: '7.000 ha de olivar', vina: '600 ha de vid', almendro: 'Consultar' };
 ---
 <Base title="Olivar, viñedo y almendro en Guareña | Fincas Castuo"
   description="Seis sistemas de cultivo en las fincas de los socios de la cooperativa: olivar tradicional, intensivo y superintensivo, viña en vaso y en espaldera y almendro."
@@ -41,7 +41,7 @@ const totals: Record<string, string> = { olivar: '7.000 ha de olivar en la coope
           </article>
         ))}
       </div>
-      <p class="wrap muted fnote">Superficie por sistema y variedades: pendiente de dato de la cooperativa. En total, los socios cultivan {totals.olivar} y {totals.vina}.</p>
+      <p class="wrap muted fnote">Superficie por sistema y variedades: pendiente de dato de la cooperativa. En total, los socios de la cooperativa cultivan {totals.olivar} y {totals.vina}.</p>
     </section>
   </div>
 

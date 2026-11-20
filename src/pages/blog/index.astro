@@ -18,7 +18,7 @@ const ld = {
 ---
 <Base title="Blog de aceite de oliva, recetas y campo | Castuo"
   description="Cultura del aceite de oliva virgen extra, recetas extremeñas, vino y vida en la cooperativa de Guareña. Consejos para elegir, conservar y disfrutar el AOVE."
-  active="blog" og="blog" jsonLd={ld}>
+  active="blog" og="blog" jsonLd={ld} footerNewsletter={false}>
   <div data-filter-root data-param="categoria" data-default="todo" data-inline-links>
     <section class="bh">
       <div class="wrap stack" style="gap:22px">
@@ -58,10 +58,12 @@ const ld = {
     </section>
   </div>
 
-  <section class="dark on-dark bn">
-    <div class="wrap bn__in" data-reveal>
-      <div class="stack" style="max-width:560px;gap:12px"><h2 class="h2">Una receta y una historia del campo, cada mes</h2><p class="muted">Sin spam. Te puedes dar de baja cuando quieras.</p></div>
-      <NewsletterForm id="nl-blog" />
+  <section class="bn" aria-labelledby="bn-t">
+    <div class="wrap">
+      <div class="bn__in" data-reveal>
+        <div class="stack" style="max-width:560px;gap:12px"><p class="eyebrow" style="margin:0">Newsletter</p><h2 id="bn-t" class="h2">Una receta y una historia del campo, cada mes</h2><p class="muted">Sin spam. Te puedes dar de baja cuando quieras.</p></div>
+        <NewsletterForm id="nl-blog" light />
+      </div>
     </div>
   </section>
 </Base>
@@ -84,12 +86,12 @@ const ld = {
   .pcard__t { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.2; letter-spacing: -.015em; transition: color .2s; }
   .pcard__d { line-height: 1.55; font-size: 15px; }
   .bempty { padding-block: 24px; }
-  .bn { padding: 88px 0; }
-  .bn__in { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
+  .bn { padding: 0 0 var(--section-y); }
+  .bn__in { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 56px; }
   @media (max-width: 960px) {
     .bgrid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
     .bf :global(.media) { height: 300px !important; }
     .bf, .bl { padding-bottom: 64px; }
-    .bn { padding: 64px 0; }
+    .bn__in { padding: 32px 24px; }
   }
 </style>

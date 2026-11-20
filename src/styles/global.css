@@ -58,6 +58,8 @@ strong { font-weight: 600; }
 .g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; align-items: center; }
 .g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+/* Si una página termina en una sección oscura, una franja de fondo piedra la separa del pie (también oscuro) */
+main > .dark:last-child { margin-bottom: clamp(56px, 7vw, 96px); }
 .sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
 @media (max-width: 960px) {
   .g2, .g3, .g4 { grid-template-columns: minmax(0, 1fr); gap: 32px; }

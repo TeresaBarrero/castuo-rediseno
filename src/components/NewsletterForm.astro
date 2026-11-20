@@ -1,15 +1,15 @@
 ---
 // Formulario de newsletter ficticio: valida en cliente y no envía nada.
-interface Props { id: string }
-const { id } = Astro.props;
+interface Props { id: string; light?: boolean }
+const { id, light = false } = Astro.props;
 ---
-<form class="nl" novalidate data-fake-form data-ok="¡Gracias! Esto es un concepto: no se ha guardado tu correo. Para suscribirte de verdad, visita castuo.es.">
+<form class:list={['nl', { 'nl--light': light }]} novalidate data-fake-form data-ok="¡Gracias! Esto es un concepto: no se ha guardado tu correo. Para suscribirte de verdad, visita castuo.es.">
   <div class="nl__row">
     <div class="nl__f">
       <label for={id}>Correo electrónico</label>
       <input id={id} name="email" type="email" placeholder="tu@correo.es" autocomplete="email" required aria-describedby={`${id}-msg`} />
     </div>
-    <button type="submit" class="btn btn--light">Suscribirme</button>
+    <button type="submit" class:list={['btn', { 'btn--light': !light }]}>Suscribirme</button>
   </div>
   <p id={`${id}-msg`} class="form-msg" role="status" aria-live="polite" data-form-msg></p>
 </form>
@@ -25,5 +25,11 @@ const { id } = Astro.props;
   .nl input::placeholder { color: #9EA295; }
   .nl input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .nl input[aria-invalid='true'] { border-color: #F2B8B5; }
+  /* Sobre fondo claro */
+  .nl--light label { color: var(--muted); }
+  .nl--light input { border-color: var(--line-strong); background: var(--surface); color: var(--ink); }
+  .nl--light input::placeholder { color: #7A7E73; }
+  .nl--light input:focus-visible { outline-color: var(--olive); }
+  .nl--light input[aria-invalid='true'] { border-color: var(--wine); }
   @media (max-width: 560px) { .nl input { width: 100%; } .nl .btn { width: 100%; } }
 </style>

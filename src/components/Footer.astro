@@ -3,17 +3,19 @@ import { ORG, PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import NewsletterForm from './NewsletterForm.astro';
+interface Props { newsletter?: boolean }
+const { newsletter = true } = Astro.props;
 const year = new Date().getFullYear();
 ---
 <footer class="ft dark on-dark">
   <div class="wrap ft__in">
-    <div class="ft__nl">
+    {newsletter && <div class="ft__nl">
       <div class="ft__nl-txt">
         <p class="ft__nl-t">Recibe la campaña nueva antes que nadie</p>
         <p class="ft__muted">Un correo al mes: cosecha, recetas y ofertas para socios y clientes.</p>
       </div>
       <NewsletterForm id="nl-footer" />
-    </div>
+    </div>}
 
     <div class="ft__cols">
       <div class="ft__brand">

@@ -17,8 +17,9 @@ interface Props {
   ogType?: 'website' | 'article' | 'product';
   jsonLd?: object | object[];
   canonical?: string;
+  footerNewsletter?: boolean; // false si la página ya tiene su propio formulario de newsletter
 }
-const { title, description, active = '', og = 'default', ogType = 'website', jsonLd, canonical } = Astro.props;
+const { title, description, active = '', og = 'default', ogType = 'website', jsonLd, canonical, footerNewsletter = true } = Astro.props;
 const site = Astro.site!;
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, site).href;
 const ogImage = new URL(`/og/${og}.png`, site).href;
@@ -90,7 +91,7 @@ const websiteLd = {
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    <Footer newsletter={footerNewsletter} />
     <ConceptBanner />
     <CartDrawer />
     <div class="sr-only" aria-live="polite" data-live></div>
