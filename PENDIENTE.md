@@ -11,9 +11,10 @@ Todo lo marcado `[ENTRE CORCHETES]` en el diseño se ha resuelto con datos publi
 
 | Hueco | Dónde | Motivo |
 |---|---|---|
-| Oficinas | Galería de Cooperativa | La galería «Oficinas» de castuo.es no contiene imágenes en el HTML, y no hay fotos libres del edificio (en Wikimedia Commons solo aparece el pueblo). |
 | Cata de aceite en la almazara / socios en la recepción de aceituna | Inicio | No existen; se han usado en su lugar fotos reales del equipo ante los depósitos y de los socios en el 50 aniversario. |
 | Sellos (Extrema Selección, ISO) | Inicio, Calidad, fichas | Los sellos ISO de castuo.es son logos de la certificadora (Applus+), un tercero: se han sustituido por insignias tipográficas. Pedir los sellos oficiales y su manual de uso. |
+
+**Oficinas**: la galería «Oficinas» de castuo.es está vacía y no hay fotos libres del edificio, así que esa tarjeta de la galería se ha sustituido por «Vista aérea», con una foto real de castuo.es. Pedir fotos de las oficinas.
 
 **Fotos de recetas ilustrativas**: los artículos de migas y tostadas usan dos fotos de Wikimedia Commons (Juan Emilio Prades Bel, CC BY 4.0), con crédito bajo la foto y en /legal/#creditos. No son platos de la cooperativa: habría que sustituirlas por fotos propias.
 

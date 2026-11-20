@@ -75,7 +75,7 @@ Los productos y precios son los de la tienda de castuo.es a 20/11/2026: coincide
 
 ## Fotografías
 
-`npm run fotos` rastrea castuo.es (respeta `robots.txt` y espera 1 s entre peticiones), descarga los originales sin sufijo de tamaño y genera el catálogo. `src/assets/fotos/catalogo.json` recoge, para cada imagen, el archivo, la URL y las páginas de origen, sus dimensiones, una descripción revisada a mano y si se usa, está disponible o se descarta (y por qué). Cuando no había una foto adecuada no se ha inventado ni se ha recurrido a bancos de imágenes. Las dos recetas del blog usan fotos de Wikimedia Commons con licencia CC BY 4.0, con crédito visible (en `src/assets/fotos/externas/`). El único hueco que queda, Oficinas, muestra un bloque `--placeholder` y está anotado en [`PENDIENTE.md`](PENDIENTE.md).
+`npm run fotos` rastrea castuo.es (respeta `robots.txt` y espera 1 s entre peticiones), descarga los originales sin sufijo de tamaño y genera el catálogo. `src/assets/fotos/catalogo.json` recoge, para cada imagen, el archivo, la URL y las páginas de origen, sus dimensiones, una descripción revisada a mano y si se usa, está disponible o se descarta (y por qué). Cuando no había una foto adecuada no se ha inventado ni se ha recurrido a bancos de imágenes. Las dos recetas del blog usan fotos de Wikimedia Commons con licencia CC BY 4.0, con crédito visible (en `src/assets/fotos/externas/`). La tarjeta «Oficinas» de la galería, sin foto disponible, se sustituyó por «Vista aérea» (ver [`PENDIENTE.md`](PENDIENTE.md)). Ya no queda ningún hueco sin foto.
 
 ## Animaciones: decisión técnica de cada una
 

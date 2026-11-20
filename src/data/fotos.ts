@@ -21,7 +21,7 @@ export const FOTOS = {
   galPremios: { file: '2025-05-premios-extrema-seleccion-aove-2025-1.jpg', alt: 'Trofeos de los Premios Extrema Selección 2025 sobre un muro de piedra', pos: '50% 60%' },
   galAniversario: { file: '2015-07-cooperativa-de-san-pedro-116.jpg', alt: 'Socios en el patio de la cooperativa durante el 50 aniversario, vista desde lo alto', pos: '50% 50%' },
   galInstalaciones: { file: '2015-05-sin-t-tulo-1.jpg', alt: 'Vista aérea de las naves y depósitos de la cooperativa', pos: '50% 50%' },
-  galOficinas: { file: null, alt: 'Oficinas de la cooperativa', label: 'Oficinas · foto pendiente' },
+  galAerea: { file: '2015-07-cabecero-aereo-castuo2.jpg', alt: 'Vista aérea de Guareña con las naves y depósitos de la cooperativa en primer término', pos: '50% 50%' },
 
   // Fincas
   'olivar-tradicional': { file: '2021-03-olivar-tradicional.jpg', alt: 'Olivar tradicional: olivos de varios pies a marco amplio sobre tierra roja', pos: '50% 0%' },

@@ -24,14 +24,14 @@ const gal = [
   { slot: 'galPremios', t: 'Premios Extrema Selección 2025' },
   { slot: 'galAniversario', t: '50 aniversario' },
   { slot: 'galInstalaciones', t: 'Instalaciones' },
-  { slot: 'galOficinas', t: 'Oficinas' },
+  { slot: 'galAerea', t: 'Vista aérea' },
 ] as const;
 const lb = [
   FOTOS.galPremios, FOTOS.calidadEquipo, FOTOS.heroInicio, FOTOS.heroVisitas,
   FOTOS.galAniversario, FOTOS.historiaInicio, FOTOS.visitaGrupos,
-  FOTOS.galInstalaciones, FOTOS.heroCooperativa, FOTOS['vina-en-espaldera'],
+  FOTOS.galInstalaciones, FOTOS.heroCooperativa, FOTOS['vina-en-espaldera'], FOTOS.galAerea,
 ].filter((f) => f.file);
-const galIdx = [0, 4, 7, -1];
+const galIdx = [0, 4, 7, 10];
 ---
 <Base title="Cooperativa del Campo San Pedro, Guareña · Historia desde 1965"
   description="Desde 1965, la Cooperativa del Campo San Pedro reúne a más de 1.100 socios de 11 municipios de Badajoz. Historia, producción, valores y servicios."
