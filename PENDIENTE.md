@@ -63,7 +63,7 @@ Se han descartado (ver `catalogo.json`, `motivo_descarte`) porque no muestran a 
 - [ ] **Newsletter «La carta castúa»**: el formulario es ficticio (valida y confirma, no envía). En producción: proveedor de correo, doble opt-in y consentimiento RGPD.
 - [ ] **Contenido de relleno (21/11/2026)**: 14 artículos más para completar el blog, entre ellos los 8 del calendario (poda, la viña en primavera, primavera en el olivar, floración, cuajado, envero, vendimia y regalos), el bizcocho, el vino de mesa, los premios Extrema Selección 2025 y el 50 aniversario. Son textos divulgativos generales que se apoyan solo en datos ya publicados en castuo.es: los galardones de 2025, 1965, 137 → +1.100 socios y la celebración de 2015 que se ve en su galería. **Que los revise un técnico de la cooperativa antes de publicar.**
 - [ ] **Noticias inventadas**: «Arranca la campaña de aceituna» y «Estuches de Navidad para empresas» describen hechos que no han ocurrido. Llevan `example: true`, que muestra el aviso «Contenido de ejemplo» en el artículo y «Ejemplo» en la tarjeta. Sustituirlas por noticias reales o borrarlas.
-- [ ] **Foto del bizcocho de aceite y vino**: no hay ninguna; se muestra el hueco «Foto pendiente».
+- [ ] **Foto del bizcocho de aceite y vino**: se usa una imagen generada con IA (Gemini), aportada el 21/11/2026 y señalada como tal en el pie de foto (`src/assets/fotos/externas/ia-bizcocho-de-aceite-y-vino.jpg`). Sustituirla por una foto real del plato.
 
 ## 6. Para producción (fuera del alcance del concepto)
 
