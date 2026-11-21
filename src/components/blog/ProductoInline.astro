@@ -1,0 +1,35 @@
+---
+// <ProductoInline>: tarjeta de producto integrada en el texto. Precio e imagen salen del catálogo (products.json).
+import Foto from '@/components/Foto.astro';
+import { productCards } from '@/lib/blog';
+interface Props { id: string; formato?: string; titulo?: string; texto?: string }
+const { id, formato, titulo, texto } = Astro.props;
+const [c] = await productCards([{ id, format: formato }]);
+---
+<a class="pin" href={c.href}>
+  <Foto file={c.img} alt="" fit="contain" sizes="110px" widths={[110, 220]} class="pin__img" />
+  <span class="pin__b">
+    <span class="eyebrow pin__e">De la tienda</span>
+    <span class="pin__t">{titulo ?? c.name}</span>
+    {texto && <span class="pin__d">{texto}</span>}
+  </span>
+  <span class="pin__p">{c.priceLabel}</span>
+</a>
+<style>
+  .pin { margin: 8px 0 32px; display: flex; gap: 20px; align-items: center; padding: 16px; background: var(--surface); border: 1px solid transparent; border-radius: 14px; text-decoration: none !important; color: var(--ink) !important; font-weight: 400 !important; transition: border-color .25s var(--ease); }
+  .pin:hover { border-color: var(--line-strong); }
+  .pin :global(.pin__img) { width: 110px; height: 110px; flex: none; border-radius: var(--radius-md); background: var(--olive-tint); }
+  .pin__b { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .pin__e { margin: 0; }
+  .pin__t { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.2; }
+  .pin:hover .pin__t { color: var(--olive); }
+  .pin__d { color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .pin__p { font-family: var(--font-display); font-weight: 600; font-size: 24px; padding-right: 12px; white-space: nowrap; }
+  @media (max-width: 720px) {
+    .pin { gap: 14px; padding: 12px; border-radius: var(--radius-md); }
+    .pin :global(.pin__img) { width: 72px; height: 72px; }
+    .pin__t { font-family: var(--font-body); font-size: 15px; }
+    .pin__d { display: none; }
+    .pin__p { font-size: 18px; padding-right: 4px; }
+  }
+</style>

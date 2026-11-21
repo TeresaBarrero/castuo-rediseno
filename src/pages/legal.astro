@@ -3,7 +3,9 @@ import Base from '@/layouts/Base.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import { PORTFOLIO_AUTHOR, OFFICIAL_URL } from '@/config';
 import { FOTOS, type Slot } from '@/data/fotos';
-const credits = Object.values(FOTOS as Record<string, Slot>).flatMap((s) => (s.credit ? [s.credit] : []));
+import { getCollection } from 'astro:content';
+const postCredits = (await getCollection('posts')).flatMap((p) => (p.data.heroCredit ? [p.data.heroCredit] : []));
+const credits = [...Object.values(FOTOS as Record<string, Slot>).flatMap((s) => (s.credit ? [s.credit] : [])), ...postCredits];
 ---
 <Base title="Aviso legal del concepto de rediseño | Castuo" description="Información legal de este concepto de rediseño no oficial de castuo.es: autoría, privacidad, cookies y condiciones." og="default">
   <section class="lg">

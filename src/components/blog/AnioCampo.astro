@@ -1,0 +1,75 @@
+---
+// «El año en el campo»: selector de 12 meses (botones con aria-pressed, flechas/Inicio/Fin) y tarjetas de olivar y viña
+// con fundido cruzado (los 12 paneles se apilan en la misma celda del grid). El HTML trae marcado el mes del build;
+// en el navegador se abre el mes actual (scripts/blog.ts). Calendario orientativo.
+// Nombre accesible = nombre completo («Ene» + «ro» oculto), que empieza por el texto visible (WCAG 2.5.3).
+import { getCollection } from 'astro:content';
+import { postUrl } from '@/lib/blog';
+const months = (await getCollection('campo')).sort((a, b) => a.data.month - b.data.month);
+const buildMonth = new Date().getMonth() + 1;
+---
+<section class="yr dark" aria-labelledby="yr-t" data-year>
+  <div class="wrap stack" style="gap:40px">
+    <div class="sec-head" data-reveal>
+      <div class="stack" style="gap:14px"><p class="eyebrow" style="margin:0">El año en el campo</p><h2 id="yr-t" class="h2">¿Qué pasa este mes en el olivar y la viña?</h2></div>
+      <p class="yr__intro">Elige un mes. Cada uno enlaza con el artículo que lo cuenta.</p>
+    </div>
+    <div class="yr__months" role="group" aria-label="Meses del año" data-year-months>
+      {months.map((m) => (
+        <button type="button" class="yr__m" data-month={m.data.month} aria-pressed={m.data.month === buildMonth ? 'true' : 'false'}
+          tabindex={m.data.month === buildMonth ? 0 : -1} aria-controls={`yr-p${m.data.month}`}>{m.data.short}<span class="sr-only">{m.data.name.slice(m.data.short.length)}</span></button>
+      ))}
+    </div>
+    <div class="yr__stack">
+      {months.map((m) => (
+        <div class:list={['yr__p', { 'is-on': m.data.month === buildMonth }]} id={`yr-p${m.data.month}`} data-panel-month={m.data.month}>
+          <div class="yr__cards">
+            <div class="yr__card">
+              <p class="eyebrow" style="margin:0">Olivar · {m.data.name}</p>
+              <p class="yr__txt">{m.data.olivar}</p>
+            </div>
+            <div class="yr__card">
+              <p class="eyebrow yr__vina" style="margin:0">Viña · {m.data.name}</p>
+              <p class="yr__txt">{m.data.vina}</p>
+            </div>
+          </div>
+          {m.data.post
+            ? <a class="yr__lnk" href={postUrl(m.data.post.id)}>Leer: {m.data.postTitle}</a>
+            : <p class="yr__soon">Próximamente en el cuaderno: «{m.data.postTitle}»</p>}
+        </div>
+      ))}
+    </div>
+    <p class="yr__note">Calendario orientativo: las fechas varían con el año, la variedad y la finca. Pendiente de validar con los técnicos de la cooperativa.</p>
+  </div>
+</section>
+
+<style>
+  .yr { padding: 104px 0; }
+  .yr__intro { margin: 0; max-width: 400px; color: var(--on-dark-muted); line-height: 1.6; }
+  .yr__months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; }
+  .yr__m { min-height: 48px; border-radius: var(--radius); font: 600 14px var(--font-body); background: transparent; color: var(--on-dark-muted); border: 1px solid var(--dark-line-2); transition: background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease); }
+  .yr__m:hover { border-color: var(--on-dark-muted); color: var(--on-dark); }
+  .yr__m[aria-pressed='true'] { background: var(--on-dark); color: var(--ink); border-color: var(--on-dark); }
+  .yr__m:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .yr__stack { display: grid; }
+  .yr__p { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 32px; opacity: 0; visibility: hidden; transition: opacity .45s var(--ease), visibility 0s linear .45s; }
+  .yr__p.is-on { opacity: 1; visibility: visible; transition: opacity .45s var(--ease) .12s, visibility 0s; }
+  .yr__p .yr__card { transform: translateY(8px); transition: transform .6s var(--ease); }
+  .yr__p.is-on .yr__card { transform: none; }
+  .yr__p.is-on .yr__card + .yr__card { transition-delay: .06s; }
+  .yr__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .yr__card { background: var(--dark-input); border-radius: 14px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .yr .yr__vina { color: var(--wine-tint); }
+  .yr__txt { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 26px; line-height: 1.25; }
+  .yr__lnk { align-self: flex-start; color: var(--on-dark); font-weight: 600; border-bottom: 1.5px solid currentColor; padding-bottom: 2px; text-decoration: none; }
+  .yr__lnk:hover { color: var(--gold); }
+  .yr__soon { margin: 0; color: var(--on-dark-muted); font-weight: 500; }
+  .yr__note { margin: 0; font-size: 13px; color: var(--on-dark-muted-2); }
+  @media (max-width: 960px) {
+    .yr { padding: 72px 0; }
+    .yr__months { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .yr__cards { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .yr__card { padding: 24px; }
+    .yr__txt { font-size: 22px; }
+  }
+</style>

@@ -16,7 +16,7 @@ Todo lo marcado `[ENTRE CORCHETES]` en el diseño se ha resuelto con datos publi
 
 **Oficinas**: la galería «Oficinas» de castuo.es está vacía y no hay fotos libres del edificio, así que esa tarjeta de la galería se ha sustituido por «Vista aérea», con una foto real de castuo.es. Pedir fotos de las oficinas.
 
-**Fotos de recetas ilustrativas**: los artículos de migas y tostadas usan dos fotos de Wikimedia Commons (Juan Emilio Prades Bel, CC BY 4.0), con crédito bajo la foto y en /legal/#creditos. No son platos de la cooperativa: habría que sustituirlas por fotos propias.
+**Fotos de recetas ilustrativas**: los artículos de migas y tostadas del blog usan dos fotos de Wikimedia Commons (Juan Emilio Prades Bel, CC BY 4.0), con crédito bajo la foto y en /legal/#creditos. No son platos de la cooperativa: habría que sustituirlas por fotos propias.
 
 **Fotos de fincas en baja resolución**: olivar (tradicional, intensivo y superintensivo), viña en vaso, almendro y la ruta por el olivar usan las miniaturas de 400 × 400 px de castuo.es, que llevan el logo superpuesto. Un recorte en servidor deja el logo fuera, pero a 2× se ven algo blandas. Habría que pedir los originales sin logo.
 
@@ -51,7 +51,21 @@ Todo lo marcado `[ENTRE CORCHETES]` en el diseño se ha resuelto con datos publi
 
 Se han descartado (ver `catalogo.json`, `motivo_descarte`) porque no muestran a la cooperativa: jarras con girasol, copa con barrica, aceitunas sobre pizarra, olivar al atardecer de los banners de 2021, viñedo al atardecer, maizal, portátil de «contacto», periódicos de «noticias» y cajas en cinta transportadora.
 
-## 5. Para producción (fuera del alcance del concepto)
+## 5. Blog «Cuaderno Castúo»
+
+- [ ] **Confirmar la cita en una edición de *El miajón de los castúos* (1921)**: «cultivan por sí mismo sus propios campos», del vocabulario final del libro (artículo `/blog/que-significa-castuo/`).
+- [ ] **«El año en el campo»: validar con la cooperativa.** Los 12 meses de olivar y viña se han copiado del diseño (`src/content/campo.json`) y se marcan como orientativos. Solo octubre y noviembre enlazan a un artículo publicado; el resto anuncia el título previsto como «Próximamente».
+- [ ] **Fotos con el lettering «El Castúo de Guareña»** de la propuesta previa (viñedo, ramas de olivo, manos en la vid): no están en castuo.es ni en su mediateca (revisada el 21/11/2026). El artículo destacado usa en su lugar una foto real de viñedo en espaldera de castuo.es (`2021-02-finca-inicio.jpg`) y la figura «manos de un socio entre las hojas de la vid» queda como hueco reservado. Pedir los originales y su crédito.
+- [ ] **Crédito de las fotos** del blog: el diseño pide «[Crédito de la foto]». Se ha puesto «Foto: Cooperativa del Campo San Pedro (castuo.es)»; confirmar autor.
+- [ ] **Firma real y foto del autor** en la caja de autoría (hoy, «Equipo de la Cooperativa del Campo San Pedro»), para reforzar la autoría (E-E-A-T).
+- [ ] **Fechas de publicación**: son de demostración (dos artículos al mes entre septiembre y noviembre de 2026, según el calendario editorial de `canvas.json`). Ajustarlas al publicar.
+- [ ] **Revisión técnica** de los artículos 2 a 6 (cosecha temprana, etiqueta, almazara, migas, conservación): información general sin cifras propias de la cooperativa salvo las publicadas en castuo.es (7.000 ha de olivar, 1965, 137 → +1.100 socios, 11 municipios). Se retiró la cifra de «22 millones de kilos», que en castuo.es es una *expectativa* y no un dato de campaña.
+- [ ] **Newsletter «La carta castúa»**: el formulario es ficticio (valida y confirma, no envía). En producción: proveedor de correo, doble opt-in y consentimiento RGPD.
+- [ ] **Contenido de relleno (21/11/2026)**: 14 artículos más para completar el blog, entre ellos los 8 del calendario (poda, la viña en primavera, primavera en el olivar, floración, cuajado, envero, vendimia y regalos), el bizcocho, el vino de mesa, los premios Extrema Selección 2025 y el 50 aniversario. Son textos divulgativos generales que se apoyan solo en datos ya publicados en castuo.es: los galardones de 2025, 1965, 137 → +1.100 socios y la celebración de 2015 que se ve en su galería. **Que los revise un técnico de la cooperativa antes de publicar.**
+- [ ] **Noticias inventadas**: «Arranca la campaña de aceituna» y «Estuches de Navidad para empresas» describen hechos que no han ocurrido. Llevan `example: true`, que muestra el aviso «Contenido de ejemplo» en el artículo y «Ejemplo» en la tarjeta. Sustituirlas por noticias reales o borrarlas.
+- [ ] **Foto del bizcocho de aceite y vino**: no hay ninguna; se muestra el hueco «Foto pendiente».
+
+## 6. Para producción (fuera del alcance del concepto)
 
 - Redirecciones 301 de las URL antiguas (`/categoria-producto/…`, `/tienda/aceite-castuo/…`, `/historia/`, `/nuestras-fincas/`, `/galeria/`, `/vinos/`, `/noticias/`…) a la nueva arquitectura.
 - Pasarela de pago real (PayPal y transferencia), cálculo de portes de Envialia y gestión de stock.

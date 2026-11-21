@@ -1,0 +1,20 @@
+---
+// Páginas 2+ de «Lo último del cuaderno» (solo se generan a partir de BLOG.pageSize artículos).
+import Listing from '@/components/blog/Listing.astro';
+import { BLOG, getPosts } from '@/lib/blog';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const featured = posts.find((p) => p.data.featured) ?? posts[0];
+  const rest = posts.filter((p) => p !== featured);
+  const total = Math.ceil(rest.length / BLOG.pageSize);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => i + 2).map((page) => ({
+    params: { page: String(page) },
+    props: { page, total, posts: rest.slice((page - 1) * BLOG.pageSize, page * BLOG.pageSize), featuredUrl: featured.url },
+  }));
+}
+const { page, total, posts, featuredUrl } = Astro.props;
+---
+<Listing title={`${BLOG.name} · Página ${page} | Castuo`} description={`${BLOG.description} Página ${page}.`} h1={BLOG.name}
+  eyebrow="El blog de la Cooperativa del Campo San Pedro" intro={BLOG.tagline}
+  crumbs={[{ label: 'Blog', href: '/blog/' }, { label: `Página ${page}` }]} active="todo"
+  posts={posts} page={page} totalPages={total} base="/blog/" featuredUrl={featuredUrl} />

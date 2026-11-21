@@ -1,0 +1,26 @@
+---
+// <Receta>: ficha de la receta (tiempo, dificultad, raciones e ingredientes) a partir del frontmatter `recipe`.
+// En el MDX: <Receta datos={frontmatter.recipe} />. Los pasos detallados siguen en el texto; el schema Recipe usa `steps`.
+interface Datos { time: string; difficulty: string; servings: number; servingsLabel?: string; ingredients: string[] }
+interface Props { datos: Datos }
+const { datos: r } = Astro.props;
+---
+<aside class="rec" aria-label="Ficha de la receta">
+  <ul class="rec__meta" role="list">
+    <li><span class="sr-only">Tiempo: </span>{r.time}</li>
+    <li><span class="sr-only">Dificultad: </span>{r.difficulty}</li>
+    <li>{r.servings} {r.servingsLabel ?? 'personas'}</li>
+  </ul>
+  <p class="rec__h">Ingredientes</p>
+  <ul class="rec__ing">
+    {r.ingredients.map((i) => <li>{i}</li>)}
+  </ul>
+</aside>
+<style>
+  .rec { margin: 8px 0 40px; padding: 28px; background: var(--surface); border-radius: var(--radius-lg); }
+  .rec__meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px !important; padding: 0 !important; list-style: none; }
+  .rec__meta li { margin: 0 !important; padding: 6px 14px !important; border-radius: var(--radius-pill); background: var(--olive-tint); font-size: 14px; line-height: 1.4; color: var(--ink); }
+  .rec__h { margin: 0 0 8px !important; font-family: var(--font-display); font-weight: 600; font-size: 22px !important; color: var(--ink) !important; }
+  .rec__ing { margin: 0 !important; font-size: 17px !important; }
+  @media (max-width: 720px) { .rec { padding: 20px; } .rec__ing { font-size: 16px !important; } }
+</style>

@@ -57,11 +57,11 @@ src/
   assets/fotos/original/   320 fotos rastreadas de castuo.es
   assets/fotos/catalogo.json
   components/              Header, Footer, Foto, ProductCard, ShopListing, Accordion, Lightbox…
-  content/                 products.json, fincas.json, faqs.json, visitas.json, posts/*.mdx
+  content/                 products.json, fincas.json, faqs.json, visitas.json, campo.json, posts/*.mdx
   data/fotos.ts            hueco del diseño → foto real (o null → placeholder)
   lib/                     tienda, JSON-LD, blog
   pages/                   rutas
-  scripts/                 cart, header, motion, filters, product, forms, tabs
+  scripts/                 cart, header, motion, filters, product, forms, tabs, blog
 scripts/                   rastreo, catálogo, OG, capturas, pruebas y Lighthouse
 diseno/                    diseño aprobado (.dc.html) y canvas.json
 capturas/                  capturas a 390 y 1440 px de cada página
@@ -69,13 +69,13 @@ capturas/                  capturas a 390 y 1440 px de cada página
 
 ## Páginas
 
-`/` · `/tienda/` (+ `/tienda/aceite-de-oliva-virgen-extra/`, `/tienda/vinos/`, `/tienda/estuches-regalo/`) · `/producto/[slug]/` (11 fichas, 46 formatos) · `/cooperativa/` · `/fincas/` (+ 6 subpáginas) · `/calidad-y-premios/` · `/visitas-almazara-guarena/` · `/blog/` (+ 7 artículos) · `/preguntas-frecuentes/` · `/socios/` · `/contacto/` · `/carrito/` · `/buscar/` · `/legal/` · `404`.
+`/` · `/tienda/` (+ `/tienda/aceite-de-oliva-virgen-extra/`, `/tienda/vinos/`, `/tienda/estuches-regalo/`) · `/producto/[slug]/` (11 fichas, 46 formatos) · `/cooperativa/` · `/fincas/` (+ 6 subpáginas) · `/calidad-y-premios/` · `/visitas-almazara-guarena/` · `/blog/` «Cuaderno Castúo» (+ 22 artículos, 6 categorías, paginación en `/blog/[categoria]/`, RSS en `/blog/rss.xml`) · `/preguntas-frecuentes/` · `/socios/` · `/contacto/` · `/carrito/` · `/buscar/` · `/legal/` · `404`.
 
 Los productos y precios son los de la tienda de castuo.es a 20/11/2026: coinciden con el brief y además se han añadido los que la tienda tiene hoy (AOVE de 250 y 750 ml y vino tinto y blanco de mesa en caja de 6 × 0,75 L y en garrafas de 5 L). Los estuches de 2 y 3 botellas tienen sus 10 y 20 composiciones reales con precio y foto.
 
 ## Fotografías
 
-`npm run fotos` rastrea castuo.es (respeta `robots.txt` y espera 1 s entre peticiones), descarga los originales sin sufijo de tamaño y genera el catálogo. `src/assets/fotos/catalogo.json` recoge, para cada imagen, el archivo, la URL y las páginas de origen, sus dimensiones, una descripción revisada a mano y si se usa, está disponible o se descarta (y por qué). Cuando no había una foto adecuada no se ha inventado ni se ha recurrido a bancos de imágenes. Las dos recetas del blog usan fotos de Wikimedia Commons con licencia CC BY 4.0, con crédito visible (en `src/assets/fotos/externas/`). La tarjeta «Oficinas» de la galería, sin foto disponible, se sustituyó por «Vista aérea» (ver [`PENDIENTE.md`](PENDIENTE.md)). Ya no queda ningún hueco sin foto.
+`npm run fotos` rastrea castuo.es (respeta `robots.txt` y espera 1 s entre peticiones), descarga los originales sin sufijo de tamaño y genera el catálogo. `src/assets/fotos/catalogo.json` recoge, para cada imagen, el archivo, la URL y las páginas de origen, sus dimensiones, una descripción revisada a mano y si se usa, está disponible o se descarta (y por qué). Cuando no había una foto adecuada no se ha inventado ni se ha recurrido a bancos de imágenes. Las dos recetas del blog usan fotos de Wikimedia Commons con licencia CC BY 4.0, con crédito visible (en `src/assets/fotos/externas/`). La tarjeta «Oficinas» de la galería, sin foto disponible, se sustituyó por «Vista aérea». Las fotos con el lettering «El Castúo de Guareña» de la propuesta previa del blog no están en castuo.es ni en su mediateca: el artículo destacado usa un viñedo real de la web y la foto «manos en la vid» queda como hueco documentado (ver [`PENDIENTE.md`](PENDIENTE.md)).
 
 ## Animaciones: decisión técnica de cada una
 
@@ -97,27 +97,32 @@ Todas respetan `prefers-reduced-motion: reduce`: una regla global reduce cualqui
 | 12 | Línea de tiempo | Una línea oliva se escala en `scaleY` según el progreso de scroll y cada hito se ilumina al cruzarla (punto relleno y año en tinta). | El texto mantiene siempre el contraste AA: solo cambian el punto y el color del año. |
 | 13 | Trazabilidad | Al entrar en pantalla, la línea superior de cada paso se llena de izquierda a derecha en secuencia (`transition-delay` por índice). | CSS puro disparado por una clase. |
 | 14 | Detalles | Subrayado animado en `.lnk`, flecha del botón primario que se desplaza 4 px y cursor por defecto. | — |
+| 15 | Blog · «Cuaderno Castúo» | Cada palabra del título entra desde abajo dentro de una máscara (`overflow: hidden`), **solo CSS**, escalonada 110 ms. | Sin JS que medir (cada palabra es una línea), así no retrasa el LCP. |
+| 16 | Blog · cita y cifras | La cita destacada usa el revelado al hacer scroll (n.º 2) y las cifras del artículo, los contadores (n.º 3). | Mismo código que el resto de la web. |
+| 17 | Blog · el año en el campo | Los 12 paneles se apilan en la misma celda del grid y cambian con un **fundido cruzado** (`opacity` + `visibility` diferida) y un leve desplazamiento de las tarjetas. | Sin medir alturas ni duplicar nodos; los paneles ocultos salen del árbol de accesibilidad. |
+| 18 | Blog · progreso de lectura | Barra de 3 px en `--olive` con `animation-timeline: scroll(root)`; si no hay soporte o hay *reduced motion*, JS fija `--p` en `scroll` + `rAF`. | Sin coste en el hilo principal en Chrome/Edge. El minificador fundía `animation-timeline` en el *shorthand* `animation` (Chrome lo descarta), así que va en una regla aparte; el mismo arreglo recuperó el parallax n.º 4. |
 
 ## SEO on-page (demostración)
 
 El sitio es `noindex` a propósito (comentario explicativo en el `<head>` de cada página). Aun así, todo el SEO on-page está implementado como se haría en producción:
 
-- `<title>` y `<meta name="description">` únicos en las 41 páginas (los de `canvas.json` donde existían). Un solo H1 por página y jerarquía H2/H3 correcta.
+- `<title>` y `<meta name="description">` únicos en las 63 páginas (los de `canvas.json` donde existían). Un solo H1 por página y jerarquía H2/H3 correcta.
 - HTML semántico (`header`, `nav`, `main`, `section` con `aria-labelledby`, `article`, `aside`, `footer`, `address`), `lang="es"`, URL limpias en minúsculas con guiones, canónicas y `@astrojs/sitemap` (excluye carrito, búsqueda y aviso legal).
 - Migas de pan visibles + `BreadcrumbList`.
-- JSON-LD: `WebSite` (con `SearchAction`) en todas; `Organization` + `LocalBusiness` (NAP, geo, `foundingDate: 1965`, premios y certificaciones) en Inicio y Contacto; `Organization` en Cooperativa y Calidad; `Product` + `Offer`/`AggregateOffer` (precio, `EUR`, IVA incluido, disponibilidad) en las 11 fichas, **sin `AggregateRating`**; `ItemList` en la Tienda; `FAQPage`; `Blog`, `BlogPosting` y `Recipe` (migas y tostadas); `TouristAttraction` en Visitas. Validado: 0 errores de sintaxis.
-- Open Graph y Twitter Card con una imagen 1200 × 630 por página, con el estilo de la marca (`npm run og`).
+- JSON-LD: `WebSite` (con `SearchAction`) en todas; `Organization` + `LocalBusiness` (NAP, geo, `foundingDate: 1965`, premios y certificaciones) en Inicio y Contacto; `Organization` en Cooperativa y Calidad; `Product` + `Offer`/`AggregateOffer` (precio, `EUR`, IVA incluido, disponibilidad) en las 11 fichas, **sin `AggregateRating`**; `ItemList` en la Tienda; `FAQPage`; `Blog` en la portada del blog, `CollectionPage` en sus categorías, `BlogPosting` (autor como `Organization`, `datePublished`, `dateModified`, `image`), `FAQPage` en los artículos con preguntas y `Recipe` (migas y tostadas); `TouristAttraction` en Visitas. Validado: 0 errores de sintaxis.
+- Open Graph y Twitter Card con una imagen 1200 × 630 por página y por artículo, con el estilo de la marca (`npm run og`). Feed RSS del blog con `@astrojs/rss`.
 - Enlazado interno según el diseño: el blog enlaza a fichas de producto, las fichas a Calidad y las fincas a Visitas.
-- 1.100 enlaces internos comprobados con `linkinator`: 0 rotos.
+- 1.503 enlaces internos comprobados con `linkinator`: 0 rotos.
 
 ## Verificación
 
 | Comprobación | Resultado |
 |---|---|
-| `astro build` | 41 páginas, sin errores ni avisos |
-| Enlaces internos | 1.100 comprobados, 0 rotos |
+| `astro build` | 64 páginas (63 + una redirección del blog antiguo), sin errores ni avisos |
+| Enlaces internos | 1.503 comprobados, 0 rotos |
 | Pruebas de interacción (`node scripts/test-interacciones.mjs`, Playwright) | 35/35: carrito, mini-carrito, modal de compra, acordeones, filtros + URL, orden, formatos, €/L, lightbox, estuches, «Avísame», formularios, pestañas FAQ, menú móvil (foco atrapado, Esc), barra fija, sin scroll horizontal a 360 y 390 px, 0 errores de consola |
-| Capturas | `capturas/` a 390 y 1440 px de 18 páginas; revisión adicional a 768 y 1024 px |
+| Pruebas del blog (`node scripts/test-blog.mjs`) | 58/58 (incluye paginación y aviso de contenido de ejemplo): H1 único, title y JSON-LD, pestañas + `?categoria=` + estado vacío, buscador (tildes, flechas, Esc, `?q=`), meses con flechas/Fin y vuelta, newsletter, índice activo, cifras, progreso, copiar enlace, acordeón, móvil (`<details>`, barra inferior, sin scroll horizontal), categorías, RSS, redirección y *reduced motion* |
+| Capturas | `capturas/` a 390 y 1440 px de 18 páginas; revisión adicional a 768 y 1024 px. Blog: `capturas/blog/` |
 
 ### Lighthouse (móvil)
 
@@ -132,8 +137,8 @@ Medido el 20/11/2026 sobre la **web publicada** (https://teresabarrero.github.io
 | Fincas | 100 | 100 | 100 | 69* | 1,3 s | 0,009 | 40 ms |
 | Calidad y premios | 100 | 100 | 100 | 69* | 1,6 s | 0 | 20 ms |
 | Visitas | 100 | 100 | 100 | 69* | 1,6 s | 0 | 10 ms |
-| Blog | 100 | 100 | 100 | 69* | 1,7 s | 0,009 | 0 ms |
-| Artículo | 100 | 100 | 100 | 69* | 1,5 s | 0 | 0 ms |
+| Blog (`/blog/`) | 99 | 100 | 100 | 69* | 2,0 s | 0,009 | 10 ms |
+| Artículo (`/blog/que-significa-castuo/`) | 99 | 100 | 100 | 69* | 2,0 s | 0 | 10 ms |
 | FAQ | 100 | 100 | 100 | 69* | 1,4 s | 0,009 | 10 ms |
 | Socios | 100 | 100 | 100 | 69* | 1,5 s | 0,009 | 0 ms |
 | Contacto | 100 | 100 | 100 | 69* | 1,4 s | 0,009 | 0 ms |
@@ -152,6 +157,8 @@ Nota de medición: Lighthouse se lanza con `--disable-gpu`. En Chrome *headless*
 | `npm run og` | Imágenes Open Graph 1200 × 630 y favicon |
 | `npm run shots` | Capturas a 390 y 1440 px (`--widths`, `--only`, `--base`) |
 | `node scripts/test-interacciones.mjs` | Pruebas de interacción con Playwright |
+| `node scripts/test-blog.mjs` | Pruebas del blog «Cuaderno Castúo» |
+| `node scripts/og.mjs --blog` | Solo las imágenes Open Graph del blog |
 | `node scripts/lighthouse.mjs` | Lighthouse móvil de las páginas principales |
 | `node scripts/seo-demo.mjs` | Copia sin `noindex` solo para medir el SEO |
 
@@ -170,3 +177,15 @@ Ver [`PENDIENTE.md`](PENDIENTE.md): fotos que faltan, logo en SVG, variedades, h
 **Decisiones.** La dirección «Campo contemporáneo» combina fondo piedra, tinta y oliva, tipografía Bricolage Grotesque y fotografía real de la cooperativa, sin degradados ni adornos. La arquitectura elimina el menú duplicado (los vinos viven en la Tienda) y diferencia los teléfonos («Oficinas» y «Atención al cliente»). Los productos agotados nunca aparecen en portada. Las 320 fotos de castuo.es se catalogaron a mano: lo que no existía se deja como hueco documentado en lugar de rellenarlo con imágenes de banco. Las animaciones son contenidas y sirven al producto: contadores, el carrito que recibe el producto, filtros con FLIP y la foto de la tarjeta que se convierte en la de la ficha.
 
 **Resultados.** 41 páginas estáticas con unos 14,5 KB de JavaScript comprimido por página. En Lighthouse móvil, sobre la web publicada: rendimiento de 99 a 100, accesibilidad 100 y buenas prácticas 100 en todas las páginas, LCP de 1,3 a 1,8 s y CLS de 0 a 0,009. El SEO on-page llega a 100 al retirar el `noindex`, que se mantiene a propósito porque es un concepto.
+
+---
+
+## Caso de estudio · Blog
+
+**Punto de partida.** castuo.es no tenía blog: sus «Noticias» eran accesos a otras secciones. Había una propuesta previa con fotos rotuladas «El Castúo de Guareña», pero con dos titulares grandes, texto blanco pequeño en negrita sobre verde y frases genéricas («mucho más que un nombre»).
+
+**Decisiones de diseño.** El blog tiene nombre propio, *Cuaderno Castúo*, y un solo H1 por página. El texto va en una columna de 720 px a 19 px. El artículo suma índice, cita, cifras, producto integrado, preguntas, autoría y relacionados. Se conservan el verde oscuro y las fotos rotuladas, y «Noticias» pasa a ser una categoría real.
+
+**Decisiones de contenido.** El primer artículo responde a una búsqueda real, «qué significa castúo», con datos verificables: Luis Chamizo, 1921, la fundación en 1965 y el paso de 137 socios a más de 1.100. Se corrige el relato (la cooperativa nació para vender uva de mesa, no «para dar visibilidad a pequeños productores») y se evita «artesanal», que no encaja con 4,5 millones de litros.
+
+**Resultados.** En Lighthouse móvil, la portada y el artículo obtienen 99 en rendimiento, 100 en accesibilidad y 100 en buenas prácticas (LCP 2,0 s, CLS ≤ 0,009). El SEO marca 69 solo por el `noindex`.

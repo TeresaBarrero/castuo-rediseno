@@ -7,6 +7,7 @@ import { initFilters } from './filters';
 import { bindLightbox, initProduct } from './product';
 import { bindForms } from './forms';
 import { bindTabs, initTabs } from './tabs';
+import { bindShare, cleanupBlog, initBlog } from './blog';
 import { $$ } from './util';
 
 bindCart();
@@ -15,6 +16,7 @@ bindAccordions();
 bindLightbox();
 bindForms();
 bindTabs();
+bindShare();
 
 // Selección de visita (tarjetas → select del formulario)
 document.addEventListener('click', (e) => {
@@ -31,7 +33,7 @@ document.addEventListener('click', (e) => {
   if (sel) sel.value = v;
 });
 
-document.addEventListener('astro:before-swap', cleanupMotion);
+document.addEventListener('astro:before-swap', () => { cleanupMotion(); cleanupBlog(); });
 document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
 document.addEventListener('astro:page-load', () => {
   document.documentElement.classList.add('js');
@@ -42,6 +44,7 @@ document.addEventListener('astro:page-load', () => {
   initFilters();
   initProduct();
   initTabs();
+  initBlog();
   const min = new Date().toISOString().slice(0, 10);
   for (const d of $$<HTMLInputElement>('input[type=date][data-min-today]')) d.min = min;
 });

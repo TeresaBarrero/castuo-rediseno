@@ -20,6 +20,8 @@
   --on-dark-muted-2: #B9BCAF;
   --placeholder: #E4E1D6;
   --chip-bg: #F1EFE7;
+  --olive-tint: #E7E8DA; /* fondo de la newsletter del blog */
+  --wine-tint: #E0A9AF;  /* acento «Viña» sobre fondo oscuro */
 
   --radius-sm: 6px; --radius: 10px; --radius-md: 12px; --radius-lg: 16px; --radius-pill: 999px;
   --container: 1240px; --gutter: 32px;

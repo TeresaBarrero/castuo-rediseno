@@ -7,7 +7,7 @@ const arg = (k, d) => { const i = process.argv.indexOf(k); return i > -1 ? proce
 const BASE = arg('--base', 'http://localhost:4321');
 const OUT = arg('--out', 'capturas');
 const widths = arg('--widths', '390,1440').split(',').map(Number);
-const ROUTES = arg('--only', '/,/tienda/,/tienda/aceite-de-oliva-virgen-extra/,/producto/aceite-de-oliva-virgen-extra/,/producto/estuche-regalo-3-botellas/,/producto/aove-cosecha-temprana-6x2l/,/cooperativa/,/fincas/,/fincas/vina-en-espaldera/,/calidad-y-premios/,/visitas-almazara-guarena/,/blog/,/blog/migas-extremenas-con-aceite/,/preguntas-frecuentes/,/socios/,/contacto/,/carrito/,/no-existe/').split(',');
+const ROUTES = arg('--only', '/,/tienda/,/tienda/aceite-de-oliva-virgen-extra/,/producto/aceite-de-oliva-virgen-extra/,/producto/estuche-regalo-3-botellas/,/producto/aove-cosecha-temprana-6x2l/,/cooperativa/,/fincas/,/fincas/vina-en-espaldera/,/calidad-y-premios/,/visitas-almazara-guarena/,/blog/,/blog/que-significa-castuo/,/blog/migas-extremenas-con-aceite/,/preguntas-frecuentes/,/socios/,/contacto/,/carrito/,/no-existe/').split(',');
 
 await fs.mkdir(OUT, { recursive: true });
 const browser = await chromium.launch();

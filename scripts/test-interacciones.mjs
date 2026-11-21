@@ -92,10 +92,10 @@ ok(!(await page.locator('#vino').getAttribute('hidden') !== null), 'FAQ: #vino a
 
 // Blog: filtro
 await page.goto(BASE + '/blog/');
-await page.locator('[data-filter-cat="recetas"]').click();
-ok((await page.locator('[data-filter-grid] [data-item]:not([hidden])').count()) === 2, 'Blog: filtro Recetas → 2');
+await page.locator('[data-filter-cat="en-la-cocina"]').click();
+ok((await page.locator('[data-filter-grid] [data-item]:not([hidden])').count()) === (await page.locator('[data-filter-grid] [data-item][data-cat="en-la-cocina"]').count()), 'Blog: filtro En la cocina (detalle en test-blog.mjs)');
 await page.locator('[data-filter-cat="noticias"]').click();
-ok(await page.locator('[data-filter-empty]').isVisible(), 'Blog: Noticias vacío muestra mensaje');
+ok(await page.locator('[data-filter-empty]').isHidden(), 'Blog: Noticias muestra sus artículos');
 
 // Menú móvil
 const m = await browser.newContext({ viewport: { width: 390, height: 844 } });

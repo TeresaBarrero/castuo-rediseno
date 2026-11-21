@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cuaderno Castúo · Portada del blog</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&amp;family=Inter:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F6F5F0}
+*{box-sizing:border-box}
+a{color:#3F5B2E}a:hover{color:#17201A}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.ph{background:#E4E1D6;border-radius:8px;display:flex;align-items:flex-end;padding:16px;color:#4A4A40;font-size:12px;letter-spacing:.03em}
+.eyebrow{font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#3F5B2E;margin:0}
+.h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(28px,3.2vw,44px);line-height:1.08;letter-spacing:-.02em;margin:0}
+.meta{margin:0;font-size:13px;color:#55594F}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px;align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 28px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
+.feat{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:center}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+@media (max-width:960px){.g2,.g3,.feat{grid-template-columns:repeat(1,minmax(0,1fr));gap:32px}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.months{grid-template-columns:repeat(6,minmax(0,1fr))}}
+</style>
+</helmet>
+<div style="width:100%;font-family:Inter,system-ui,sans-serif;color:#17201A;background:#F6F5F0">
+<dc-import name="Header" active="blog" hint-size="100%,132px"></dc-import>
+<main>
+
+<!-- CABECERA EDITORIAL -->
+<section style="background:#17201A;color:#F6F5F0;padding:72px 0 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:28px">
+    <nav aria-label="Migas de pan" style="font-size:14px;color:#B9BCAF"><a href="Main.dc.html" style="color:#E2E3DA">Inicio</a> / <span aria-current="page">Blog</span></nav>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:18px;max-width:820px">
+        <p class="eyebrow" style="color:#C9A74A">El blog de la Cooperativa del Campo San Pedro</p>
+        <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(56px,8vw,120px);line-height:.95;letter-spacing:-.035em">Cuaderno Castúo</h1>
+        <p style="margin:0;font-size:20px;line-height:1.55;color:#C9CCC0">Aceite, vino, recetas y vida de campo, contado por quienes trabajan la tierra en Guareña.</p>
+      </div>
+      <form role="search" style="display:flex;flex-direction:column;gap:6px">
+        <label for="bq" style="font-size:13px;color:#B9BCAF">Buscar en el blog</label>
+        <div style="display:flex;align-items:center;gap:8px;height:50px;width:320px;max-width:100%;padding:0 8px 0 18px;border-radius:999px;border:1px solid #4A564E;background:#222D25">
+          <input id="bq" type="search" placeholder="Migas, cosecha temprana…" style="flex:1;min-width:0;border:0;background:transparent;color:#F6F5F0;font:15px Inter,sans-serif;outline-offset:4px">
+          <button type="submit" aria-label="Buscar" style="width:36px;height:36px;border:0;border-radius:50%;background:#F6F5F0;display:flex;align-items:center;justify-content:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17201A" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        </div>
+      </form>
+    </div>
+    <nav aria-label="Secciones del blog" style="display:flex;flex-wrap:wrap;gap:4px 28px;border-top:1px solid #34403A;margin-top:24px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="7">
+        <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="{{c.style}}">{{c.label}}</button>
+      </sc-for>
+    </nav>
+  </div>
+</section>
+
+<!-- DESTACADO -->
+<section aria-labelledby="dest" style="padding:72px 0 96px">
+  <div class="wrap feat">
+    <a href="BlogArticulo.dc.html" class="ph" style="height:560px;background:#C9CDB4;text-decoration:none">[FOTO] Viñedo con el lettering «El Castúo de Guareña» (de tu propuesta) · 1600 × 1200</a>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <p class="eyebrow">Destacado · La cooperativa</p>
+      <h2 id="dest" class="h2" style="font-size:clamp(32px,3.6vw,50px)"><a href="BlogArticulo.dc.html" style="color:#17201A;text-decoration:none">Qué significa «castúo» y por qué da nombre a nuestro aceite y nuestro vino</a></h2>
+      <p style="margin:0;font-size:18px;line-height:1.6;color:#4B4F45">Antes de ser una marca fue una palabra que un poeta de Guareña eligió para nombrar a los campesinos de su tierra. Esta es su historia, y la nuestra.</p>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div aria-hidden="true" style="width:40px;height:40px;border-radius:50%;background:#3F5B2E;color:#F6F5F0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px">C</div>
+        <p class="meta"><strong style="color:#17201A">Equipo Castuo</strong><br>[Fecha] · 6 min de lectura</p>
+      </div>
+      <a href="BlogArticulo.dc.html" style="align-self:flex-start;min-height:50px;padding:0 26px;border-radius:999px;background:#17201A;color:#F6F5F0;display:inline-flex;align-items:center;gap:10px;font-weight:600;text-decoration:none">Leer el artículo <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- EMPIEZA AQUÍ -->
+<section aria-labelledby="emp" style="background:#fff;padding:96px 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">Guías básicas</p><h2 id="emp" class="h2">Empieza por aquí</h2></div>
+      <p style="margin:0;max-width:420px;color:#4B4F45;line-height:1.6">Tres lecturas para entender el aceite de oliva virgen extra antes de comprarlo.</p>
+    </div>
+    <ol class="g3" style="list-style:none;margin:0;padding:0;gap:24px">
+      <li><a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;padding:28px;border:1px solid #DAD7CB;border-radius:14px;text-decoration:none;color:#17201A;min-height:260px"><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:56px;line-height:1;color:#3F5B2E">01</span><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:23px;line-height:1.2">Cómo leer la etiqueta de un aceite de oliva virgen extra</span><span class="meta" style="margin-top:auto">Guía · 7 min</span></a></li>
+      <li><a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;padding:28px;border:1px solid #DAD7CB;border-radius:14px;text-decoration:none;color:#17201A;min-height:260px"><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:56px;line-height:1;color:#3F5B2E">02</span><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:23px;line-height:1.2">Cosecha temprana: qué es y por qué sabe distinto</span><span class="meta" style="margin-top:auto">Guía · 6 min</span></a></li>
+      <li><a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;padding:28px;border:1px solid #DAD7CB;border-radius:14px;text-decoration:none;color:#17201A;min-height:260px"><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:56px;line-height:1;color:#3F5B2E">03</span><span style="font-family:'Bricolage Grotesque';font-weight:600;font-size:23px;line-height:1.2">Cómo conservar el aceite en casa para que no pierda sabor</span><span class="meta" style="margin-top:auto">Guía · 5 min</span></a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ÚLTIMOS ARTÍCULOS -->
+<section aria-labelledby="ult" style="padding:104px 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:44px">
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">{{catLabel}}</p><h2 id="ult" class="h2">Lo último del cuaderno</h2></div>
+      <p class="meta" aria-live="polite">{{count}} artículos</p>
+    </div>
+    <div class="g3">
+      <sc-for list="{{posts}}" as="p" hint-placeholder-count="6">
+        <article style="display:flex;flex-direction:column;gap:12px">
+          <a href="BlogArticulo.dc.html" class="ph" style="height:250px;background:{{p.bg}};text-decoration:none">[FOTO] {{p.img}}</a>
+          <p class="eyebrow">{{p.cat}}</p>
+          <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:23px;line-height:1.2"><a href="BlogArticulo.dc.html" style="color:#17201A;text-decoration:none">{{p.t}}</a></h3>
+          <p style="margin:0;color:#4B4F45;line-height:1.55;font-size:15px">{{p.d}}</p>
+          <p class="meta">{{p.time}}</p>
+        </article>
+      </sc-for>
+    </div>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+      <p style="margin:0;padding:40px;border:1.5px dashed #CFCBBE;border-radius:12px;text-align:center;color:#4B4F45">Pronto publicaremos en esta sección. Mientras tanto, <a href="BlogArticulo.dc.html">lee el artículo destacado</a>.</p>
+    </sc-if>
+  </div>
+</section>
+
+<!-- EL AÑO EN EL CAMPO -->
+<section aria-labelledby="cal" style="background:#17201A;color:#F6F5F0;padding:104px 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow" style="color:#C9A74A">El año en el campo</p><h2 id="cal" class="h2">¿Qué pasa este mes en el olivar y la viña?</h2></div>
+      <p style="margin:0;max-width:400px;color:#C9CCC0;line-height:1.6">Elige un mes. Cada uno enlaza con el artículo que lo cuenta.</p>
+    </div>
+    <div class="months" role="group" aria-label="Meses del año">
+      <sc-for list="{{months}}" as="m" hint-placeholder-count="12">
+        <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="{{m.style}}">{{m.short}}</button>
+      </sc-for>
+    </div>
+    <div class="g2" style="align-items:stretch;gap:24px">
+      <div style="background:#222D25;border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:14px">
+        <p class="eyebrow" style="color:#C9A74A">Olivar · {{mon.name}}</p>
+        <p style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:26px;line-height:1.25">{{mon.olivar}}</p>
+      </div>
+      <div style="background:#222D25;border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:14px">
+        <p class="eyebrow" style="color:#E0A9AF">Viña · {{mon.name}}</p>
+        <p style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:26px;line-height:1.25">{{mon.vina}}</p>
+      </div>
+    </div>
+    <a href="BlogArticulo.dc.html" style="align-self:flex-start;color:#F6F5F0;font-weight:600;border-bottom:1.5px solid currentColor;padding-bottom:2px;text-decoration:none">Leer: {{mon.post}}</a>
+    <p style="margin:0;font-size:13px;color:#B9BCAF">Calendario orientativo · [validar fechas con los técnicos de la cooperativa]</p>
+  </div>
+</section>
+
+<!-- RECETAS -->
+<section aria-labelledby="rec" style="padding:104px 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:40px">
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">En la cocina</p><h2 id="rec" class="h2">Recetas con aceite de aquí</h2></div>
+      <a href="BlogPortada.dc.html" style="font-weight:600;border-bottom:1.5px solid currentColor;padding-bottom:2px;text-decoration:none">Ver todas las recetas</a>
+    </div>
+    <div class="g3" style="gap:24px">
+      <a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#17201A"><div class="ph" style="height:340px;background:#E2D9C2">[FOTO] Migas extremeñas en sartén de hierro</div><h3 style="margin:0;font-family:'Bricolage Grotesque';font-weight:600;font-size:23px">Migas extremeñas</h3><ul style="list-style:none;margin:0;padding:0;display:flex;gap:8px;flex-wrap:wrap;font-size:13px"><li style="padding:6px 12px;border-radius:999px;background:#fff">45 min</li><li style="padding:6px 12px;border-radius:999px;background:#fff">Fácil</li><li style="padding:6px 12px;border-radius:999px;background:#fff">4 personas</li></ul></a>
+      <a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#17201A"><div class="ph" style="height:340px;background:#E7E8DA">[FOTO] Tostada con tomate y aceite verde</div><h3 style="margin:0;font-family:'Bricolage Grotesque';font-weight:600;font-size:23px">Tres tostadas para el desayuno</h3><ul style="list-style:none;margin:0;padding:0;display:flex;gap:8px;flex-wrap:wrap;font-size:13px"><li style="padding:6px 12px;border-radius:999px;background:#fff">10 min</li><li style="padding:6px 12px;border-radius:999px;background:#fff">Muy fácil</li><li style="padding:6px 12px;border-radius:999px;background:#fff">2 personas</li></ul></a>
+      <a href="BlogArticulo.dc.html" style="display:flex;flex-direction:column;gap:14px;text-decoration:none;color:#17201A"><div class="ph" style="height:340px;background:#EDE3E0">[FOTO] Bizcocho de aceite y vino semidulce</div><h3 style="margin:0;font-family:'Bricolage Grotesque';font-weight:600;font-size:23px">Bizcocho de aceite y vino</h3><ul style="list-style:none;margin:0;padding:0;display:flex;gap:8px;flex-wrap:wrap;font-size:13px"><li style="padding:6px 12px;border-radius:999px;background:#fff">1 h</li><li style="padding:6px 12px;border-radius:999px;background:#fff">Fácil</li><li style="padding:6px 12px;border-radius:999px;background:#fff">8 raciones</li></ul></a>
+    </div>
+  </div>
+</section>
+
+<!-- DESDE LA TIENDA -->
+<section aria-labelledby="tie" style="background:#fff;padding:88px 0">
+  <div class="wrap" style="display:flex;flex-direction:column;gap:32px">
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">Desde la tienda</p><h2 id="tie" class="h2" style="font-size:clamp(26px,2.6vw,36px)">Lo que usamos en estas recetas</h2></div>
+      <a href="Tienda.dc.html" style="font-weight:600;border-bottom:1.5px solid currentColor;padding-bottom:2px;text-decoration:none">Ir a la tienda</a>
+    </div>
+    <div class="g4">
+      <a href="Producto.dc.html" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid #DAD7CB;border-radius:12px;text-decoration:none;color:#17201A"><div class="ph" style="width:72px;height:72px;flex:none;padding:0;background:#E7E8DA"></div><div><p style="margin:0;font-weight:600;font-size:15px">AOVE · 500 ml</p><p style="margin:2px 0 0;font-family:'Bricolage Grotesque';font-weight:600">8,00 €</p></div></a>
+      <a href="Producto.dc.html" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid #DAD7CB;border-radius:12px;text-decoration:none;color:#17201A"><div class="ph" style="width:72px;height:72px;flex:none;padding:0;background:#E7E8DA"></div><div><p style="margin:0;font-weight:600;font-size:15px">AOVE · 6 × 2 L</p><p style="margin:2px 0 0;font-family:'Bricolage Grotesque';font-weight:600">52,80 €</p></div></a>
+      <a href="Producto.dc.html" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid #DAD7CB;border-radius:12px;text-decoration:none;color:#17201A"><div class="ph" style="width:72px;height:72px;flex:none;padding:0;background:#EDE3E0"></div><div><p style="margin:0;font-weight:600;font-size:15px">Semidulce El Castúo</p><p style="margin:2px 0 0;font-family:'Bricolage Grotesque';font-weight:600">3,00 €</p></div></a>
+      <a href="Producto.dc.html" style="display:flex;gap:14px;align-items:center;padding:12px;border:1px solid #DAD7CB;border-radius:12px;text-decoration:none;color:#17201A"><div class="ph" style="width:72px;height:72px;flex:none;padding:0;background:#EFE9DA"></div><div><p style="margin:0;font-weight:600;font-size:15px">Estuche 3 botellas</p><p style="margin:2px 0 0;font-family:'Bricolage Grotesque';font-weight:600">desde 11,20 €</p></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section aria-labelledby="nl" style="padding:104px 0">
+  <div class="wrap g2" style="background:#E7E8DA;border-radius:20px;padding:56px;gap:40px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <p class="eyebrow">Newsletter</p>
+      <h2 id="nl" class="h2">La carta castúa</h2>
+      <p style="margin:0;color:#3A3F36;line-height:1.6;font-size:17px">Una vez al mes: lo que pasa en el campo, una receta y avisos de campaña antes que nadie.</p>
+    </div>
+    <form style="display:flex;flex-direction:column;gap:12px">
+      <label for="nl-m" style="font-size:14px;font-weight:500">Correo electrónico</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input id="nl-m" type="email" placeholder="tu@correo.es" style="flex:1 1 220px;height:52px;padding:0 18px;border-radius:999px;border:1px solid #CFCBBE;background:#fff;font:15px Inter,sans-serif">
+        <button type="submit" style="height:52px;padding:0 26px;border-radius:999px;border:0;background:#17201A;color:#F6F5F0;font:600 15px Inter,sans-serif;cursor:pointer">Suscribirme</button>
+      </div>
+      <p style="margin:0;font-size:13px;color:#4B4F45">Sin spam. Puedes darte de baja cuando quieras.</p>
+    </form>
+  </div>
+</section>
+</main>
+<dc-import name="Footer" hint-size="100%,760px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5600}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { c: 'todo', m: 10 }; }
+  renderVals() {
+    const C = [['todo','Todo'],['campo','Del campo'],['cocina','En la cocina'],['aceite','Aceite'],['vino','Vino'],['coop','La cooperativa'],['noticias','Noticias']];
+    const P = [
+      { k:'aceite', cat:'Aceite', t:'Cómo leer la etiqueta de un aceite de oliva virgen extra', d:'Categoría, campaña, fecha de envasado y origen: lo que de verdad importa.', time:'7 min', img:'Etiqueta de botella', bg:'#E7E8DA' },
+      { k:'campo', cat:'Del campo', t:'Así es un día de campaña en la almazara', d:'De la llegada de los remolques al primer aceite de la mañana.', time:'6 min', img:'Almazara en marcha', bg:'#D6D9C4' },
+      { k:'cocina', cat:'En la cocina', t:'Migas extremeñas paso a paso', d:'La receta de siempre, con el aceite como protagonista.', time:'Receta · 45 min', img:'Migas', bg:'#E2D9C2' },
+      { k:'vino', cat:'Vino', t:'Vino semidulce: cuándo servirlo y con qué', d:'Temperatura, copa y maridajes sencillos para el vino de la casa.', time:'4 min', img:'Copa de semidulce', bg:'#EDE3E0' },
+      { k:'coop', cat:'La cooperativa', t:'Premio Extrema Selección 2025: lo que hay detrás', d:'Cómo se trabajó la campaña del aceite premiado.', time:'5 min', img:'Entrega del premio', bg:'#E4E1D6' },
+      { k:'campo', cat:'Del campo', t:'Olivar tradicional, intensivo y superintensivo: diferencias', d:'Tres formas de cultivar y lo que cambia en el aceite.', time:'8 min', img:'Olivar en seto', bg:'#D6D9C4' }
+    ];
+    const MO = [
+      ['Ene','Enero','Últimos días de recogida y poda tras la cosecha.','Poda de invierno con la cepa en reposo.','La poda: por qué empieza el año en el campo'],
+      ['Feb','Febrero','Poda y limpieza de restos en las fincas.','Termina la poda; se preparan las espalderas.','La poda: por qué empieza el año en el campo'],
+      ['Mar','Marzo','Abonado y primeros cuidados del suelo.','Lloro y brotación: la viña despierta.','Cuando la viña despierta'],
+      ['Abr','Abril','El olivo forma los racimos florales.','Crecen los brotes y se hacen las esperguras.','Primavera en el olivar'],
+      ['May','Mayo','Floración del olivo: momento delicado.','Floración de la vid.','La flor del olivo, en un mes clave'],
+      ['Jun','Junio','Cuajado: la flor se convierte en fruto.','Cuajado y crecimiento de la uva.','Del cuajado a la aceituna'],
+      ['Jul','Julio','Riego y endurecimiento del hueso.','Envero: la uva cambia de color.','El envero, contado fácil'],
+      ['Ago','Agosto','La aceituna engorda con el calor.','Arranca la vendimia de las variedades tempranas.','Vendimia en Guareña'],
+      ['Sep','Septiembre','Seguimiento de la maduración.','Plena vendimia y recepción en la bodega.','Vendimia en Guareña'],
+      ['Oct','Octubre','Empieza la cosecha temprana: aceite verde e intenso.','Fermentación de los mostos.','Cosecha temprana: qué es y por qué sabe distinto'],
+      ['Nov','Noviembre','Plena campaña: la almazara trabaja día y noche.','Descube y crianza de los vinos.','Así es un día de campaña en la almazara'],
+      ['Dic','Diciembre','Sigue la recogida de las variedades más tardías.','Los vinos reposan en bodega.','Regalar aceite y vino de cooperativa']
+    ];
+    const s = this.state;
+    const posts = P.filter(p => s.c === 'todo' || p.k === s.c);
+    const catBase = 'min-height:52px;padding:0;border:0;background:none;font:500 15px Inter,sans-serif;cursor:pointer;';
+    const mBase = 'min-height:48px;border-radius:10px;font:600 14px Inter,sans-serif;cursor:pointer;';
+    const m = MO[s.m];
+    return {
+      cats: C.map(([id, label]) => ({ label, on: s.c === id ? 'true' : 'false', style: catBase + (s.c === id ? 'color:#F6F5F0;box-shadow:inset 0 -3px 0 #C9A74A' : 'color:#B9BCAF'), pick: () => this.setState({ c: id }) })),
+      catLabel: (C.find(x => x[0] === s.c) || C[0])[1],
+      posts, count: posts.length, empty: posts.length === 0,
+      months: MO.map((x, i) => ({ short: x[0], on: s.m === i ? 'true' : 'false', style: mBase + (s.m === i ? 'background:#F6F5F0;color:#17201A;border:1px solid #F6F5F0' : 'background:transparent;color:#C9CCC0;border:1px solid #4A564E'), pick: () => this.setState({ m: i }) })),
+      mon: { name: m[1], olivar: m[2], vina: m[3], post: m[4] }
+    };
+  }
+}
+</script>
+</body>
+</html>
