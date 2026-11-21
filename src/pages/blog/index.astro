@@ -37,7 +37,7 @@ const ld = {
     <BlogHeader crumbs={[{ label: 'Blog' }]} inline />
 
     <!-- Destacado -->
-    <section class="bf" aria-labelledby="dest">
+    <section class="bf" aria-labelledby="dest" data-filter-hide>
       <div class="wrap bf__g">
         <a href={featured.url} class="bf__img" tabindex="-1" aria-hidden="true">
           <Foto file={featured.data.heroImage} alt="" pos={featured.data.heroPos} crop={1.25} priority height="560px"
@@ -57,7 +57,7 @@ const ld = {
     </section>
 
     <!-- Empieza por aquí -->
-    <section class="sec sec--white" aria-labelledby="emp">
+    <section class="sec sec--white" aria-labelledby="emp" data-filter-hide>
       <div class="wrap stack" style="gap:40px">
         <div class="sec-head" data-reveal>
           <div class="stack" style="gap:14px"><p class="eyebrow" style="margin:0">Guías básicas</p><h2 id="emp" class="h2">Empieza por aquí</h2></div>
@@ -78,17 +78,17 @@ const ld = {
     </section>
 
     <!-- Lo último -->
-    <section class="sec" aria-labelledby="ult">
+    <section class="sec ult" aria-labelledby="ult" data-filter-scroll>
       <div class="wrap stack" style="gap:44px">
         <div class="sec-head">
           <div class="stack" style="gap:14px"><p class="eyebrow" style="margin:0" data-filter-title>Todo el cuaderno</p><h2 id="ult" class="h2">Lo último del cuaderno</h2></div>
           <p class="meta" aria-live="polite" data-filter-count data-unit="artículos">{latest.length} artículos</p>
         </div>
         <div class="grid3" data-filter-grid data-reveal-group>
-          {latest.map((p, i) => <PostCard post={p} transition filter order={i} />)}
+          {rest.map((p, i) => <PostCard post={p} transition filter order={i} extra={i >= BLOG.pageSize} />)}
         </div>
         <p class="empty" data-filter-empty hidden>Pronto publicaremos en esta sección. Mientras tanto, <a href={featured.url}>lee el artículo destacado</a>.</p>
-        <Pagination current={1} total={totalPages} base="/blog/" />
+        <div data-filter-hide><Pagination current={1} total={totalPages} base="/blog/" /></div>
       </div>
     </section>
   </div>
@@ -134,6 +134,8 @@ const ld = {
 </Base>
 
 <style>
+  .bf[hidden], .sec[hidden], [data-filter-hide][hidden] { display: none; }
+  .ult { scroll-margin-top: 24px; }
   .meta { margin: 0; font-size: 13px; color: var(--muted-2); line-height: 1.5; }
   .meta strong { color: var(--ink); }
   .head-note { margin: 0; max-width: 420px; color: var(--muted); line-height: 1.6; }

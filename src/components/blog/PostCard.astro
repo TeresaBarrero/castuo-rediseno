@@ -3,13 +3,13 @@
 // (solo una tarjeta por página puede llevarlo).
 import Foto from '@/components/Foto.astro';
 import { catLabel, type Post } from '@/lib/blog';
-interface Props { post: Post; variant?: 'grid' | 'related' | 'recipe'; transition?: boolean; heading?: 'h2' | 'h3'; filter?: boolean; order?: number }
-const { post: p, variant = 'grid', transition = false, heading: H = 'h3', filter = false, order } = Astro.props;
+interface Props { post: Post; variant?: 'grid' | 'related' | 'recipe'; transition?: boolean; heading?: 'h2' | 'h3'; filter?: boolean; order?: number; extra?: boolean }
+const { post: p, variant = 'grid', transition = false, heading: H = 'h3', filter = false, order, extra = false } = Astro.props;
 const d = p.data;
 const imgH = { grid: '250px', related: '230px', recipe: '340px' }[variant];
 const crop = { grid: 1.56, related: 1.7, recipe: 1.15 }[variant];
 ---
-<article class:list={['pc', `pc--${variant}`]} data-item={filter ? '' : undefined} data-cat={filter ? d.category : undefined} data-order={order} data-reveal>
+<article class:list={['pc', `pc--${variant}`]} data-item={filter ? '' : undefined} data-cat={filter ? d.category : undefined} data-order={order} data-extra={extra ? '' : undefined} hidden={extra} data-reveal>
   <Foto file={d.heroImage} alt="" label="Foto pendiente" pos={d.heroPos} crop={crop} height={imgH}
     sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} class="pc__img" transitionName={transition ? `post-${p.id}` : undefined} />
   {variant !== 'recipe' && <p class="eyebrow pc__e">{catLabel(d.category)}</p>}
