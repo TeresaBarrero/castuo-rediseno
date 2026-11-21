@@ -1,0 +1,31 @@
+---
+// <Cifras>: franja de cifras del artículo. Cada número cuenta desde 0 al entrar en pantalla (motion.ts → counters).
+// El HTML lleva el valor final: sin JS o con reduced-motion se ve la cifra correcta.
+interface Item { valor: number; etiqueta: string; corta?: string; prefijo?: string; sufijo?: string; agrupar?: boolean }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+const fmt = (i: Item) => `${i.prefijo ?? ''}${i.agrupar === false ? String(i.valor) : new Intl.NumberFormat('es-ES', { useGrouping: 'always' } as Intl.NumberFormatOptions).format(i.valor)}${i.sufijo ?? ''}`;
+---
+<dl class="cifras">
+  {items.map((i) => (
+    <div class="cifras__i">
+      <dt class="cifras__l"><span class="d">{i.etiqueta}</span>{i.corta && <span class="m">{i.corta}</span>}</dt>
+      <dd class="cifras__n" data-count={i.valor} data-prefix={i.prefijo} data-suffix={i.sufijo} data-group={i.agrupar === false ? 'false' : undefined}>{fmt(i)}</dd>
+    </div>
+  ))}
+</dl>
+<style>
+  .cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin: 40px 0; padding: 32px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cifras__i { display: flex; flex-direction: column-reverse; gap: 8px; }
+  .cifras__n { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 40px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .cifras__l { font-size: 14px; line-height: 1.4; color: var(--muted); }
+  .m { display: none; }
+  @media (max-width: 960px) { .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 720px) {
+    .cifras { padding: 20px 0; margin: 8px 0 20px; }
+    .cifras__n { font-size: 32px; }
+    .cifras__l { font-size: 13px; line-height: 1.3; }
+    .d:has(+ .m) { display: none; }
+    .m { display: inline; }
+  }
+</style>

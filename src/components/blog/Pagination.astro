@@ -1,0 +1,24 @@
+---
+// Paginación del blog (a partir de BLOG.pageSize artículos). Página 1 = base; las siguientes, base + pagina/N/.
+interface Props { current: number; total: number; base: string }
+const { current, total, base } = Astro.props;
+const href = (n: number) => (n === 1 ? base : `${base}pagina/${n}/`);
+---
+{total > 1 && (
+  <nav class="pag" aria-label="Paginación">
+    {current > 1 ? <a class="btn btn--o" href={href(current - 1)} rel="prev">Anteriores</a> : <span />}
+    <ol role="list" class="pag__n">
+      {Array.from({ length: total }, (_, i) => i + 1).map((n) => (
+        <li>{n === current ? <span aria-current="page">{n}</span> : <a href={href(n)} aria-label={`Página ${n}`}>{n}</a>}</li>
+      ))}
+    </ol>
+    {current < total ? <a class="btn btn--o" href={href(current + 1)} rel="next">Siguientes</a> : <span />}
+  </nav>
+)}
+<style>
+  .pag { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 16px; }
+  .pag__n { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .pag__n a, .pag__n span { display: grid; place-items: center; min-width: 44px; height: 44px; border-radius: var(--radius-pill); font-weight: 600; text-decoration: none; color: var(--ink); }
+  .pag__n a:hover { background: var(--surface); }
+  .pag__n [aria-current] { background: var(--ink); color: var(--on-dark); }
+</style>

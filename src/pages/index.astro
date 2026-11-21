@@ -7,6 +7,7 @@ import Accordion from '@/components/Accordion.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import { getCards } from '@/lib/shop';
 import { getCollection } from 'astro:content';
+import { getPosts, catLabel } from '@/lib/blog';
 import { organization, localBusiness } from '@/lib/schema';
 import { FOTOS } from '@/data/fotos';
 import { fotoSrc } from '@/lib/images';
@@ -25,9 +26,9 @@ const homeFaqs = faqGroups.sort((a, b) => a.data.order - b.data.order).flatMap((
 const order = ['¿Enviáis fuera de la península?', '¿Qué formas de pago aceptáis?', '¿Cómo conservo el aceite una vez abierto?', '¿Hacéis estuches para empresas?'];
 homeFaqs.sort((a, b) => order.indexOf(a.q) - order.indexOf(b.q));
 
-const posts = await getCollection('posts');
-const pick = ['como-elegir-aceite-de-oliva-virgen-extra', 'cosecha-temprana-que-es', 'migas-extremenas-con-aceite'];
-const homePosts = pick.map((id) => posts.find((p) => p.id === id)).filter(Boolean) as typeof posts;
+const posts = await getPosts();
+const pick = ['que-significa-castuo', 'cosecha-temprana-que-es', 'migas-extremenas-con-aceite'];
+const homePosts = pick.map((id) => posts.find((p) => p.id === id)!).filter(Boolean);
 
 const site = Astro.site!;
 const logoUrl = new URL((await getImage({ src: logo, width: 512, format: 'png' })).src, site).href;
@@ -176,13 +177,13 @@ const jsonLd = [organization(site, logoUrl), localBusiness(site, heroUrl)];
     <div class="wrap stack" style="gap:40px">
       <div class="sec-head" data-reveal>
         <div><p class="eyebrow">Del blog</p><h2 id="blog-t" class="h2">Cultura del aceite, recetas y campo</h2></div>
-        <a class="lnk" href="/blog/">Ir al blog</a>
+        <a class="lnk" href="/blog/">Ir al Cuaderno Castúo</a>
       </div>
       <div class="g3" data-reveal-group>
         {homePosts.map((p) => (
           <a href={`/blog/${p.id}/`} class="bcard" data-reveal>
-            <Foto slot={p.id} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="240px" transitionName={`post-${p.id}`} />
-            <p class="cat-label">{p.data.category}</p>
+            <Foto file={p.data.heroImage} alt="" pos={p.data.heroPos} crop={1.6} sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} height="240px" transitionName={`post-${p.id}`} />
+            <p class="cat-label">{catLabel(p.data.category)}</p>
             <h3 class="h3" style="font-size:20px">{p.data.title}</h3>
           </a>
         ))}

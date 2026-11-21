@@ -10,6 +10,10 @@ export default defineConfig({
   site,
   trailingSlash: 'always',
   output: 'static',
+  // Blog antiguo (Blog.dc.html, sustituido por «Cuaderno Castúo»): URL que cambian → nuevas
+  redirects: {
+    '/blog/como-elegir-aceite-de-oliva-virgen-extra/': '/blog/como-leer-la-etiqueta-del-aceite/',
+  },
   integrations: [mdx(), sitemap({ filter: (p) => !/\/(carrito|buscar|legal)\/$/.test(p) })],
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   image: { responsiveStyles: false },

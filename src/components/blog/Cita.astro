@@ -1,0 +1,20 @@
+---
+// <Cita>: cita destacada del artículo. Aparece al hacer scroll (data-reveal; sin movimiento con reduced-motion).
+interface Props { autor: string; obra?: string; anio?: string }
+const { autor, obra, anio } = Astro.props;
+---
+<blockquote class="cita" data-reveal>
+  <p class="cita__t"><slot /></p>
+  <footer class="cita__f">{autor}{obra && <>, <cite>{obra}</cite></>}{anio && <> ({anio})</>}</footer>
+</blockquote>
+<style>
+  .cita { margin: 40px 0; padding: 36px 40px; background: var(--ink); color: var(--on-dark); border-radius: var(--radius-lg); }
+  .cita__t { margin: 0 0 14px !important; font-family: var(--font-display); font-weight: 600; font-size: 34px !important; line-height: 1.2 !important; letter-spacing: -.015em; color: var(--on-dark) !important; }
+  .cita__f { font-size: 15px; color: var(--on-dark-muted); }
+  .cita__f cite { font-style: italic; }
+  @media (max-width: 720px) {
+    .cita { margin: 8px 0 24px; padding: 24px; border-radius: 14px; }
+    .cita__t { font-size: 24px !important; margin-bottom: 10px !important; }
+    .cita__f { font-size: 13px; }
+  }
+</style>

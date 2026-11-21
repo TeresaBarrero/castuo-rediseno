@@ -1,0 +1,43 @@
+---
+// Newsletter del blog «La carta castúa». Formulario ficticio: valida, confirma y no envía nada (forms.ts).
+import NewsletterForm from '@/components/NewsletterForm.astro';
+interface Props { id: string; variant?: 'box' | 'band'; heading?: 'h2' | 'p' }
+const { id, variant = 'box', heading = 'h2' } = Astro.props;
+const H = heading;
+---
+<section id="nl" class:list={['carta', `carta--${variant}`]} aria-labelledby={`${id}-t`}>
+  <div class="wrap">
+    <div class="carta__in" data-reveal>
+      <div class="carta__txt">
+        <p class="eyebrow" style="margin:0">Newsletter</p>
+        <H id={`${id}-t`} class="carta__t">La carta castúa</H>
+        <p class="carta__d">{variant === 'box' ? 'Una vez al mes: lo que pasa en el campo, una receta y avisos de campaña antes que nadie.' : 'Una vez al mes: campo, recetas y avisos de campaña.'}</p>
+      </div>
+      <div class="carta__form">
+        <NewsletterForm id={id} light />
+        <p class="carta__small">Sin spam. Puedes darte de baja cuando quieras.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .carta { padding: 104px 0; scroll-margin-top: 24px; }
+  .carta__in { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: center; }
+  .carta--box .carta__in { background: var(--olive-tint); border-radius: 20px; padding: 56px; }
+  .carta--band .carta__in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; }
+  .carta--band .carta__txt { max-width: 560px; }
+  .carta__txt { display: flex; flex-direction: column; gap: 14px; }
+  .carta__t { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.08; letter-spacing: -.02em; }
+  .carta--band .carta__t { font-size: 40px; }
+  .carta__d { margin: 0; color: var(--body-2); line-height: 1.6; font-size: 17px; }
+  .carta__form { display: flex; flex-direction: column; gap: 12px; }
+  .carta__small { margin: 0; font-size: 13px; color: var(--muted); }
+  .carta :global(.nl label) { color: var(--ink); font-weight: 500; font-size: 14px; }
+  @media (max-width: 960px) {
+    .carta { padding: 64px 0; }
+    .carta__in { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .carta--box .carta__in, .carta--band .carta__in { padding: 24px; background: var(--olive-tint); border-radius: var(--radius-lg); }
+    .carta--band .carta__t, .carta__t { font-size: 26px; }
+    .carta__d { font-size: 15px; }
+  }
+</style>

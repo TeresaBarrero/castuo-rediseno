@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 
 const BASE = process.env.BASE || 'http://localhost:4321';
-const routes = (process.argv[2] || '/,/tienda/,/producto/aceite-de-oliva-virgen-extra/,/cooperativa/,/fincas/,/calidad-y-premios/,/visitas-almazara-guarena/,/blog/,/blog/cosecha-temprana-que-es/,/preguntas-frecuentes/,/socios/,/contacto/').split(',');
+const routes = (process.argv[2] || '/,/tienda/,/producto/aceite-de-oliva-virgen-extra/,/cooperativa/,/fincas/,/calidad-y-premios/,/visitas-almazara-guarena/,/blog/,/blog/que-significa-castuo/,/preguntas-frecuentes/,/socios/,/contacto/').split(',');
 await fs.mkdir('lighthouse', { recursive: true });
 const chrome = await chromeLauncher.launch({ chromePath: chromium.executablePath(), chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu'] });
 const rows = [];

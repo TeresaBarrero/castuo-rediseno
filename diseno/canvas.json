@@ -1,38 +1,351 @@
-{"v":3,"createdOnFiles":{"v":1,"at":"2026-11-19T23:10:00Z"},"title":"Castuo · Rediseño web","launch":{"view":"canvas"},"pages":[],
-"boards":{
-"Main.dc.html":{"x":0,"y":0,"w":1440,"h":7700,"title":"Inicio","expand":"fill","is_interactive":true},
-"Tienda.dc.html":{"x":1520,"y":0,"w":1440,"h":3500,"title":"Tienda / categoría","expand":"fill","is_interactive":true},
-"Producto.dc.html":{"x":3040,"y":0,"w":1440,"h":3500,"title":"Ficha de producto","expand":"fill","is_interactive":true},
-"Movil.dc.html":{"x":4560,"y":0,"w":390,"h":3200,"title":"Inicio · móvil"},
-"Cooperativa.dc.html":{"x":0,"y":8800,"w":1440,"h":3600,"title":"Cooperativa / Historia","expand":"fill","is_interactive":true},
-"Fincas.dc.html":{"x":1520,"y":8800,"w":1440,"h":3000,"title":"Nuestras fincas","expand":"fill","is_interactive":true},
-"Calidad.dc.html":{"x":3040,"y":8800,"w":1440,"h":3200,"title":"Calidad y premios (nueva)","expand":"fill","is_interactive":true},
-"Visitas.dc.html":{"x":0,"y":13800,"w":1440,"h":3400,"title":"Visitas y oleoturismo (nueva)","expand":"fill","is_interactive":true},
-"Blog.dc.html":{"x":1520,"y":13800,"w":1440,"h":3200,"title":"Blog y recetas (nueva)","expand":"fill","is_interactive":true},
-"FAQ.dc.html":{"x":3040,"y":13800,"w":1440,"h":2900,"title":"Preguntas frecuentes (nueva)","expand":"fill","is_interactive":true},
-"Socios.dc.html":{"x":4560,"y":13800,"w":1440,"h":2500,"title":"Área de socios (nueva)","expand":"fill","is_interactive":true},
-"Header.dc.html":{"x":0,"y":18600,"w":1440,"h":140,"title":"Componente · Cabecera","is_interactive":true},
-"Footer.dc.html":{"x":1520,"y":18600,"w":1440,"h":780,"title":"Componente · Pie"}
+{
+"v": 3,
+"createdOnFiles": {
+"v": 1,
+"at": "2026-11-19T23:10:00Z"
 },
-"order":["Main.dc.html","Header.dc.html","Footer.dc.html","Tienda.dc.html","Producto.dc.html","Movil.dc.html","Cooperativa.dc.html","Fincas.dc.html","Calidad.dc.html","Visitas.dc.html","Blog.dc.html","FAQ.dc.html","Socios.dc.html"],
-"notes":{
-"t1":{"x":0,"y":-1080,"text":"1 · Páginas principales y tienda","kind":"title1","maxW":4950},
-"t2":{"x":0,"y":7720,"text":"2 · Cooperativa, fincas y calidad","kind":"title1","maxW":4400},
-"t3":{"x":0,"y":12720,"text":"3 · Nuevas secciones para posicionamiento","kind":"title1","maxW":6000},
-"t4":{"x":0,"y":17520,"text":"4 · Componentes compartidos","kind":"title1","maxW":2960},
-"arq":{"x":-680,"y":-900,"w":600,"size":"s","fill":"blue","text":"ARQUITECTURA SEO PROPUESTA\n\n/ (Inicio)\n/tienda/\n  /aceite-de-oliva-virgen-extra/\n  /vinos/ (tinto, blanco, semidulce)\n  /estuches-regalo/\n/cooperativa/ (historia, producción, valores, servicios)\n/fincas/ (+ 6 subpáginas)\n/calidad-y-premios/  ← NUEVA\n/visitas-almazara-guarena/  ← NUEVA\n/blog/ (cultura AOVE, recetas, vino, noticias)  ← NUEVA\n/preguntas-frecuentes/  ← NUEVA\n/socios/ (ATRIA, descargas, balances)  ← NUEVA\n/contacto/\n\nSe elimina el menú duplicado VINOS (vive dentro de Tienda). Galería pasa a Cooperativa y Noticias al Blog. Redirecciones 301 de todas las URL antiguas."},
-"dir":{"x":-680,"y":0,"w":600,"size":"s","fill":"green","text":"DIRECCIÓN DE ARTE · \"Campo contemporáneo\"\n\nFondo piedra #F6F5F0 · Tinta #17201A · Oliva #3F5B2E · Granate vino #7A1F2B · Oro (solo sobre oscuro) #C9A74A\nTitulares: Bricolage Grotesque 600 · Texto: Inter\nFotografía real, luz natural, mucho aire. Sin degradados ni adornos.\n\nSe MANTIENE el logo actual (hueco reservado en cabecera y pie)."},
-"pend":{"x":-680,"y":900,"w":600,"size":"s","fill":"orange","text":"PENDIENTE DEL CLIENTE (marcado [ENTRE CORCHETES] en los diseños)\n\n· Logo en SVG\n· Fotos: olivar aéreo, almazara, bodega, producto en bodegón\n· Variedades de aceituna y uva, hectáreas por finca\n· Categoría exacta del premio Extrema Selección 2025\n· Ficha técnica de cada aceite (acidez, campaña, cata)\n· Precios y horarios de visitas\n· Perfiles reales de redes sociales (hoy enlazan a vacío)\n· Revisar cifra \"50 años\": fundada en 1965 → 61 años"},
-"s-main":{"x":0,"y":-900,"w":520,"size":"s","fill":"blue","text":"SEO · INICIO\nTitle (≤60): Aceite de oliva virgen extra y vino de Extremadura | Castuo\nMeta: Cooperativa del Campo San Pedro en Guareña (Badajoz) desde 1965. Compra AOVE, vinos y estuches regalo directamente del productor.\nH1 único en el hero.\nSchema: Organization + LocalBusiness (NAP, horario, geo) + WebSite/SearchAction.\nArreglar: meta description ausente, varios H1, alt vacíos, banner de cookies con {title}, noticias de 2014."},
-"s-tienda":{"x":1520,"y":-900,"w":520,"size":"s","fill":"blue","text":"SEO · TIENDA / CATEGORÍA\nTitle: Comprar aceite de oliva virgen extra online | Castuo\nMeta: AOVE de cooperativa en garrafas de 2, 3 y 5 L y botella de 500 ml. Envío a península.\nTexto SEO de 300+ palabras bajo el listado.\nSchema: BreadcrumbList + ItemList.\nFiltros con parámetros noindex / canonical a la categoría."},
-"s-prod":{"x":3040,"y":-900,"w":520,"size":"s","fill":"blue","text":"SEO · FICHA DE PRODUCTO\nTitle: AOVE Castuo caja 3 × 5 L | Cooperativa Guareña\nSchema: Product + Offer (precio, IVA, disponibilidad) + AggregateRating cuando haya opiniones reales + FAQPage.\nUna URL por producto; formatos como variaciones.\nNo destacar productos agotados en portada."},
-"s-movil":{"x":4560,"y":-900,"w":440,"size":"s","fill":"blue","text":"MÓVIL (mobile-first)\nGoogle indexa la versión móvil.\nObjetivo Core Web Vitals: LCP < 2,5 s (hero en WebP/AVIF, precargado), CLS < 0,1, INP < 200 ms.\nBotones ≥ 44 px, carrito siempre accesible."},
-"s-coop":{"x":0,"y":7900,"w":520,"size":"s","fill":"blue","text":"SEO · COOPERATIVA\nTitle: Cooperativa del Campo San Pedro, Guareña · Historia desde 1965\nRefuerza E-E-A-T: historia, socios, municipios, certificaciones.\nSchema: Organization (foundingDate 1965, areaServed)."},
-"s-fincas":{"x":1520,"y":7900,"w":520,"size":"s","fill":"blue","text":"SEO · FINCAS\nTitle: Olivar, viñedo y almendro en Guareña | Fincas Castuo\nCada sistema (tradicional, intensivo, superintensivo, vaso, espaldera, almendro) mantiene su propia URL con contenido ampliado y enlazado desde aquí."},
-"s-cal":{"x":3040,"y":7900,"w":520,"size":"s","fill":"blue","text":"SEO · CALIDAD Y PREMIOS (nueva)\nTitle: Calidad, premios y certificaciones ISO | Castuo\nCaptura búsquedas de marca + \"premio\" y aporta confianza a la tienda. Enlazar desde fichas de producto.\nSchema: Organization.award."},
-"s-vis":{"x":0,"y":12900,"w":520,"size":"s","fill":"blue","text":"SEO · VISITAS (nueva)\nTitle: Visitas a almazara en Guareña (Badajoz) · Cata de AOVE | Castuo\nSEO local + oleoturismo: \"visitar almazara Badajoz\", \"cata aceite Extremadura\".\nSchema: TouristAttraction / Event + LocalBusiness. Vincular a Google Business Profile."},
-"s-blog":{"x":1520,"y":12900,"w":520,"size":"s","fill":"blue","text":"SEO · BLOG (nueva)\nTitle: Blog de aceite de oliva, recetas y campo | Castuo\nCaptura búsquedas informativas (\"cómo conservar el aceite\", \"qué es cosecha temprana\") y enlaza a productos.\n2 artículos/mes. Schema: Article / Recipe + autor real."},
-"s-faq":{"x":3040,"y":12900,"w":520,"size":"s","fill":"blue","text":"SEO · PREGUNTAS FRECUENTES (nueva)\nTitle: Preguntas frecuentes: envíos, aceite y vino | Castuo\nSchema FAQPage. Respuestas cortas y directas (aptas para fragmentos destacados y respuestas de IA)."},
-"s-soc":{"x":4560,"y":12900,"w":520,"size":"s","fill":"blue","text":"SEO · ÁREA DE SOCIOS (nueva)\nAgrupa Boletines A.T.R.I.A, Descargas, Balances y Servicios. Los documentos privados con noindex; los boletines públicos indexables (búsquedas agrícolas locales)."}
+"title": "Castuo · Rediseño web",
+"launch": {
+"view": "canvas"
 },
-"designSystems":[]}
+"pages": [],
+"boards": {
+"Main.dc.html": {
+"x": 0,
+"y": 0,
+"w": 1440,
+"h": 7700,
+"title": "Inicio",
+"expand": "fill",
+"is_interactive": true
+},
+"Tienda.dc.html": {
+"x": 1520,
+"y": 0,
+"w": 1440,
+"h": 3500,
+"title": "Tienda / categoría",
+"expand": "fill",
+"is_interactive": true
+},
+"Producto.dc.html": {
+"x": 3040,
+"y": 0,
+"w": 1440,
+"h": 3500,
+"title": "Ficha de producto",
+"expand": "fill",
+"is_interactive": true
+},
+"Movil.dc.html": {
+"x": 4560,
+"y": 0,
+"w": 390,
+"h": 3200,
+"title": "Inicio · móvil"
+},
+"Cooperativa.dc.html": {
+"x": 0,
+"y": 8800,
+"w": 1440,
+"h": 3600,
+"title": "Cooperativa / Historia",
+"expand": "fill",
+"is_interactive": true
+},
+"Fincas.dc.html": {
+"x": 1520,
+"y": 8800,
+"w": 1440,
+"h": 3000,
+"title": "Nuestras fincas",
+"expand": "fill",
+"is_interactive": true
+},
+"Calidad.dc.html": {
+"x": 3040,
+"y": 8800,
+"w": 1440,
+"h": 3200,
+"title": "Calidad y premios (nueva)",
+"expand": "fill",
+"is_interactive": true
+},
+"Visitas.dc.html": {
+"x": 0,
+"y": 13800,
+"w": 1440,
+"h": 3400,
+"title": "Visitas y oleoturismo (nueva)",
+"expand": "fill",
+"is_interactive": true
+},
+"Blog.dc.html": {
+"x": 1520,
+"y": 13800,
+"w": 1440,
+"h": 3200,
+"title": "Blog v1 (sustituido por Cuaderno Castúo ↓)",
+"expand": "fill",
+"is_interactive": true
+},
+"FAQ.dc.html": {
+"x": 3040,
+"y": 13800,
+"w": 1440,
+"h": 2900,
+"title": "Preguntas frecuentes (nueva)",
+"expand": "fill",
+"is_interactive": true
+},
+"Socios.dc.html": {
+"x": 4560,
+"y": 13800,
+"w": 1440,
+"h": 2500,
+"title": "Área de socios (nueva)",
+"expand": "fill",
+"is_interactive": true
+},
+"Header.dc.html": {
+"x": 0,
+"y": 18600,
+"w": 1440,
+"h": 140,
+"title": "Componente · Cabecera",
+"is_interactive": true
+},
+"Footer.dc.html": {
+"x": 1520,
+"y": 18600,
+"w": 1440,
+"h": 780,
+"title": "Componente · Pie"
+},
+"BlogPortada.dc.html": {
+"x": 0,
+"y": 20700,
+"w": 1440,
+"h": 5600,
+"title": "Cuaderno Castúo · Portada del blog",
+"expand": "fill",
+"is_interactive": true
+},
+"BlogArticulo.dc.html": {
+"x": 1520,
+"y": 20700,
+"w": 1440,
+"h": 6600,
+"title": "Cuaderno Castúo · Artículo",
+"expand": "fill",
+"is_interactive": true
+},
+"BlogArticuloMovil.dc.html": {
+"x": 3040,
+"y": 20700,
+"w": 390,
+"h": 3100,
+"title": "Artículo · móvil"
+}
+},
+"order": [
+"Main.dc.html",
+"Header.dc.html",
+"Footer.dc.html",
+"Tienda.dc.html",
+"Producto.dc.html",
+"Movil.dc.html",
+"Cooperativa.dc.html",
+"Fincas.dc.html",
+"Calidad.dc.html",
+"Visitas.dc.html",
+"Blog.dc.html",
+"FAQ.dc.html",
+"Socios.dc.html",
+"BlogPortada.dc.html",
+"BlogArticulo.dc.html",
+"BlogArticuloMovil.dc.html"
+],
+"notes": {
+"t1": {
+"x": 0,
+"y": -1080,
+"text": "1 · Páginas principales y tienda",
+"kind": "title1",
+"maxW": 4950
+},
+"t2": {
+"x": 0,
+"y": 7720,
+"text": "2 · Cooperativa, fincas y calidad",
+"kind": "title1",
+"maxW": 4400
+},
+"t3": {
+"x": 0,
+"y": 12720,
+"text": "3 · Nuevas secciones para posicionamiento",
+"kind": "title1",
+"maxW": 6000
+},
+"t4": {
+"x": 0,
+"y": 17520,
+"text": "4 · Componentes compartidos",
+"kind": "title1",
+"maxW": 2960
+},
+"arq": {
+"x": -680,
+"y": -900,
+"w": 600,
+"size": "s",
+"fill": "blue",
+"text": "ARQUITECTURA SEO PROPUESTA\n\n/ (Inicio)\n/tienda/\n  /aceite-de-oliva-virgen-extra/\n  /vinos/ (tinto, blanco, semidulce)\n  /estuches-regalo/\n/cooperativa/ (historia, producción, valores, servicios)\n/fincas/ (+ 6 subpáginas)\n/calidad-y-premios/  ← NUEVA\n/visitas-almazara-guarena/  ← NUEVA\n/blog/ (cultura AOVE, recetas, vino, noticias)  ← NUEVA\n/preguntas-frecuentes/  ← NUEVA\n/socios/ (ATRIA, descargas, balances)  ← NUEVA\n/contacto/\n\nSe elimina el menú duplicado VINOS (vive dentro de Tienda). Galería pasa a Cooperativa y Noticias al Blog. Redirecciones 301 de todas las URL antiguas."
+},
+"dir": {
+"x": -680,
+"y": 0,
+"w": 600,
+"size": "s",
+"fill": "green",
+"text": "DIRECCIÓN DE ARTE · \"Campo contemporáneo\"\n\nFondo piedra #F6F5F0 · Tinta #17201A · Oliva #3F5B2E · Granate vino #7A1F2B · Oro (solo sobre oscuro) #C9A74A\nTitulares: Bricolage Grotesque 600 · Texto: Inter\nFotografía real, luz natural, mucho aire. Sin degradados ni adornos.\n\nSe MANTIENE el logo actual (hueco reservado en cabecera y pie)."
+},
+"pend": {
+"x": -680,
+"y": 900,
+"w": 600,
+"size": "s",
+"fill": "orange",
+"text": "PENDIENTE DEL CLIENTE (marcado [ENTRE CORCHETES] en los diseños)\n\n· Logo en SVG\n· Fotos: olivar aéreo, almazara, bodega, producto en bodegón\n· Variedades de aceituna y uva, hectáreas por finca\n· Categoría exacta del premio Extrema Selección 2025\n· Ficha técnica de cada aceite (acidez, campaña, cata)\n· Precios y horarios de visitas\n· Perfiles reales de redes sociales (hoy enlazan a vacío)\n· Revisar cifra \"50 años\": fundada en 1965 → 61 años"
+},
+"s-main": {
+"x": 0,
+"y": -900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · INICIO\nTitle (≤60): Aceite de oliva virgen extra y vino de Extremadura | Castuo\nMeta: Cooperativa del Campo San Pedro en Guareña (Badajoz) desde 1965. Compra AOVE, vinos y estuches regalo directamente del productor.\nH1 único en el hero.\nSchema: Organization + LocalBusiness (NAP, horario, geo) + WebSite/SearchAction.\nArreglar: meta description ausente, varios H1, alt vacíos, banner de cookies con {title}, noticias de 2014."
+},
+"s-tienda": {
+"x": 1520,
+"y": -900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · TIENDA / CATEGORÍA\nTitle: Comprar aceite de oliva virgen extra online | Castuo\nMeta: AOVE de cooperativa en garrafas de 2, 3 y 5 L y botella de 500 ml. Envío a península.\nTexto SEO de 300+ palabras bajo el listado.\nSchema: BreadcrumbList + ItemList.\nFiltros con parámetros noindex / canonical a la categoría."
+},
+"s-prod": {
+"x": 3040,
+"y": -900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · FICHA DE PRODUCTO\nTitle: AOVE Castuo caja 3 × 5 L | Cooperativa Guareña\nSchema: Product + Offer (precio, IVA, disponibilidad) + AggregateRating cuando haya opiniones reales + FAQPage.\nUna URL por producto; formatos como variaciones.\nNo destacar productos agotados en portada."
+},
+"s-movil": {
+"x": 4560,
+"y": -900,
+"w": 440,
+"size": "s",
+"fill": "blue",
+"text": "MÓVIL (mobile-first)\nGoogle indexa la versión móvil.\nObjetivo Core Web Vitals: LCP < 2,5 s (hero en WebP/AVIF, precargado), CLS < 0,1, INP < 200 ms.\nBotones ≥ 44 px, carrito siempre accesible."
+},
+"s-coop": {
+"x": 0,
+"y": 7900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · COOPERATIVA\nTitle: Cooperativa del Campo San Pedro, Guareña · Historia desde 1965\nRefuerza E-E-A-T: historia, socios, municipios, certificaciones.\nSchema: Organization (foundingDate 1965, areaServed)."
+},
+"s-fincas": {
+"x": 1520,
+"y": 7900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · FINCAS\nTitle: Olivar, viñedo y almendro en Guareña | Fincas Castuo\nCada sistema (tradicional, intensivo, superintensivo, vaso, espaldera, almendro) mantiene su propia URL con contenido ampliado y enlazado desde aquí."
+},
+"s-cal": {
+"x": 3040,
+"y": 7900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · CALIDAD Y PREMIOS (nueva)\nTitle: Calidad, premios y certificaciones ISO | Castuo\nCaptura búsquedas de marca + \"premio\" y aporta confianza a la tienda. Enlazar desde fichas de producto.\nSchema: Organization.award."
+},
+"s-vis": {
+"x": 0,
+"y": 12900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · VISITAS (nueva)\nTitle: Visitas a almazara en Guareña (Badajoz) · Cata de AOVE | Castuo\nSEO local + oleoturismo: \"visitar almazara Badajoz\", \"cata aceite Extremadura\".\nSchema: TouristAttraction / Event + LocalBusiness. Vincular a Google Business Profile."
+},
+"s-blog": {
+"x": 1520,
+"y": 12900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · BLOG (nueva)\nTitle: Blog de aceite de oliva, recetas y campo | Castuo\nCaptura búsquedas informativas (\"cómo conservar el aceite\", \"qué es cosecha temprana\") y enlaza a productos.\n2 artículos/mes. Schema: Article / Recipe + autor real."
+},
+"s-faq": {
+"x": 3040,
+"y": 12900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · PREGUNTAS FRECUENTES (nueva)\nTitle: Preguntas frecuentes: envíos, aceite y vino | Castuo\nSchema FAQPage. Respuestas cortas y directas (aptas para fragmentos destacados y respuestas de IA)."
+},
+"s-soc": {
+"x": 4560,
+"y": 12900,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · ÁREA DE SOCIOS (nueva)\nAgrupa Boletines A.T.R.I.A, Descargas, Balances y Servicios. Los documentos privados con noindex; los boletines públicos indexables (búsquedas agrícolas locales)."
+},
+"t5": {
+"x": 0,
+"y": 19620,
+"text": "5 · Blog: Cuaderno Castúo",
+"kind": "title1",
+"maxW": 4100
+},
+"s-bp": {
+"x": 0,
+"y": 19800,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · PORTADA DEL BLOG\nURL: /blog/\nTitle: Cuaderno Castúo · Blog de aceite, vino y campo extremeño\nMeta: Historias del campo de Guareña, guías para elegir y conservar aceite de oliva virgen extra y recetas extremeñas, contadas por la Cooperativa del Campo San Pedro.\nCategorías con URL propia: /blog/del-campo/, /blog/en-la-cocina/, /blog/aceite/, /blog/vino/, /blog/la-cooperativa/, /blog/noticias/\nSchema: Blog + BreadcrumbList. Paginación con rel canonical."
+},
+"s-ba": {
+"x": 1520,
+"y": 19800,
+"w": 520,
+"size": "s",
+"fill": "blue",
+"text": "SEO · ARTÍCULO\nURL: /blog/que-significa-castuo/\nTitle: Qué significa castúo · Origen de la palabra | Castuo\nMeta: «Castúo» nació en 1921 con Luis Chamizo, poeta de Guareña, para nombrar a los campesinos que trabajan su tierra. Te contamos su historia y la de nuestra cooperativa.\nPalabras clave: qué significa castúo, castúo extremeño, Luis Chamizo, cooperativa Guareña.\nSchema: BlogPosting (autor, fecha, imagen) + FAQPage + BreadcrumbList.\nEnlaces internos: Calidad, Visitas, 2 productos, 3 artículos."
+},
+"mej": {
+"x": 3520,
+"y": 20700,
+"w": 620,
+"size": "s",
+"fill": "green",
+"text": "QUÉ MEJORA RESPECTO A LA PROPUESTA ORIGINAL\n\nDiseño\n· El blog tiene nombre propio: «Cuaderno Castúo».\n· Un solo H1 por página (había dos titulares grandes).\n· Texto en columna de 720 px y 19 px (antes, texto blanco pequeño en negrita sobre verde: cansa leer).\n· Índice, cita destacada, cifras, producto integrado, FAQ, autor y relacionados.\n· «Noticias» eran accesos a secciones, no noticias: ahora son categorías reales.\n· Se conserva el verde oscuro y las fotos con lettering de la propuesta.\n\nContenido\n· El post de bienvenida pasa a responder una búsqueda real: «qué significa castúo».\n· Se usan datos verificables (Chamizo, 1921, 1965, 137 → +1.100 socios) en lugar de frases genéricas («mucho más que un nombre», «productos gourmet»).\n· Se corrige el relato: la cooperativa no «surge para dar visibilidad a pequeños productores», nace en 1965 para vender uva de mesa.\n· Se evita «artesanal», que no casa con 4,5 M de litros y olivar superintensivo."
+},
+"cal": {
+"x": 3520,
+"y": 21720,
+"w": 620,
+"size": "s",
+"fill": "orange",
+"text": "CALENDARIO EDITORIAL · PRIMEROS 3 MESES (2 artículos/mes)\n\n1. Qué significa «castúo» (publicado)\n2. Cosecha temprana: qué es y por qué sabe distinto · kw «aceite cosecha temprana»\n3. Cómo leer la etiqueta de un AOVE · kw «cómo elegir aceite de oliva virgen extra»\n4. Así es un día de campaña en la almazara · kw «almazara cómo funciona»\n5. Migas extremeñas paso a paso (Recipe) · kw «migas extremeñas receta»\n6. Cómo conservar el aceite en casa · kw «cómo conservar aceite de oliva»\n\nCada artículo: 1 enlace a producto, 1 a página de la web y 2 a otros artículos."
+}
+},
+"designSystems": []
+}

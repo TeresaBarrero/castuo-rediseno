@@ -43,8 +43,8 @@ const lbItems = [...mainImgs.filter((m) => !useSelect || m.key === cur.key), ...
 
 const related = d.related.map((id) => all.find((x) => x.id === id)).filter(Boolean).map((x) => cardsFor(x!)[x!.data.listing === 'perFormat' ? Math.max(0, x!.data.formats.findIndex((f) => f.key === (x!.data.defaultFormat ?? ''))) : 0]);
 const relPost = d.wine
-  ? { href: '/blog/vino-semidulce-cuando-servirlo/', t: 'Blog · Vino semidulce: cuándo servirlo y con qué', slot: 'vino-semidulce-cuando-servirlo' }
-  : { href: '/blog/como-conservar-el-aceite-en-casa/', t: 'Blog · Cómo conservar el aceite en casa', slot: 'como-conservar-el-aceite-en-casa' };
+  ? { href: '/blog/vino-semidulce-cuando-servirlo/', t: 'Blog · Vino semidulce: cuándo servirlo y con qué', file: '2022-12-img_0331.jpg' }
+  : { href: '/blog/como-conservar-el-aceite-en-casa/', t: 'Blog · Cómo conservar el aceite en casa', file: '2021-02-aceite-el-castuo-0.75-l-1.jpg' };
 
 // JSON-LD Product + Offer (sin AggregateRating: no hay opiniones reales)
 const imgUrls = await Promise.all([...new Set([cur.img, ...d.gallery])].slice(0, 4).map(async (f) => { const s = fotoSrc(f); return s ? new URL((await getImage({ src: s, width: 1000, format: 'jpg' })).src, site).href : null; }));
@@ -199,7 +199,7 @@ const priceRange = multi && useSelect ? `${eur(Math.min(...prices))} – ${eur(M
       <div class="g4 m2 rel-grid" data-reveal-group>
         {related.map((c) => <ProductCard card={c} variant="home" sizes="(max-width: 960px) 50vw, 290px" height="240px" />)}
         <a href={relPost.href} class="relpost" data-reveal>
-          <Foto slot={relPost.slot} crop={1.2} sizes="(max-width: 960px) 50vw, 290px" widths={[300, 450, 600]} height="240px" />
+          <Foto file={relPost.file} alt="" crop={1.2} sizes="(max-width: 960px) 50vw, 290px" widths={[300, 450, 600]} height="240px" />
           <span class="relpost__t">{relPost.t}</span><span class="relpost__l">Leer artículo</span>
         </a>
       </div>

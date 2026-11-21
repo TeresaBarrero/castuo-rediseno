@@ -41,17 +41,7 @@ export const FOTOS = {
   visitaOlivar: { file: '2021-03-olivar-intensivo.jpg', alt: 'Hileras de olivos en una finca de socios', pos: '50% 100%' },
   visitaGrupos: { file: '2015-07-cooperativa-de-san-pedro-127.jpg', alt: 'Grupo de socios entre los depósitos de acero de la cooperativa', pos: '50% 50%' },
 
-  // Blog
-  'como-elegir-aceite-de-oliva-virgen-extra': { file: '2025-04-5-imagen-de-whatsapp-2025-04-04-a-las-11.36.25_5211cb80.jpg', alt: 'Garrafas y botellas de AOVE El Castúo en una estantería bajo los trofeos Extrema Selección', pos: '50% 85%' },
-  'como-conservar-el-aceite-en-casa': { file: '2021-02-aceite-el-castuo-0.75-l-1.jpg', alt: 'Botella de cristal oscuro de AOVE El Castúo de 750 ml', pos: '50% 50%' },
-  'cosecha-temprana-que-es': { file: '2025-05-premios-extrema-seleccion-aove-2025-7.jpg', alt: 'Medalla de Oro Extrema Selección 2025 junto a una botella de AOVE ante los depósitos', pos: '50% 50%' },
-  // Fotos externas con licencia CC BY 4.0 (Wikimedia Commons): llevan crédito visible en el artículo y en /legal/
-  'migas-extremenas-con-aceite': { file: 'commons-migas-de-pastor-maestrazgo.jpg', alt: 'Migas de pastor con pimentón doradas en la sartén', pos: '50% 50%',
-    credit: { author: 'Juan Emilio Prades Bel', title: 'Migas de Pastor, Maestrazgo', source: 'https://commons.wikimedia.org/wiki/File:Migas_de_Pastor,_Maestrazgo.jpg', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/' } },
-  'tostadas-con-aove': { file: 'commons-pan-tostado-tomate-aceite-sal.jpg', alt: 'Rebanadas de pan tostado con tomate, aceite de oliva y sal', pos: '50% 50%',
-    credit: { author: 'Juan Emilio Prades Bel', title: 'Pan tostado con tomate de colgar, aceite de oliva y sal', source: 'https://commons.wikimedia.org/wiki/File:Pan_tostado_con_tomate_de_colgar,_aceite_de_oliva_y_sal.jpg', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/' } },
-  'vino-semidulce-cuando-servirlo': { file: '2022-12-img_0331.jpg', alt: 'Botella de vino semidulce El Castúo apoyada en su estuche', pos: '50% 50%' },
-  'jornada-de-campana-en-la-almazara': { file: '2014-11-foto-aerea.jpg', alt: 'Vista aérea de las instalaciones de la almazara en Guareña', pos: '50% 50%' },
+  // Blog: la foto de cada artículo está en su frontmatter (heroImage, heroAlt, heroCredit)
 } satisfies Record<string, Slot>;
 
 export type FotoKey = keyof typeof FOTOS;

@@ -1,0 +1,22 @@
+---
+// Páginas 2+ de cada categoría (solo se generan si la categoría supera BLOG.pageSize artículos).
+import Listing from '@/components/blog/Listing.astro';
+import { BLOG, CATEGORIES, CAT_IDS, catUrl, getPosts } from '@/lib/blog';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const featured = posts.find((p) => p.data.featured) ?? posts[0];
+  return CAT_IDS.flatMap((c) => {
+    const list = posts.filter((p) => p.data.category === c);
+    const total = Math.ceil(list.length / BLOG.pageSize);
+    return Array.from({ length: Math.max(0, total - 1) }, (_, i) => i + 2).map((page) => ({
+      params: { slug: c, page: String(page) },
+      props: { cat: c, page, total, posts: list.slice((page - 1) * BLOG.pageSize, page * BLOG.pageSize), featuredUrl: featured.url },
+    }));
+  });
+}
+const { cat, page, total, posts, featuredUrl } = Astro.props;
+const C = CATEGORIES[cat];
+---
+<Listing title={C.title.replace(' | ', ` · Página ${page} | `)} description={`${C.description} Página ${page}.`} h1={C.label}
+  eyebrow={BLOG.name} intro={C.intro} crumbs={[{ label: 'Blog', href: '/blog/' }, { label: C.label, href: catUrl(cat) }, { label: `Página ${page}` }]}
+  active={cat} posts={posts} page={page} totalPages={total} base={catUrl(cat)} featuredUrl={featuredUrl} />

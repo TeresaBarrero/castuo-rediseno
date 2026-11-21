@@ -1,0 +1,15 @@
+---
+// <Figura>: foto dentro del artículo con pie. `src={null}` deja el hueco reservado (bloque --placeholder) y se anota en PENDIENTE.md.
+import Foto from '@/components/Foto.astro';
+interface Props { src: string | null; alt: string; pie?: string; etiqueta?: string; pos?: string }
+const { src, alt, pie, etiqueta, pos } = Astro.props;
+---
+<figure class="fig">
+  <Foto file={src} alt={alt} label={etiqueta} pos={pos} crop={1.7} sizes="(max-width: 760px) 100vw, 720px" widths={[400, 720, 1080, 1440]} class="fig__img" />
+  {pie && <figcaption>{pie}</figcaption>}
+</figure>
+<style>
+  .fig { margin: 40px 0; }
+  .fig :global(.fig__img) { aspect-ratio: 12 / 7; border-radius: var(--radius-md); }
+  .fig figcaption { margin-top: 12px; font-size: 14px; line-height: 1.5; color: var(--muted-2); }
+</style>

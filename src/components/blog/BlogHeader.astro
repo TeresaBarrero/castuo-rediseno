@@ -1,0 +1,103 @@
+---
+// Cabecera editorial del blog: migas, eyebrow dorado, título gigante (entra por líneas con máscara),
+// buscador (índice JSON generado en build, panel de resultados accesible) y pestañas de categoría.
+// Las pestañas son enlaces reales a /blog/[categoria]/; en la portada, con JS, filtran sin recargar (filters.ts).
+import Breadcrumbs, { type Crumb } from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import { BLOG, CAT_IDS, CATEGORIES, catUrl, type CatId } from '@/lib/blog';
+interface Props { title?: string; eyebrow?: string; intro?: string; crumbs: Crumb[]; active?: CatId | 'todo'; inline?: boolean }
+const { title, eyebrow = 'El blog de la Cooperativa del Campo San Pedro', intro = BLOG.tagline, crumbs, active = 'todo', inline = false } = Astro.props;
+// «Cuaderno Castúo» entra palabra a palabra (una por línea); en las categorías el título entra como un solo bloque
+const lines = title ? [title] : BLOG.name.split(' ');
+const tabs = [{ id: 'todo', label: 'Todo', href: '/blog/' }, ...CAT_IDS.map((c) => ({ id: c, label: CATEGORIES[c].label, href: catUrl(c) }))];
+---
+<section class="bh dark">
+  <div class="wrap bh__in">
+    <Breadcrumbs items={crumbs} class="bh__crumbs" />
+    <div class="bh__row">
+      <div class="bh__txt">
+        <p class="eyebrow bh__e">{eyebrow}</p>
+        <h1 class:list={['bh__t', { 'bh__t--sm': !!title }]}>{lines.map((l, i) => <span class="bh__l"><span class="bh__li" style={`--i:${i}`}>{l}</span>{i < lines.length - 1 && ' '}</span>)}</h1>
+        <p class="bh__lead">{intro}</p>
+      </div>
+      <div class="bh__search" data-blog-search>
+        <form role="search" action="/buscar/" method="get" class="bs">
+          <label for="bq" class="bs__lbl">Buscar en el blog</label>
+          <div class="bs__box">
+            <input id="bq" name="q" type="search" placeholder="Migas, cosecha temprana…" autocomplete="off" aria-controls="bq-panel" aria-describedby="bq-status" data-bs-input />
+            <button type="submit" class="bs__btn" aria-label="Buscar"><Icon name="search" size={16} width={2.2} /></button>
+          </div>
+        </form>
+        <div id="bq-panel" class="bs__panel" role="region" aria-label="Resultados de la búsqueda en el blog" hidden data-bs-panel>
+          <p id="bq-status" class="bs__status" role="status" aria-live="polite" data-bs-status></p>
+          <ul class="bs__res" role="list" data-bs-results></ul>
+        </div>
+      </div>
+    </div>
+    <nav class="bh__tabs" aria-label="Secciones del blog">
+      <ul role="list">
+        {tabs.map((t) => (
+          <li><a href={t.href} class="bh__tab" data-filter-cat={inline ? t.id : undefined} data-title={t.id === 'todo' ? 'Todo el cuaderno' : t.label} aria-current={t.id === active ? 'page' : undefined}>{t.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<style>
+  .bh { padding: 72px 0 0; }
+  .bh__in { display: flex; flex-direction: column; gap: 28px; }
+  .bh :global(.bh__crumbs) { color: var(--on-dark-muted-2); }
+  .bh :global(.bh__crumbs a) { color: var(--on-dark-2); }
+  .bh :global(.bh__crumbs li + li::before) { color: var(--on-dark-muted-2); }
+  .bh__row { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .bh__txt { display: flex; flex-direction: column; gap: 18px; max-width: 820px; }
+  .bh__e { margin: 0; }
+  .bh__t { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(56px, 8vw, 120px); line-height: .95; letter-spacing: -.035em; }
+  .bh__t--sm { font-size: clamp(48px, 6.4vw, 96px); }
+  .bh__l { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+  .bh__li { display: inline-block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .bh__li { animation: bh-line 1s var(--ease-out) both; animation-delay: calc(var(--i) * 110ms + 60ms); }
+  }
+  @keyframes bh-line { from { transform: translateY(105%); } to { transform: none; } }
+  .bh__lead { margin: 0; font-size: 20px; line-height: 1.55; color: var(--on-dark-muted); max-width: 640px; }
+
+  .bh__search { position: relative; width: 320px; max-width: 100%; }
+  .bs { display: flex; flex-direction: column; gap: 6px; }
+  .bs__lbl { font-size: 13px; color: var(--on-dark-muted-2); }
+  .bs__box { display: flex; align-items: center; gap: 8px; height: 50px; padding: 0 7px 0 18px; border-radius: var(--radius-pill); border: 1px solid var(--dark-line-2); background: var(--dark-input); }
+  .bs__box:focus-within { border-color: var(--gold); }
+  .bs input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--on-dark); font: 15px var(--font-body); height: 100%; }
+  .bs input::placeholder { color: #9EA295; }
+  .bs input:focus-visible { outline: none; }
+  .bs input::-webkit-search-cancel-button { filter: invert(1); }
+  .bs__btn { width: 36px; height: 36px; flex: none; border: 0; border-radius: 50%; background: var(--on-dark); color: var(--ink); display: grid; place-items: center; }
+  .bs__btn:hover { background: var(--gold); }
+  .bs__panel { position: absolute; z-index: 20; top: calc(100% + 8px); right: 0; width: min(420px, calc(100vw - 2 * var(--gutter))); max-height: min(60vh, 480px); overflow: auto; padding: 8px 20px 12px; background: var(--surface); color: var(--ink); border-radius: var(--radius-md); box-shadow: 0 18px 40px rgba(0, 0, 0, .28); }
+  .bs__panel[hidden] { display: none; }
+  .bs__status { margin: 10px 0 4px; font-size: 13px; color: var(--muted-2); }
+  .bs__res { margin: 0; padding: 0; list-style: none; }
+  .bs__res :global(a) { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 600; line-height: 1.3; }
+  .bs__res :global(a:hover), .bs__res :global(a:focus-visible) { color: var(--olive); }
+  .bs__res :global(small) { color: var(--olive); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .bs__res :global(mark) { background: #F3E9C4; color: inherit; border-radius: 2px; }
+
+  .bh__tabs { margin-top: 24px; border-top: 1px solid var(--dark-line); }
+  .bh__tabs ul { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 0; padding: 0; list-style: none; }
+  .bh__tab { display: inline-flex; align-items: center; min-height: 52px; font: 500 15px var(--font-body); color: var(--on-dark-muted-2); text-decoration: none; box-shadow: inset 0 0 0 transparent; transition: color .2s, box-shadow .3s var(--ease); }
+  .bh__tab:hover { color: var(--on-dark); }
+  .bh__tab[aria-current='page'] { color: var(--on-dark); box-shadow: inset 0 -3px 0 var(--gold); }
+
+  @media (max-width: 720px) {
+    .bh { padding-top: 40px; }
+    .bh__in { gap: 22px; }
+    .bh__lead { font-size: 17px; }
+    .bh__search { width: 100%; }
+    .bs__panel { left: 0; right: auto; width: 100%; }
+    .bh__tabs { margin-top: 8px; margin-inline: calc(var(--gutter) * -1); }
+    .bh__tabs ul { flex-wrap: nowrap; overflow-x: auto; gap: 24px; padding-inline: var(--gutter); scrollbar-width: none; }
+    .bh__tabs ul::-webkit-scrollbar { display: none; }
+    .bh__tab { white-space: nowrap; }
+  }
+</style>

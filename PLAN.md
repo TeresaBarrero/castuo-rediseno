@@ -12,6 +12,7 @@ Pieza de porfolio. No sustituye a la web oficial (https://castuo.es). `noindex`,
 6. **SEO**: titles/descriptions, JSON-LD, migas, OG 1200×630, sitemap, canónicas ✔
 7. **Verificación**: build, enlaces, 35 pruebas de interacción, Lighthouse, capturas 390/1440 (+768/1024) ✔
 8. **README** + caso de estudio + `PENDIENTE.md` ✔
+9. **Blog «Cuaderno Castúo»** (`PROMPT-BLOG.md`, diseños `BlogPortada`, `BlogArticulo` y `BlogArticuloMovil`): sustituye al blog de `Blog.dc.html` ✔
 
 ## Decisiones ante ambigüedades del diseño
 
@@ -44,3 +45,17 @@ Pieza de porfolio. No sustituye a la web oficial (https://castuo.es). `noindex`,
 - **Sin iframe de Google Maps**: un mapa ilustrativo en SVG enlaza a Google Maps (sin cookies de terceros ni peso extra).
 - **Socios**: el formulario avisa de que es una demostración y pide no introducir credenciales reales; los boletines y descargas enlazan a castuo.es.
 - **Rendimiento**: CSS incrustado en el HTML, AVIF con `<img>` WebP, recorte en servidor al formato visible (`crop`), fuentes de reserva con `size-adjust` medido y la foto del hero con animación solo CSS para no retrasar el LCP.
+
+## Blog «Cuaderno Castúo»: decisiones
+
+- **Sustituye al blog anterior** (`Blog.dc.html`): se rehace `/blog/` y la única URL de artículo que cambia (`/blog/como-elegir-aceite-de-oliva-virgen-extra/`, reescrito como «Cómo leer la etiqueta…») redirige a la nueva (`redirects` de Astro).
+- **Artículos**: los 6 del calendario (`cal` en `canvas.json`) más «Tres tostadas para el desayuno» y «Vino semidulce», que ya existían y aparecen en el diseño de la portada; se adaptan al nuevo esquema y reglas de enlazado (1 producto, 1 página y 2 artículos como mínimo). El «Bizcocho de aceite y vino» y los artículos de premios u olivar en seto del diseño no se escriben: no hay datos ni fotos.
+- **`/blog/[slug]/` comparte nivel** entre artículos y categorías: un solo `[slug].astro` genera ambos tipos y falla el build si un artículo usara el slug de una categoría.
+- **Pestañas**: enlaces reales a `/blog/[categoria]/` (indexables); en la portada filtran sin recargar con FLIP y sincronizan `?categoria=` (el mismo `filters.ts` de la Tienda).
+- **Tiempo de lectura**: calculado del cuerpo MDX + receta + preguntas (200 palabras/min), no escrito a mano. Por eso el artículo 1 marca 3 min, y no los 6 del diseño.
+- **Índice**: se genera desde los H2 (`render().headings`); el frontmatter `toc` guarda las etiquetas cortas del diseño («Una palabra de Guareña»…).
+- **Barra inferior en móvil**: «Ver en la tienda · precio» en lugar de «Probar El Castúo», para que valga para cualquier producto; el nombre completo va en texto oculto para lectores de pantalla.
+- **Etiquetas**: enlazan a `/blog/?q=etiqueta`, que abre el buscador del blog con esa búsqueda (no hay páginas de etiqueta).
+- **«El año en el campo»**: el HTML trae marcado el mes del build y el navegador abre el mes actual. Los meses sin artículo publicado muestran «Próximamente», sin enlace.
+- **Paginación** a partir de 9 artículos (`/blog/pagina/N/` y `/blog/[categoria]/pagina/N/`). Con 22 artículos se generan `/blog/pagina/2/` y `/blog/pagina/3/`.
+- **Contenido de relleno** (petición del 21/11/2026): artículos divulgativos con información general; las dos noticias, que narran hechos inventados, llevan `example: true` y un aviso visible. Las fotos salen de las galerías de castuo.es (Extrema Selección 2025 y 50 aniversario), descartando las de personas reconocibles para las noticias inventadas.

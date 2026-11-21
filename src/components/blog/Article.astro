@@ -1,0 +1,293 @@
+---
+// Plantilla de artículo (diseños BlogArticulo.dc.html y BlogArticuloMovil.dc.html · SEO: nota s-ba).
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Foto from '@/components/Foto.astro';
+import Icon from '@/components/Icon.astro';
+import Accordion from '@/components/Accordion.astro';
+import PostCard from '@/components/blog/PostCard.astro';
+import CartaCastua from '@/components/blog/CartaCastua.astro';
+import Cita from '@/components/blog/Cita.astro';
+import Cifras from '@/components/blog/Cifras.astro';
+import Figura from '@/components/blog/Figura.astro';
+import ProductoInline from '@/components/blog/ProductoInline.astro';
+import Receta from '@/components/blog/Receta.astro';
+import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { fotoSrc } from '@/lib/images';
+import { orgId } from '@/lib/schema';
+import { BLOG, catLabel, catUrl, fmtDate, isoDate, productCards, related, type Post } from '@/lib/blog';
+
+interface Props { post: Post; all: Post[] }
+const { post, all } = Astro.props;
+const d = post.data;
+const { Content, headings } = await render(post);
+const h2s = headings.filter((h) => h.depth === 2).map((h, i) => ({ id: h.slug, label: d.toc?.[i] ?? h.text }));
+const site = Astro.site!;
+const url = new URL(post.url, site).href;
+const src = fotoSrc(d.heroImage);
+const img = src ? new URL((await getImage({ src, width: 1200, format: 'jpg' })).src, site).href : undefined;
+const pub = isoDate(d.pubDate);
+const mod = isoDate(d.updatedDate ?? d.pubDate);
+const cards = await productCards(d.relatedProducts);
+const main = cards[0];
+const more = related(post, all, 3);
+const strip = (s: string) => s.replace(/<[^>]+>/g, '');
+
+const author = { '@type': 'Organization', name: BLOG.author, url: new URL('/cooperativa/', site).href };
+const ld: object[] = [{
+  '@context': 'https://schema.org', '@type': 'BlogPosting', '@id': `${url}#post`,
+  headline: d.title, description: d.description, image: img ? [img] : undefined,
+  datePublished: pub, dateModified: mod, author, publisher: { '@id': orgId(site) },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url }, isPartOf: { '@id': new URL('/blog/#blog', site).href },
+  articleSection: catLabel(d.category), keywords: d.tags.join(', ') || undefined, wordCount: post.words, inLanguage: 'es-ES',
+}];
+if (d.faqs?.length) {
+  ld.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: strip(f.a) } })) });
+}
+if (d.recipe) {
+  const r = d.recipe;
+  ld.push({
+    '@context': 'https://schema.org', '@type': 'Recipe', name: d.title, description: d.description, image: img ? [img] : undefined,
+    author, datePublished: pub, prepTime: r.prepTime, cookTime: r.cookTime, totalTime: r.totalTime,
+    recipeYield: `${r.servings} ${r.servingsLabel}`, recipeCategory: r.recipeCategory, recipeCuisine: r.cuisine,
+    recipeIngredient: r.ingredients, recipeInstructions: r.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, text: s })),
+    keywords: d.tags.join(', ') || undefined,
+  });
+}
+const shareText = encodeURIComponent(`${d.title} ${url}`);
+---
+<Base title={d.seoTitle ?? `${d.title} | Castuo`} description={d.description} active="blog" og={`blog-${post.id}`} ogType="article" jsonLd={ld} footerNewsletter={false}>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={pub} />
+    <meta property="article:modified_time" content={mod} />
+    <meta property="article:section" content={catLabel(d.category)} />
+    {d.tags.map((t) => <meta property="article:tag" content={t} />)}
+    <link rel="alternate" type="application/rss+xml" title={`${BLOG.name} (RSS)`} href="/blog/rss.xml" />
+  </Fragment>
+
+  <div class="rprog" aria-hidden="true" data-rprog><span></span></div>
+
+  <article class="art">
+    <header class="wrap art__h">
+      <Breadcrumbs items={[{ label: 'Blog', href: '/blog/' }, { label: catLabel(d.category), href: catUrl(d.category) }, { label: d.title }]} class="art__crumbs" />
+      <p class="eyebrow art__e"><a href={catUrl(d.category)}>{catLabel(d.category)}</a>{d.subcategory && ` · ${d.subcategory}`}</p>
+      <h1 class="art__t">{d.title}</h1>
+      <p class="art__lead">{d.lead}</p>
+      {d.example && <p class="demo"><strong>Contenido de ejemplo.</strong> Esta noticia se ha escrito para mostrar el diseño del blog: no describe un hecho real de la Cooperativa del Campo San Pedro.</p>}
+      <div class="art__by">
+        <div class="art__au">
+          <span class="av" aria-hidden="true">C</span>
+          <p class="meta"><strong>{BLOG.author}</strong><br />
+            <time datetime={pub}>{fmtDate(d.pubDate)}</time>{d.updatedDate && <> · actualizado el <time datetime={mod}>{fmtDate(d.updatedDate)}</time></>} · {post.readingTime} min de lectura</p>
+        </div>
+        <div class="share" role="group" aria-label="Compartir">
+          <a class="share__b" href={`https://wa.me/?text=${shareText}`} target="_blank" rel="noopener" aria-label="Compartir en WhatsApp (se abre en otra pestaña)"><Icon name="whatsapp" size={18} /></a>
+          <a class="share__b" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} target="_blank" rel="noopener" aria-label="Compartir en Facebook (se abre en otra pestaña)"><Icon name="facebook" size={18} /></a>
+          <button type="button" class="share__b" data-copy-link aria-label="Copiar enlace"><Icon name="link" size={18} /></button>
+          <button type="button" class="share__b" data-share hidden aria-label="Compartir con otras aplicaciones"><Icon name="share" size={18} /></button>
+        </div>
+      </div>
+    </header>
+
+    <figure class="wrap art__fig">
+      <Foto file={d.heroImage} alt={d.heroAlt} label="Foto pendiente" pos={d.heroPos} crop={1.9} priority height="620px" class="art__img"
+        sizes="(max-width: 1240px) 100vw, 1176px" widths={[480, 800, 1200, 1600]} transitionName={`post-${post.id}`} />
+      {(d.heroCaption || d.heroCredit) && (
+        <figcaption>
+          {d.heroCaption}
+          {d.heroCredit && <> Foto: «{d.heroCredit.title}», de {d.heroCredit.author}, en <a href={d.heroCredit.source} rel="noopener">Wikimedia Commons</a> · <a href={d.heroCredit.licenseUrl} rel="noopener license">{d.heroCredit.license}</a>, recortada.</>}
+        </figcaption>
+      )}
+    </figure>
+
+    <div class="wrap art__lay">
+      <aside class="toc" aria-label="En este artículo">
+        <nav class="toc__nav" aria-labelledby="toc-t" data-toc>
+          <p id="toc-t" class="eyebrow toc__e">En este artículo</p>
+          <ol role="list">
+            {h2s.map((h) => <li><a href={`#${h.id}`} data-toc-link={h.id}>{h.label}</a></li>)}
+          </ol>
+        </nav>
+        {main && (
+          <div class="tprod">
+            <p class="tprod__q">¿Quieres probarlo?</p>
+            <Foto file={main.img} alt="" fit="contain" sizes="220px" widths={[220, 440]} height="120px" class="tprod__img" />
+            <p class="tprod__n">{main.name} · {main.priceLabel}</p>
+            <a href={main.href} class="btn btn--block tprod__b" aria-label={`Ver en la tienda: ${main.name}`}>Ver en la tienda</a>
+          </div>
+        )}
+      </aside>
+
+      <div class="art__body">
+        <details class="tocm">
+          <summary>En este artículo ({h2s.length})</summary>
+          <ol>{h2s.map((h) => <li><a href={`#${h.id}`}>{h.label}</a></li>)}</ol>
+        </details>
+
+        <div class="prose"><Content components={{ Cita, Cifras, Figura, ProductoInline, Receta }} /></div>
+
+        {d.faqs && d.faqs.length > 0 && (
+          <section class="faqa" aria-labelledby="faqa-t">
+            <h2 id="faqa-t" class="faqa__t">Preguntas rápidas</h2>
+            <Accordion items={d.faqs} id="faqa" />
+          </section>
+        )}
+
+        {d.tags.length > 0 && (
+          <ul class="tags" role="list" aria-label="Etiquetas">
+            {d.tags.map((t) => <li><a href={`/blog/?q=${encodeURIComponent(t)}`}>{t}</a></li>)}
+          </ul>
+        )}
+
+        <div class="abox">
+          <span class="av av--lg" aria-hidden="true">C</span>
+          <div class="stack" style="gap:6px">
+            <p class="abox__t">Escrito por el equipo de la cooperativa</p>
+            <p class="abox__d">Técnicos, socios y personal de la Cooperativa del Campo San Pedro, en Guareña (Badajoz). <a href="/cooperativa/">Conoce la cooperativa</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <section class="sec sec--white rel" aria-labelledby="rel-t">
+    <div class="wrap stack" style="gap:36px">
+      <div class="sec-head"><h2 id="rel-t" class="h2 h2--sm">Sigue leyendo</h2><a href={catUrl(d.category)} class="lnk">Más de {catLabel(d.category).toLowerCase()}</a></div>
+      <div class="rel__g" data-reveal-group>
+        {more.map((p) => <PostCard post={p} variant="related" transition />)}
+      </div>
+    </div>
+  </section>
+
+  <CartaCastua id="nl-art" variant="band" />
+
+  {main && (
+    <div class="abar" data-abar>
+      <button type="button" class="abar__s" data-share-any aria-label="Compartir"><Icon name="share" size={18} /></button>
+      <a href={main.href} class="btn abar__p"><span class="sr-only">{main.name}: </span>Ver en la tienda · {main.priceLabel}</a>
+    </div>
+  )}
+  <p class="toast" role="status" aria-live="polite" data-toast></p>
+</Base>
+
+<style>
+  /* Barra de progreso de lectura: CSS scroll-driven si existe; si no (o con reduced-motion), JS fija --p */
+  .rprog { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 95; background: var(--line); pointer-events: none; }
+  .rprog span { display: block; height: 100%; background: var(--olive); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* En dos reglas: si van juntas, el minificador las funde en el shorthand `animation` y Chrome lo descarta */
+      .rprog span { animation: rprog linear both; }
+      .rprog > span { animation-timeline: scroll(root); }
+    }
+  }
+  @keyframes rprog { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .meta { margin: 0; font-size: 14px; color: var(--muted-2); line-height: 1.5; }
+  .meta strong { color: var(--ink); }
+  .av { width: 44px; height: 44px; flex: none; border-radius: 50%; background: var(--olive); color: var(--on-dark); display: grid; place-items: center; font-weight: 600; }
+  .av--lg { width: 64px; height: 64px; font-family: var(--font-display); font-size: 24px; }
+
+  .art__h { padding-top: 56px; padding-bottom: 48px; display: flex; flex-direction: column; gap: 24px; max-width: 1040px; margin-left: max(calc((100% - var(--container)) / 2), 0px); }
+  .art :global(.art__crumbs li:last-child) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .art__e { margin: 0; }
+  .art__e a { color: inherit; text-decoration: none; }
+  .art__e a:hover { color: var(--ink); }
+  .art__t { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(34px, 5.4vw, 76px); line-height: 1.02; letter-spacing: -.03em; }
+  .art__lead { margin: 0; font-size: 22px; line-height: 1.55; color: var(--muted); max-width: 860px; }
+  .demo { margin: 0; max-width: 860px; padding: 14px 18px; border-radius: var(--radius-md); background: #F3E9C4; color: var(--ink); font-size: 15px; line-height: 1.5; }
+  .art__by { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .art__au { display: flex; align-items: center; gap: 12px; }
+  .share { display: flex; gap: 8px; }
+  .share__b { width: 44px; height: 44px; border: 1px solid var(--line-strong); border-radius: 50%; background: none; color: var(--ink); display: grid; place-items: center; transition: background-color .2s, border-color .2s; }
+  .share__b:hover { background: var(--surface); border-color: var(--ink); color: var(--ink); }
+  .share__b[hidden] { display: none; }
+
+  .art__fig { margin-bottom: 72px; }
+  .art :global(.art__img) { border-radius: 14px; }
+  .art__fig figcaption { margin-top: 12px; font-size: 14px; line-height: 1.5; color: var(--muted-2); }
+  .art__fig figcaption a { color: var(--muted-2); }
+
+  .art__lay { display: flex; flex-wrap: wrap; gap: 72px; align-items: flex-start; padding-bottom: 104px; }
+  .toc { flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 32px; }
+  .toc__e { margin: 0 0 12px; }
+  .toc ol { margin: 0; padding: 0; list-style: none; }
+  .toc__nav a { display: block; padding: 10px 0 10px 16px; font-size: 15px; line-height: 1.35; color: var(--muted-2); text-decoration: none; box-shadow: inset 1px 0 0 var(--line); transition: color .2s, box-shadow .3s var(--ease); }
+  .toc__nav a:hover { color: var(--ink); }
+  .toc__nav a[aria-current='true'] { color: var(--ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--olive); }
+  .tprod { background: var(--surface); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .tprod__q { margin: 0; font-weight: 600; font-size: 15px; }
+  .tprod :global(.tprod__img) { border-radius: var(--radius-sm); background: var(--olive-tint); }
+  .tprod__n { margin: 0; font-size: 14px; color: var(--muted); }
+  .tprod__b { min-height: 44px; font-size: 14px; }
+
+  .art__body { flex: 999 1 560px; min-width: 0; max-width: 720px; }
+  .tocm { display: none; }
+
+  .prose { font-size: 19px; line-height: 1.75; color: #2B3029; }
+  .prose :global(h2) { font-family: var(--font-display); font-weight: 600; font-size: 34px; line-height: 1.12; letter-spacing: -.02em; color: var(--ink); margin: 64px 0 20px; scroll-margin-top: 24px; }
+  .prose :global(h3) { font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1.2; color: var(--ink); margin: 40px 0 12px; }
+  .prose :global(p) { margin: 0 0 24px; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 24px; padding-left: 22px; }
+  .prose :global(li) { margin-bottom: 10px; padding-left: 4px; }
+  .prose :global(li::marker) { color: var(--olive); font-weight: 600; }
+  .prose :global(a) { color: var(--olive); font-weight: 500; text-decoration-thickness: 1.5px; }
+  .prose :global(a:hover) { color: var(--ink); }
+  .prose :global(strong) { color: var(--ink); }
+  /* Primer párrafo: más grande y con letra capital */
+  .prose > :global(p:first-child) { font-size: 21px; line-height: 1.7; color: var(--ink); }
+  .prose > :global(p:first-child::first-letter) { float: left; font-family: var(--font-display); font-weight: 700; font-size: 84px; line-height: .82; margin: 8px 12px 0 0; color: var(--olive); }
+
+  .faqa { margin-top: 64px; padding: 36px; background: var(--surface); border-radius: var(--radius-lg); }
+  .faqa__t { margin: 0 0 8px; font-family: var(--font-display); font-weight: 600; font-size: 28px; }
+  .faqa :global(.acc__item:last-child) { border-bottom: 0; }
+  .tags { margin: 40px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); color: var(--ink); text-decoration: none; font-size: 14px; }
+  .tags a:hover { border-color: var(--ink); background: var(--surface); }
+  .abox { margin-top: 40px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); display: flex; gap: 20px; align-items: flex-start; }
+  .abox__t { margin: 0; font-weight: 600; }
+  .abox__d { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+  .rel { padding-block: 96px; }
+  .rel__g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+
+  .abar { display: none; }
+  .toast { position: fixed; left: 50%; bottom: calc(var(--banner-h) + 96px); z-index: 96; transform: translateX(-50%); padding: 12px 18px; border-radius: var(--radius-pill); background: var(--ink); color: var(--on-dark); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); }
+  .toast:empty { display: none; }
+
+  @media (max-width: 960px) {
+    .art__lay { gap: 0; padding-bottom: 64px; }
+    .toc { display: none; }
+    .tocm { display: block; margin: 0 0 12px; background: var(--surface); border-radius: var(--radius-md); padding: 0 18px; }
+    .tocm summary { min-height: 52px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
+    .tocm ol { margin: 0 0 16px; padding-left: 20px; line-height: 2; font-size: 15px; }
+    .tocm a { color: var(--ink); }
+    .prose { font-size: 17px; line-height: 1.7; }
+    .prose :global(h2) { font-size: 26px; line-height: 1.15; margin: 40px 0 14px; }
+    .prose > :global(p:first-child) { font-size: 18px; }
+    .prose > :global(p:first-child::first-letter) { font-size: 64px; margin: 6px 10px 0 0; }
+    .rel__g { display: flex; gap: 12px; overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding: 0 var(--gutter) 8px; scroll-padding-inline: var(--gutter); scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .rel__g > :global(*) { flex: 0 0 240px; scroll-snap-align: start; }
+    .rel { padding-block: 56px; }
+    .abar { display: flex; gap: 10px; position: fixed; left: 0; right: 0; bottom: var(--banner-h); z-index: 89; padding: 12px 16px; background: var(--bg); border-top: 1px solid var(--line); }
+    .abar__s { width: 48px; height: 48px; flex: none; border: 1px solid var(--line-strong); border-radius: 50%; background: none; color: var(--ink); display: grid; place-items: center; }
+    .abar__p { flex: 1; min-height: 48px; }
+    :global(body:has(.abar) .fa) { bottom: calc(var(--banner-h) + 84px); }
+    :global(body:has(.abar) .ft__credit) { padding-bottom: calc(var(--banner-h) + 96px); }
+  }
+  @media (max-width: 720px) {
+    .art__h { padding-top: 24px; padding-bottom: 28px; gap: 16px; }
+    .art__lead { font-size: 17px; }
+    .demo { margin: 0; max-width: 860px; padding: 14px 18px; border-radius: var(--radius-md); background: #F3E9C4; color: var(--ink); font-size: 15px; line-height: 1.5; }
+  .art__by { padding-top: 0; border-top: 0; }
+    .av { width: 36px; height: 36px; font-size: 14px; }
+    .meta { font-size: 13px; }
+    .share { display: none; }
+    .art__fig { padding-inline: 0; margin-bottom: 24px; }
+    .art :global(.art__img) { height: 300px !important; border-radius: 0; }
+    .art__fig figcaption { padding-inline: var(--gutter); }
+    .faqa { padding: 24px 20px; margin-top: 40px; }
+    .abox { padding: 20px; }
+  }
+</style>

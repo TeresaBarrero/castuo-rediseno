@@ -59,7 +59,9 @@ const style = [ratio && `aspect-ratio:${ratio}`, height && `height:${height}`, b
   .is-parallax :global(img) { transform: scale(1.1); will-change: transform; }
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .is-parallax :global(img) { animation: px linear both; animation-timeline: view(); }
+      /* En dos reglas: el minificador fundiría animation-timeline en el shorthand y Chrome lo descartaría */
+      .is-parallax :global(img) { animation: px linear both; }
+      .is-parallax > :global(picture img), .is-parallax > :global(img) { animation-timeline: view(); }
     }
   }
   @keyframes px { from { transform: translate3d(0, -20px, 0) scale(1.1); } to { transform: translate3d(0, 20px, 0) scale(1.1); } }

@@ -27,7 +27,9 @@ const products = JSON.parse(await fs.readFile('src/content/products.json', 'utf8
 const posts = (await fs.readdir('src/content/posts')).map((f) => f.replace('.mdx', ''));
 const fotosTs = await fs.readFile('src/data/fotos.ts', 'utf8');
 const slotFile = (k) => fotosTs.match(new RegExp(`'?${k}'?: \\{ file: '([^']+)'`))?.[1] ?? null;
-const titleOf = async (id) => (await fs.readFile(`src/content/posts/${id}.mdx`, 'utf8')).match(/title: "([^"]+)"/)[1];
+const fmOf = async (id) => (await fs.readFile(`src/content/posts/${id}.mdx`, 'utf8'));
+const titleOf = async (id) => (await fmOf(id)).match(/title: "([^"]+)"/)[1];
+const heroOf = async (id) => (await fmOf(id)).match(/heroImage: "([^"]+)"/)?.[1] ?? null;
 
 const items = [
   ['default', 'Cooperativa del Campo San Pedro', 'Aceite de oliva virgen extra y vino de Extremadura, directos del campo.', slotFile('heroInicio')],
@@ -40,14 +42,15 @@ const items = [
   ['fincas', 'Nuestras fincas', 'Olivar, viñedo y almendro en Guareña', slotFile('fincaVinedo')],
   ['calidad', 'Calidad y premios', 'Premios Extrema Selección 2025 · ISO 9001 · ISO 14001', slotFile('premioCalidad')],
   ['visitas', 'Visitas y oleoturismo', 'Visitas a la almazara y fincas en Guareña', slotFile('heroVisitas')],
-  ['blog', 'Blog', 'Cultura del aceite, recetas y vida en el campo', slotFile('como-elegir-aceite-de-oliva-virgen-extra')],
+  ['blog', 'Blog · Cuaderno Castúo', 'Aceite, vino, recetas y vida de campo, desde Guareña', await heroOf('que-significa-castuo')],
   ['faq', 'Preguntas frecuentes', 'Envíos, pagos, aceite y vino', slotFile('heroInicio')],
   ['socios', 'Área de socios', 'Boletines A.T.R.I.A, descargas y balances', slotFile('galInstalaciones')],
   ['contacto', 'Contacto', 'Calle Don Benito, 13 · 06470 Guareña (Badajoz)', slotFile('heroCooperativa')],
   ...products.map((p) => [`producto-${p.id}`, p.catLabel, p.name, p.formats.find((f) => f.key === p.defaultFormat)?.img ?? p.formats[0].img, true]),
-  ...(await Promise.all(posts.map(async (id) => [`blog-${id}`, 'Blog', await titleOf(id), slotFile(id)]))),
+  ...(await Promise.all(posts.map(async (id) => [`blog-${id}`, 'Cuaderno Castúo', await titleOf(id), await heroOf(id)]))),
 ];
 
+const ONLY = process.argv.includes('--blog') ? (n) => n === 'blog' || n.startsWith('blog-') : () => true;
 const html = (eyebrow, title, img, product) => `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:B;src:url(${bric})}@font-face{font-family:I;src:url(${inter})}
 *{margin:0;box-sizing:border-box}body{width:1200px;height:630px;background:#F6F5F0;font-family:I;color:#17201A;display:flex;overflow:hidden}
@@ -62,7 +65,7 @@ h1{font-family:B;font-weight:600;font-size:${title.length > 60 ? 50 : 60}px;line
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-for (const [name, eyebrow, title, file, product] of items) {
+for (const [name, eyebrow, title, file, product] of items.filter(([n]) => ONLY(n))) {
   const img = file ? await b64(file, product ? 800 : 700, product ? 1000 : 630) : null;
   await page.setContent(html(eyebrow, title, img, product), { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);

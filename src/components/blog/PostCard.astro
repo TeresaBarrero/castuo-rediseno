@@ -1,0 +1,57 @@
+---
+// Tarjeta de artículo. `transition` activa el transition:name compartido con la foto principal del artículo
+// (solo una tarjeta por página puede llevarlo).
+import Foto from '@/components/Foto.astro';
+import { catLabel, type Post } from '@/lib/blog';
+interface Props { post: Post; variant?: 'grid' | 'related' | 'recipe'; transition?: boolean; heading?: 'h2' | 'h3'; filter?: boolean; order?: number }
+const { post: p, variant = 'grid', transition = false, heading: H = 'h3', filter = false, order } = Astro.props;
+const d = p.data;
+const imgH = { grid: '250px', related: '230px', recipe: '340px' }[variant];
+const crop = { grid: 1.56, related: 1.7, recipe: 1.15 }[variant];
+---
+<article class:list={['pc', `pc--${variant}`]} data-item={filter ? '' : undefined} data-cat={filter ? d.category : undefined} data-order={order} data-reveal>
+  <Foto file={d.heroImage} alt="" label="Foto pendiente" pos={d.heroPos} crop={crop} height={imgH}
+    sizes="(max-width: 960px) 100vw, 390px" widths={[400, 600, 800]} class="pc__img" transitionName={transition ? `post-${p.id}` : undefined} />
+  {variant !== 'recipe' && <p class="eyebrow pc__e">{catLabel(d.category)}</p>}
+  <H class="pc__t"><a href={p.url} class="pc__a">{d.title}</a></H>
+  {variant === 'grid' && <p class="pc__d">{d.excerpt}</p>}
+  {variant === 'grid' && <p class="pc__m">{d.example && 'Ejemplo · '}{d.recipe ? `Receta · ${d.recipe.time}` : `${p.readingTime} min de lectura`}</p>}
+  {variant === 'recipe' && d.recipe && (
+    <ul class="pc__pills" role="list">
+      <li><span class="sr-only">Tiempo: </span>{d.recipe.time}</li>
+      <li><span class="sr-only">Dificultad: </span>{d.recipe.difficulty}</li>
+      <li>{d.recipe.servings} {d.recipe.servingsLabel}</li>
+    </ul>
+  )}
+</article>
+<style>
+  .pc { position: relative; display: flex; flex-direction: column; gap: 12px; color: var(--ink); }
+  .pc[hidden] { display: none; }
+  .pc--recipe { gap: 14px; }
+  .pc :global(.pc__img) { border-radius: var(--radius-sm); order: -1; }
+  .pc :global(.pc__img img) { transition: transform .9s var(--ease); }
+  .pc:hover :global(.pc__img img) { transform: scale(1.04); }
+  .pc__e { margin: 0; }
+  .pc__t { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 23px; line-height: 1.2; letter-spacing: -.01em; }
+  .pc--related .pc__t { font-size: 22px; }
+  /* Toda la tarjeta es clicable sin anidar enlaces */
+  .pc__a { color: inherit; text-decoration: none; }
+  .pc__a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .pc__a:focus-visible { outline: none; }
+  .pc:has(.pc__a:focus-visible) { outline: 2px solid var(--olive); outline-offset: 6px; border-radius: 4px; }
+  .pc:hover .pc__t { color: var(--olive); }
+  .pc__d { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; }
+  .pc__m { margin: 0; font-size: 13px; color: var(--muted-2); }
+  .pc__pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .pc__pills li { padding: 6px 12px; border-radius: var(--radius-pill); background: var(--surface); }
+  @media (max-width: 960px) {
+    .pc--recipe :global(.pc__img) { height: 260px !important; }
+  }
+  @media (max-width: 720px) {
+    .pc--related { gap: 8px; }
+    .pc--related :global(.pc__img) { height: 160px !important; }
+    .pc--related .pc__e { display: none; }
+    .pc--related .pc__t { font-family: var(--font-body); font-size: 16px; line-height: 1.3; }
+    .pc--grid :global(.pc__img) { height: 220px !important; }
+  }
+</style>
