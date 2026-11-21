@@ -22,7 +22,7 @@ function apply(root: HTMLElement, s: State, animate = true) {
     const cats = (el.dataset.cat ?? '').split(' ');
     const fmts = (el.dataset.formats ?? '').split(' ');
     const price = Number(el.dataset.price ?? 0);
-    const ok = (s.cat === 'todo' || cats.includes(s.cat))
+    const ok = (s.cat === 'todo' ? !el.hasAttribute('data-extra') : cats.includes(s.cat))
       && (!s.fmts.length || s.fmts.some((f) => fmts.includes(f)))
       && (!s.prices.length || s.prices.some((r) => priceMatch(price, r)));
     el.hidden = !ok;
@@ -48,6 +48,8 @@ function apply(root: HTMLElement, s: State, animate = true) {
   for (const c of $$('[data-filter-count]', root)) c.textContent = `${shown} ${c.dataset.unit ?? 'resultados'}`;
   const empty = $('[data-filter-empty]', root);
   if (empty) empty.hidden = shown > 0;
+  // Secciones que sobran al filtrar (en el blog: destacado y guías), para que los resultados suban junto a las pestañas
+  for (const el of $$('[data-filter-hide]', root)) el.hidden = s.cat !== (root.dataset.default ?? 'todo');
   const title = $('[data-filter-title]', root);
   if (title) { const b = $<HTMLElement>(`[data-filter-cat="${s.cat}"]`, root); title.textContent = b?.dataset.title ?? title.textContent; }
 
@@ -105,6 +107,12 @@ export function initFilters() {
       apply(root, s);
       syncUrl(root, s);
       announce(`Mostrando ${b.textContent?.trim()}`);
+      // Si los resultados quedan fuera de la pantalla, se lleva al usuario hasta ellos
+      const target = $('[data-filter-scroll]', root);
+      if (target) {
+        const top = target.getBoundingClientRect().top;
+        if (top > window.innerHeight * 0.55 || top < 0) target.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+      }
     });
     root.addEventListener('change', (e) => {
       const t = e.target as HTMLElement;

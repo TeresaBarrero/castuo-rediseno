@@ -27,11 +27,19 @@ await page.locator('[data-filter-cat="en-la-cocina"]').click();
 ok(page.url().includes('categoria=en-la-cocina'), 'Pestañas: sincronizan ?categoria=en-la-cocina');
 const cocina = await page.locator('[data-filter-grid] [data-item]:not([hidden])').count();
 const cocinaEsperado = await page.locator('[data-filter-grid] [data-item][data-cat="en-la-cocina"]').count();
+ok(cocina === 3, `Pestañas: «En la cocina» muestra las 3 recetas, también las de otras páginas (${cocina})`);
+ok(await page.locator('.pag').isHidden(), 'Pestañas: la paginación se oculta al filtrar');
 ok(cocina === cocinaEsperado && cocina > 0 && cocina < total, `Pestañas: «En la cocina» muestra ${cocina} de ${total}`);
 ok(await page.locator('[data-filter-cat="en-la-cocina"]').getAttribute('aria-current') === 'page', 'Pestañas: aria-current en la activa');
+ok(await page.locator('.bf').isHidden(), 'Pestañas: al filtrar se oculta el destacado');
+await page.waitForTimeout(900);
+const gy = (await page.locator('[data-filter-grid]').boundingBox()).y;
+ok(gy >= 0 && gy < 900, `Pestañas: los resultados quedan a la vista (y = ${Math.round(gy)})`);
 ok((await page.locator('[data-filter-count]').textContent()).trim() === `${cocina} artículos`, 'Pestañas: el contador coincide');
 await page.locator('[data-filter-cat="noticias"]').click();
 ok(await page.locator('[data-filter-empty]').isHidden() && (await page.locator('[data-filter-grid] [data-item]:not([hidden])').count()) > 0, 'Pestañas: «Noticias» con artículos (sin estado vacío)');
+await page.locator('[data-filter-cat="todo"]').click();
+ok(await page.locator('.bf').isVisible(), 'Pestañas: «Todo» recupera el destacado');
 await page.goto(BASE + '/blog/?categoria=vino');
 ok((await page.locator('[data-filter-grid] [data-item]:not([hidden])').count()) === (await page.locator('[data-filter-grid] [data-item][data-cat="vino"]').count()), 'Pestañas: ?categoria=vino filtra al cargar');
 
@@ -121,7 +129,7 @@ const p2 = await page.goto(BASE + '/blog/pagina/2/');
 ok(p2.ok() && (await page.locator('[data-reveal-group] .pc').count()) > 0, 'Paginación: /blog/pagina/2/ con artículos');
 await page.goto(BASE + '/blog/');
 ok((await page.locator('.pag a[rel="next"]').count()) === 1, 'Paginación: «Siguientes» en la portada');
-ok((await page.locator('[data-filter-grid] [data-item]').count()) === 9, 'Paginación: 9 artículos por página');
+ok((await page.locator('[data-filter-grid] [data-item]:not([hidden])').count()) === 9, 'Paginación: 9 artículos por página');
 await page.goto(BASE + '/blog/arranca-la-campana-de-aceituna/');
 ok(await page.locator('.demo').isVisible(), 'Noticias inventadas: aviso «Contenido de ejemplo»');
 
