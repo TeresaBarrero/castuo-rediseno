@@ -54,13 +54,13 @@ const ONLY = process.argv.includes('--blog') ? (n) => n === 'blog' || n.startsWi
 const html = (eyebrow, title, img, product) => `<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:B;src:url(${bric})}@font-face{font-family:I;src:url(${inter})}
 *{margin:0;box-sizing:border-box}body{width:1200px;height:630px;background:#F6F5F0;font-family:I;color:#17201A;display:flex;overflow:hidden}
-.l{flex:1;padding:64px 56px 56px 72px;display:flex;flex-direction:column;justify-content:space-between}
+.l{flex:1;padding:92px 56px 56px 72px;display:flex;flex-direction:column;justify-content:space-between}
 .e{font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:#3F5B2E}
 h1{font-family:B;font-weight:600;font-size:${title.length > 60 ? 50 : 60}px;line-height:1.04;letter-spacing:-.025em;margin-top:22px}
 .f{display:flex;align-items:center;justify-content:space-between}.f img{height:72px}.u{font-size:18px;color:#4B4F45}
 .r{width:500px;height:630px;${product ? 'background:#EEECE4;display:grid;place-items:center' : ''}}.r img{width:100%;height:100%;object-fit:${product ? 'contain;mix-blend-mode:multiply;padding:40px' : 'cover'}}
-.tag{position:absolute;left:72px;bottom:150px;font-size:14px;color:#55594F}
-</style></head><body><div class="l"><div><p class="e">${eyebrow}</p><h1>${title}</h1></div><div class="f"><img src="${logo}"><span class="u">Concepto de rediseño · castuo.es</span></div></div>
+.tag{position:absolute;left:72px;top:28px;font-size:15px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#8B1E24;padding:6px 12px;border-radius:4px}
+</style></head><body><span class="tag">Concepto no oficial · proyecto de porfolio</span><div class="l"><div><p class="e">${eyebrow}</p><h1>${title}</h1></div><div class="f"><img src="${logo}"><span class="u">Web oficial: castuo.es</span></div></div>
 <div class="r">${img ? `<img src="${img}">` : ''}</div></body></html>`;
 
 const browser = await chromium.launch();

@@ -24,6 +24,9 @@ const { title, description, active = '', og = 'default', ogType = 'website', jso
 const site = Astro.site!;
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, site).href;
 const ogImage = new URL(`/og/${og}.png`, site).href;
+// Al compartir el enlace (LinkedIn, WhatsApp…) la vista previa debe dejar claro que no es la web oficial
+const shareTitle = `Concepto no oficial · ${title}`;
+const shareDescription = `Concepto de rediseño no oficial (proyecto de porfolio de María Teresa Barrero). Web oficial: castuo.es. ${description}`;
 const lds = (Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []);
 const websiteLd = {
   '@context': 'https://schema.org',
@@ -65,18 +68,18 @@ const websiteLd = {
     <link rel="preload" href={fontBody} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content="Castuo" />
+    <meta property="og:site_name" content="Castuo · concepto de rediseño no oficial" />
     <meta property="og:locale" content="es_ES" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={shareTitle} />
+    <meta property="og:description" content={shareDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={shareTitle} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={shareTitle} />
+    <meta name="twitter:description" content={shareDescription} />
     <meta name="twitter:image" content={ogImage} />
 
     <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
